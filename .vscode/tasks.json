@@ -1,0 +1,34 @@
+{
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "Compiler le jeu",
+            "command": "gcc",
+            "args": [
+                "src/main.c",
+                "src/assets.c",
+                "src/game.c",
+                "-o",
+                "app",
+                "-fdiagnostics-color=always",
+                "-I/usr/include/SDL2",
+                "-D_REENTRANT",
+                "-lSDL2",
+                "-lSDL2_image",
+                "-Wall"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Tâche de compilation"
+        },
+    ],
+    "version": "2.0.0"
+}
