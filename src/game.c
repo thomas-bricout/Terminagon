@@ -35,6 +35,15 @@ void GAME_run(Game *game) {
 
     while (!quit) {
         quit = readEvents(game);
+    
+        // Bidoouillage pour avoir un sprite à l'écran
+        SDL_Rect src = {0, 0, 1000, 1000};
+        SDL_Rect dst = {0, 0, 1000, 1000};
+        SDL_RenderCopy(game->renderer, game->asset_manager->asset_table, &src, &dst);
+
+        // Affichage à l'écran
+        SDL_RenderPresent(game->renderer);
+        SDL_RenderClear(game->renderer);
 
         // Limitation des FPS
     }

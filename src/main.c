@@ -43,12 +43,6 @@ int main(int argc, char *argv[])
     // Dit au renderer de dessiner directement sur la fenêtre
     SDL_SetRenderTarget(renderer, NULL);
 
-    // Bidoouillage pour avoir un sprite à l'écran
-    SDL_Rect src = {0, 0, 1000, 1000};
-    SDL_Rect dst = {0, 0, 1000, 1000};
-    SDL_RenderCopy(renderer, asset_manager.asset_table, &src, &dst);
-    SDL_RenderPresent(renderer); // Actualise la fenêtre
-
     // Création du jeu
     Game game;
     GAME_init(&game, renderer, window, &asset_manager);
