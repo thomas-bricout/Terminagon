@@ -40,23 +40,32 @@ int main(int argc, char *argv[])
     AssetManager asset_manager;
     ASSETS_Load(&asset_manager, renderer);
 
-
-    // Bidouillage
+    // Dit au renderer de dessiner directement sur la fenêtre
     SDL_SetRenderTarget(renderer, NULL);
+
+    // Bidoouillage pour avoir un sprite à l'écran
     SDL_Rect src = {0, 0, 1000, 1000};
     SDL_Rect dst = {0, 0, 1000, 1000};
     SDL_RenderCopy(renderer, asset_manager.asset_table, &src, &dst);
     SDL_RenderPresent(renderer); // Actualise la fenêtre
-    SDL_Delay(3000); // Permet de laisser la fenêtre ouverte pendant 3 secondes
+
+    // Création du jeu
+    Game game;
+    GAME_init(&game, renderer, window, &asset_manager);
+
+    // Appelle de la boucle principale de jeu
+    GAME_run(&game);
 
     // Clean up sortie normal 
-    ASSETS_Destroy(&asset_manager);  // Détruit l'asset_manager
+    ASSETS_Destroy(&asset_manager); // Détruit l'asset_manager
     SDL_DestroyRenderer(renderer);  // Détruit le renderer
     SDL_DestroyWindow(window);      // Détruit la fenêtre
     SDL_Quit();                     // Désalloue la mémoire lié à SDL
     return EXIT_SUCCESS;
 Quit:
     // Clean up sortie en échec
+    // On doit rajouter des check parce qu'on est pas sûr que tout à bien été initialisé
+    ASSETS_Destroy(&asset_manager);
     if (NULL != renderer) {
         SDL_DestroyRenderer(renderer);
     }
