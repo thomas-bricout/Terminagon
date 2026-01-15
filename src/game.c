@@ -41,7 +41,7 @@ void GAME_run(Game *game) {
 
         deltaTime = (double)((NOW - LAST)*1000 / (double)SDL_GetPerformanceFrequency() );
         FPS = 1000 / deltaTime;
-        SDL_Log("deltaTime: %fms        FPS: %f", deltaTime, FPS);
+        SDL_Log("deltaTime: %7.2fms FPS: %4.1f", deltaTime, FPS);
 
         // Read game events
         quit = readEvents(game);
