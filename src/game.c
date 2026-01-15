@@ -17,10 +17,24 @@ SDL_bool readEvents(Game *game) {
     SDL_bool quit = SDL_FALSE;
 
     while (SDL_PollEvent(&event) && !quit) {
-        // Deal with events here
+        SDL_Log("TREATING EVENT: TYPE: %d, TIMESTAMP: %dms", event.type, event.common.timestamp);
+
         switch (event.type) {
+            // Meta events
             case SDL_QUIT:
                 quit = SDL_TRUE;
+                break;
+            case SDL_WINDOWEVENT:
+                break;
+
+            // Game play related event
+            case SDL_KEYDOWN:
+                break;
+            case SDL_KEYUP:
+                break;
+            case SDL_MOUSEMOTION:
+                break;
+            case SDL_MOUSEBUTTONDOWN:
                 break;
         }
     }
