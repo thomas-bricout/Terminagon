@@ -6,7 +6,7 @@
 #define ASSET_ARRAY_LENGTH 100
 
 typedef enum {
-    debug = 0
+    TEX_DEBUG = 0
 } TextureLocation ;
 
 typedef struct {
