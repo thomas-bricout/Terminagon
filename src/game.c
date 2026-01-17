@@ -31,8 +31,30 @@ SDL_bool readEvents(Game *game) {
 
             // Game play related event
             case SDL_KEYDOWN:
+                switch (event.key.keysym.scancode) {
+                    case SDL_SCANCODE_UP:
+                        break;
+                    case SDL_SCANCODE_DOWN:
+                        break;
+                    case SDL_SCANCODE_LEFT:
+                        break;
+                    case SDL_SCANCODE_RIGHT:
+                        break;
+                }
+
                 break;
             case SDL_KEYUP:
+                switch (event.key.keysym.scancode) {
+                    case SDL_SCANCODE_UP:
+                        break;
+                    case SDL_SCANCODE_DOWN:
+                        break;
+                    case SDL_SCANCODE_LEFT:
+                        break;
+                    case SDL_SCANCODE_RIGHT:
+                        break;
+                }
+
                 break;
             case SDL_MOUSEMOTION:
                 break;
