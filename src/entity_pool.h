@@ -1,5 +1,5 @@
-#ifndef ENTITY_POOL.H
-#define ENTITY_POOL.H
+#ifndef ENTITY_POOL_H
+#define ENTITY_POOL_H
 
 #include <SDL2/SDL.h>
 #include "assets.h"
@@ -15,10 +15,13 @@ typedef struct {
     int currentCount;
 
     EntityID id[MAX_ENTITY_COUNT];
-    TextureLocation texture[MAX_ENTITY_COUNT];
-    SDL_Rect rectangle[MAX_ENTITY_COUNT];
+    TextureLocation tex_location[MAX_ENTITY_COUNT];
+    SDL_Rect display_rect[MAX_ENTITY_COUNT];
 } EntityPool ;
 
 void POOL_Init(EntityPool *pool);
+void POOL_Load(EntityPool *pool);
+EntityID POOL_New_entity(EntityPool *pool, TextureLocation tex_location, SDL_Rect display_rect);
+void POOL_Display_All(AssetManager *assetManager, EntityPool *pool, SDL_Renderer *renderer);
 
 #endif

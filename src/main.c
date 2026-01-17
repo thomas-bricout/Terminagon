@@ -5,6 +5,7 @@
 
 #include "game.h"
 #include "assets.h"
+#include "entity_pool.h"
 
 #define GAMENAME "Mon jeu"
 #define VERSION "0.0.0"
@@ -44,9 +45,14 @@ int main(int argc, char *argv[])
     // Dit au renderer de dessiner directement sur la fenêtre
     SDL_SetRenderTarget(renderer, NULL);
 
+    // Création de l'entity pool
+    EntityPool pool;
+    POOL_Init(&pool);
+    POOL_Load(&pool);
+
     // Création du jeu
     Game game;
-    GAME_init(&game, renderer, window, &asset_manager);
+    GAME_init(&game, renderer, window, &asset_manager, &pool);
 
     // Appelle de la boucle principale de jeu
     GAME_run(&game);

@@ -8,6 +8,7 @@
                 "src/main.c",
                 "src/assets.c",
                 "src/game.c",
+                "src/entity_pool.c",
                 "-o",
                 "app",
                 "-fdiagnostics-color=always",

@@ -6,7 +6,8 @@
 #define ASSET_ARRAY_LENGTH 100
 
 typedef enum {
-    TEX_DEBUG = 0
+    TEX_DEBUG = 0,
+    TEX_PLAYER_STILL = 1,
 } TextureLocation ;
 
 typedef struct {
@@ -17,6 +18,6 @@ typedef struct {
 void ASSETS_Init(AssetManager *assetManager, SDL_Renderer *renderer);
 void ASSETS_Load(AssetManager *assetManager, SDL_Renderer *renderer);
 void ASSETS_Destroy(AssetManager *assetManager);
-SDL_Texture *ASSETS_AccessTexture(AssetManager *assetManager, TextureLocation textureLocation);
+SDL_Texture* ASSETS_AccessTexture(AssetManager *assetManager, TextureLocation textureLocation);
 
 #endif

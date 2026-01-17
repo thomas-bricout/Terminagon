@@ -2,14 +2,16 @@
 
 #include "game.h"
 #include "assets.h"
+#include "entity_pool.h"
 
 const double TARGET_FPS = 60.0;
 const double TARGET_FRAME_TIME =  1000.0 / TARGET_FPS; // in ms
 
-void GAME_init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetManager *asset_manager) {
+void GAME_init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetManager *asset_manager, EntityPool *pool) {
     game->renderer = renderer;
     game->window = window;
     game->asset_manager = asset_manager;
+    game->pool = pool;
 }
 
 SDL_bool readEvents(Game *game) {
@@ -65,14 +67,16 @@ void GAME_run(Game *game) {
         // Read game events
         quit = readEvents(game);
     
-        // Bidoouillage pour avoir un sprite à l'écran
-        SDL_Rect src = {0, 0, 1000, 1000};
-        SDL_Rect dst = {0, 0, 1000, 1000};
-        SDL_RenderCopy(game->renderer, game->asset_manager->asset_table, &src, &dst);
+        
+        // Création du rendu
+        POOL_Display_All(game->asset_manager, game->pool, game->renderer);
 
         // Affichage à l'écran
         SDL_RenderPresent(game->renderer);
         SDL_RenderClear(game->renderer);
+
+        // Logging
+        SDL_Log("Current Entity Count: %d", game->pool->currentCount);
 
         // Limitation des FPS
         Uint64 frame_end = SDL_GetPerformanceCounter();
