@@ -38,6 +38,7 @@ int main(int argc, char *argv[])
 
     // Chargement des assets
     AssetManager asset_manager;
+    ASSETS_Init(&asset_manager, renderer);
     ASSETS_Load(&asset_manager, renderer);
 
     // Dit au renderer de dessiner directement sur la fenêtre

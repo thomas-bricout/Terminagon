@@ -3,6 +3,13 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+void ASSETS_Init(AssetManager *assetManager, SDL_Renderer *renderer) {
+    SDL_Texture *debugTexture = IMG_LoadTexture(renderer, "debug.png");
+    for ( int i = 0; i < ASSET_ARRAY_LENGTH; i++ ) {
+        assetManager->asset_array[i] = debugTexture;
+    }
+}
+
 void ASSETS_Load(AssetManager *assetManager, SDL_Renderer *renderer) {
     assetManager->asset_table = IMG_LoadTexture(renderer, "assets/assets.png");
 }
