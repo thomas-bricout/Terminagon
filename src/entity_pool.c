@@ -3,6 +3,7 @@
 
 void POOL_Init(EntityPool *pool) {
     pool->currentCount = 0;
+    pool->lastEntitylocation = 0;
     SDL_Rect default_rect = {0, 0, 0, 0};
     EntityID default_id = {0, 0};
 
@@ -20,6 +21,8 @@ void POOL_Load(EntityPool *pool) {
     // Adds the main player
     SDL_Rect player_display_rect = {100, 100, 100, 100};
     pool->player = POOL_New_entity_classic(pool, TEX_DEBUG, player_display_rect);
+    pool->velocity[pool->player.location] = (SDL_Point) {0.0, 1.0};
+    pool->velocity_map[pool->player.location] = SDL_TRUE;
 }
 
 EntityID POOL_New_entity(EntityPool *pool) {
@@ -31,6 +34,7 @@ EntityID POOL_New_entity(EntityPool *pool) {
     currentID ++;
     
     pool->currentCount ++;
+    pool->lastEntitylocation ++;
 
     pool->id[new_id.location] = new_id;
 
@@ -62,12 +66,13 @@ void POOL_Destroy_entity(EntityPool *pool, EntityID id) {
     // Reset all bitmaps
     pool->tex_location_map[id.location] = SDL_FALSE;
     pool->display_rect_map[id.location] = SDL_FALSE;
+    pool->velocity_map[id.location] = SDL_FALSE;
 }
 
 void POOL_Display_All(AssetManager *assetManager, EntityPool *pool, SDL_Renderer *renderer) {
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Starting displaying entities");
 
-    for (int i = 0; i < pool->currentCount; i++) {
+    for (int i = 0; i < pool->lastEntitylocation; i++) {
         // Skip entities that don't have texture / display rect
         if (!pool->display_rect_map[i] || !pool->tex_location_map[i]) { continue; }
 
@@ -79,5 +84,13 @@ void POOL_Display_All(AssetManager *assetManager, EntityPool *pool, SDL_Renderer
             "Rendering Entity with location %d, unique_id %d, texture %d, coordinates (%d, %d)",
              i, pool->id[i].unique_id, pool->tex_location[i], pool->display_rect[i].x, pool->display_rect[i].y
         );
+    }
+}
+
+void POOL_ApplyVelocity(EntityPool *pool, double deltaTime) {
+    for (int i = 0; i < pool->lastEntitylocation; i++) {
+        if (!pool->display_rect_map[i] || !pool->velocity_map[i]) { continue; }
+        pool->display_rect[i].x += pool->velocity[i].x * deltaTime;
+        pool->display_rect[i].y += pool->velocity[i].y * deltaTime;
     }
 }

@@ -88,7 +88,9 @@ void GAME_run(Game *game) {
 
         // Read game events
         quit = readEvents(game);
-    
+        
+        // Physique
+        POOL_ApplyVelocity(game->pool, deltaTime);
         
         // Création du rendu
         POOL_Display_All(game->asset_manager, game->pool, game->renderer);
