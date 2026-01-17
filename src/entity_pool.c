@@ -22,24 +22,30 @@ void POOL_Load(EntityPool *pool) {
     pool->player = POOL_New_entity_classic(pool, TEX_DEBUG, player_display_rect);
 }
 
-EntityID POOL_New_entity_classic(EntityPool *pool, TextureLocation tex_location, SDL_Rect display_rect) {
-    // Create new entity with new a new unique id and a designated position in the pool
+EntityID POOL_New_entity(EntityPool *pool) {
     static int currentID = 1;
     EntityID new_id;
 
     new_id.location = pool->currentCount; // TODO allow reusage of freed up places
     new_id.unique_id = currentID;
     currentID ++;
-
-    SDL_Log("Creating new Entity with location %d and unique_id %d", new_id.location, new_id.unique_id);
+    
+    pool->currentCount ++;
 
     pool->id[new_id.location] = new_id;
+
+    SDL_Log("Creating new Entity with location %d and unique_id %d", new_id.location, new_id.unique_id);
+    return new_id;
+}
+
+EntityID POOL_New_entity_classic(EntityPool *pool, TextureLocation tex_location, SDL_Rect display_rect) {
+    // Create new entity with new a new unique id and a designated position in the pool
+    EntityID new_id = POOL_New_entity(pool);
+
     pool->tex_location[new_id.location] = tex_location;
     pool->display_rect[new_id.location] = display_rect;
     pool->tex_location_map[new_id.location] = SDL_TRUE;
     pool->display_rect_map[new_id.location] = SDL_TRUE;
-
-    pool->currentCount ++;
 
     return new_id;
 }
