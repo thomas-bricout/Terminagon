@@ -14,8 +14,10 @@ typedef struct {
 typedef struct {
     // Keeping track of which spots are occupied by valid entities
     int currentCount;
-    int lastEntitylocation;
-    SDL_bool emptyLocations[MAX_ENTITY_COUNT];
+    int lastEntitylocation; // Available spot
+
+    int emptyLocations[MAX_ENTITY_COUNT];
+    int emptyLocationsAmount;
 
     // Keep track of specific entities or entity lists ( for example, all entities which might damage the player )
     EntityID player;

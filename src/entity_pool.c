@@ -4,6 +4,8 @@
 void POOL_Init(EntityPool *pool) {
     pool->currentCount = 0;
     pool->lastEntitylocation = 0;
+    pool->emptyLocationsAmount = 0;
+
     SDL_Rect default_rect = {0, 0, 0, 0};
     EntityID default_id = {0, 0};
 
@@ -29,12 +31,18 @@ EntityID POOL_New_entity(EntityPool *pool) {
     static int currentID = 1;
     EntityID new_id;
 
-    new_id.location = pool->currentCount; // TODO allow reusage of freed up places
+    if (pool->emptyLocationsAmount == 0) {  // Append to the end of the list
+        new_id.location = pool->lastEntitylocation;
+        pool->lastEntitylocation ++;
+    } else {                                // Fill one of the empty spots
+        new_id.location = pool->emptyLocations[pool->emptyLocationsAmount - 1];
+        pool->emptyLocationsAmount --;
+    }
+
     new_id.unique_id = currentID;
     currentID ++;
     
     pool->currentCount ++;
-    pool->lastEntitylocation ++;
 
     pool->id[new_id.location] = new_id;
 
@@ -60,6 +68,13 @@ void POOL_Destroy_entity(EntityPool *pool, EntityID id) {
         return;
     }
 
+    // Inform everywhere the entity is destroyed and a new spot is available
+    if (id.location == pool->lastEntitylocation) {
+        pool->lastEntitylocation --;
+    } else {
+        pool->emptyLocationsAmount ++;
+        pool->emptyLocations[pool->emptyLocationsAmount - 1] = id.location;
+    }
     pool->currentCount --;
     pool->id[id.location] = (EntityID) {0, 0};
 
