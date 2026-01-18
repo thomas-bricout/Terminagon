@@ -23,8 +23,8 @@ void POOL_Load(EntityPool *pool) {
     // Adds the main player
     SDL_Rect player_display_rect = {-50, -50, 100, 100};
 
-    pool->player = POOL_NewEntityClassic(pool, TEX_DEBUG, player_display_rect, (SDL_Point) {0, 0});
-    pool->velocity[pool->player.location] = (SDL_Point) {0.0, 0.0};
+    pool->player = POOL_NewEntityClassic(pool, TEX_DEBUG, player_display_rect, (SDL_FPoint) {0, 0});
+    pool->velocity[pool->player.location] = (SDL_FPoint) {10., 10.};
     pool->velocity_map[pool->player.location] = SDL_TRUE;
 }
 
@@ -51,7 +51,7 @@ EntityID POOL_NewEntity(EntityPool *pool) {
     return new_id;
 }
 
-EntityID POOL_NewEntityClassic(EntityPool *pool, TextureLocation tex_location, SDL_Rect display_rect, SDL_Point position) {
+EntityID POOL_NewEntityClassic(EntityPool *pool, TextureLocation tex_location, SDL_Rect display_rect, SDL_FPoint position) {
     // Create new entity with new a new unique id and a designated position in the pool
     EntityID new_id = POOL_NewEntity(pool);
 
@@ -99,23 +99,30 @@ void POOL_DisplayAll(AssetManager *assetManager, EntityPool *pool, SDL_Renderer 
         SDL_Texture *tex = assetManager->asset_array[pool->tex_location[i]];
         SDL_Rect dst = pool->display_rect[i];
 
-        dst.x += pool->position[i].x;
-        dst.y += pool->position[i].y;
+        dst.x += (int) pool->position[i].x;
+        dst.y += (int) pool->position[i].y;
 
         SDL_RenderCopy(renderer, tex, NULL, &dst);
 
         SDL_LogDebug(
             SDL_LOG_CATEGORY_RENDER,
-            "Rendering Entity with location %d, unique_id %d, texture %d, coordinates (%d, %d)",
-             i, pool->id[i].unique_id, pool->tex_location[i], pool->display_rect[i].x, pool->display_rect[i].y
+            "Rendering Entity with location %d, unique_id %d, texture %d, coordinates (%f, %f)",
+             i, pool->id[i].unique_id, pool->tex_location[i], pool->position[i].x, pool->position[i].y
         );
     }
 }
 
 void POOL_ApplyVelocity(EntityPool *pool, double deltaTime) {
+    SDL_Log("Running POOL_ApplyVelocity");
     for (int i = 0; i < pool->lastEntitylocation; i++) {
         if (!pool->position_map[i] || !pool->velocity_map[i]) { continue; }
         pool->position[i].x += pool->velocity[i].x * deltaTime;
         pool->position[i].y += pool->velocity[i].y * deltaTime;
+
+        SDL_LogDebug(
+            SDL_LOG_CATEGORY_CUSTOM,
+            "Current player velocity: (%f, %f)",
+            pool->velocity[i].x, pool->velocity[i].y
+        );
     }
 }

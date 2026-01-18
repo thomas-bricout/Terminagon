@@ -27,8 +27,8 @@ typedef struct {
     TextureLocation tex_location[MAX_ENTITY_COUNT];
     SDL_Rect display_rect[MAX_ENTITY_COUNT]; // Where to display the entity relative to its position
 
-    SDL_Point position[MAX_ENTITY_COUNT];
-    SDL_Point velocity[MAX_ENTITY_COUNT];
+    SDL_FPoint position[MAX_ENTITY_COUNT];
+    SDL_FPoint velocity[MAX_ENTITY_COUNT];
 
     // Bitmaps ( whether a specific entity has a component )
     SDL_bool tex_location_map[MAX_ENTITY_COUNT];
@@ -42,7 +42,7 @@ typedef struct {
 void POOL_Init(EntityPool *pool);
 void POOL_Load(EntityPool *pool);
 EntityID POOL_NewEntity(EntityPool *pool);
-EntityID POOL_NewEntityClassic(EntityPool *pool, TextureLocation tex_location, SDL_Rect display_rect, SDL_Point point);
+EntityID POOL_NewEntityClassic(EntityPool *pool, TextureLocation tex_location, SDL_Rect display_rect, SDL_FPoint position);
 void POOL_DestroyEntity(EntityPool *pool, EntityID id);
 void POOL_DisplayAll(AssetManager *assetManager, EntityPool *pool, SDL_Renderer *renderer);
 void POOL_ApplyVelocity(EntityPool *pool, double deltaTime);

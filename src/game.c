@@ -7,7 +7,7 @@
 const double TARGET_FPS = 60.0;
 const double TARGET_FRAME_TIME =  1000.0 / TARGET_FPS; // in ms
 
-const double MAX_PLAYER_SPEED;
+const double MAX_PLAYER_SPEED = 0.1;
 
 void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetManager *asset_manager, EntityPool *pool) {
     game->renderer = renderer;
@@ -19,6 +19,11 @@ void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetMana
 SDL_bool readEvents(Game *game) {
     SDL_Event event;
     SDL_bool quit = SDL_FALSE;
+
+    static SDL_bool HoldingUP;
+    static SDL_bool HoldingDOWN;
+    static SDL_bool HoldingLEFT;
+    static SDL_bool HoldingRIGHT;
 
     while (SDL_PollEvent(&event) && !quit) {
         SDL_Log("TREATING EVENT: TYPE: %d, TIMESTAMP: %dms", event.type, event.common.timestamp);
@@ -34,13 +39,19 @@ SDL_bool readEvents(Game *game) {
             // Game play related event
             case SDL_KEYDOWN:
                 switch (event.key.keysym.scancode) {
+                    case SDL_SCANCODE_UNKNOWN:
+                        break;
                     case SDL_SCANCODE_UP:
+                        HoldingUP = SDL_TRUE;
                         break;
                     case SDL_SCANCODE_DOWN:
+                        HoldingDOWN = SDL_TRUE;
                         break;
                     case SDL_SCANCODE_LEFT:
+                        HoldingLEFT = SDL_TRUE;
                         break;
                     case SDL_SCANCODE_RIGHT:
+                        HoldingRIGHT = SDL_TRUE;
                         break;
                     case SDL_SCANCODE_F11:
                         Uint32 windowFlags = SDL_GetWindowFlags(game->window);
@@ -57,13 +68,19 @@ SDL_bool readEvents(Game *game) {
                 break;
             case SDL_KEYUP:
                 switch (event.key.keysym.scancode) {
+                    case SDL_SCANCODE_UNKNOWN:
+                        break;
                     case SDL_SCANCODE_UP:
+                        HoldingUP = SDL_FALSE;
                         break;
                     case SDL_SCANCODE_DOWN:
+                        HoldingDOWN = SDL_FALSE;
                         break;
                     case SDL_SCANCODE_LEFT:
+                        HoldingLEFT = SDL_FALSE;
                         break;
                     case SDL_SCANCODE_RIGHT:
+                        HoldingRIGHT = SDL_FALSE;
                         break;
                 }
 
@@ -74,6 +91,21 @@ SDL_bool readEvents(Game *game) {
                 break;
         }
     }
+
+    // Treat holden keys
+    int playerLocation = game->pool->player.location;
+
+    if ( game->pool->id[playerLocation].unique_id == game->pool->player.unique_id ) {
+        SDL_FPoint *playerVelocity = &game->pool->velocity[playerLocation];
+        playerVelocity->x = MAX_PLAYER_SPEED * ( (int) HoldingRIGHT - (int) HoldingLEFT );
+        playerVelocity->y = MAX_PLAYER_SPEED * ( (int) HoldingDOWN - (int) HoldingUP );
+    }
+
+    SDL_LogInfo(
+        SDL_LOG_CATEGORY_INPUT,
+        "Holding: UP %d DOWN %d LEFT %d RIGHT %d",
+        HoldingUP, HoldingDOWN, HoldingLEFT, HoldingRIGHT
+    );
 
     return quit;
 }
