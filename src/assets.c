@@ -23,7 +23,7 @@ void ASSETS_Destroy(AssetManager *assetManager) {
     SDL_DestroyTexture(assetManager->asset_table);
 }
 
-SDL_Texture* ASSETS_AccessTexture(AssetManager *assetManager, TextureLocation textureLocation) {
+void ASSETS_AccessTexture(SDL_Texture **texture, AssetManager *assetManager, TextureLocation textureLocation) {
     assert(textureLocation < ASSET_ARRAY_LENGTH);
-    return assetManager->asset_array[textureLocation];
+    *texture = assetManager->asset_array[textureLocation];
 }

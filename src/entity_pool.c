@@ -96,7 +96,9 @@ void POOL_DisplayAll(AssetManager *assetManager, EntityPool *pool, SDL_Renderer 
         // Skip entities that don't have texture / display rect / position
         if (!pool->position_map || !pool->display_rect_map[i] || !pool->tex_location_map[i]) { continue; }
 
-        SDL_Texture *tex = assetManager->asset_array[pool->tex_location[i]];
+        SDL_Texture *tex;
+        ASSETS_AccessTexture(&tex, assetManager, pool->tex_location[i]);
+
         SDL_Rect dst = pool->display_rect[i];
 
         dst.x += (int) pool->position[i].x;

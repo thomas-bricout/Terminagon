@@ -18,6 +18,6 @@ typedef struct {
 void ASSETS_Init(AssetManager *assetManager, SDL_Renderer *renderer);
 void ASSETS_Load(AssetManager *assetManager, SDL_Renderer *renderer);
 void ASSETS_Destroy(AssetManager *assetManager);
-SDL_Texture* ASSETS_AccessTexture(AssetManager *assetManager, TextureLocation textureLocation);
+void ASSETS_AccessTexture(SDL_Texture **texture, AssetManager *assetManager, TextureLocation textureLocation);
 
 #endif
