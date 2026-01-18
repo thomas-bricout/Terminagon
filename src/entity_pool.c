@@ -23,7 +23,7 @@ void POOL_Load(EntityPool *pool) {
     // Adds the main player
     SDL_Rect player_display_rect = {100, 100, 100, 100};
     pool->player = POOL_New_entity_classic(pool, TEX_DEBUG, player_display_rect);
-    pool->velocity[pool->player.location] = (SDL_Point) {0.0, 1.0};
+    pool->velocity[pool->player.location] = (SDL_Point) {0.0, 0.0};
     pool->velocity_map[pool->player.location] = SDL_TRUE;
 }
 

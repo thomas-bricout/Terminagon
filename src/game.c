@@ -7,6 +7,8 @@
 const double TARGET_FPS = 60.0;
 const double TARGET_FRAME_TIME =  1000.0 / TARGET_FPS; // in ms
 
+const double MAX_PLAYER_SPEED;
+
 void GAME_init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetManager *asset_manager, EntityPool *pool) {
     game->renderer = renderer;
     game->window = window;
@@ -39,6 +41,16 @@ SDL_bool readEvents(Game *game) {
                     case SDL_SCANCODE_LEFT:
                         break;
                     case SDL_SCANCODE_RIGHT:
+                        break;
+                    case SDL_SCANCODE_F11:
+                        Uint32 windowFlags = SDL_GetWindowFlags(game->window);
+                        if (windowFlags & SDL_WINDOW_FULLSCREEN_DESKTOP) {
+                            SDL_SetWindowFullscreen(game->window, 0);
+                        } else if (windowFlags & SDL_WINDOW_FULLSCREEN) {
+                            SDL_SetWindowFullscreen(game->window, 0);
+                        } else {
+                            SDL_SetWindowFullscreen(game->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+                        }
                         break;
                 }
 
