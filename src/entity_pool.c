@@ -23,12 +23,12 @@ void POOL_Load(EntityPool *pool) {
     // Adds the main player
     SDL_Rect player_display_rect = {-50, -50, 100, 100};
 
-    pool->player = POOL_New_entity_classic(pool, TEX_DEBUG, player_display_rect, (SDL_Point) {0, 0});
+    pool->player = POOL_NewEntityClassic(pool, TEX_DEBUG, player_display_rect, (SDL_Point) {0, 0});
     pool->velocity[pool->player.location] = (SDL_Point) {0.0, 0.0};
     pool->velocity_map[pool->player.location] = SDL_TRUE;
 }
 
-EntityID POOL_New_entity(EntityPool *pool) {
+EntityID POOL_NewEntity(EntityPool *pool) {
     static int currentID = 1;
     EntityID new_id;
 
@@ -51,9 +51,9 @@ EntityID POOL_New_entity(EntityPool *pool) {
     return new_id;
 }
 
-EntityID POOL_New_entity_classic(EntityPool *pool, TextureLocation tex_location, SDL_Rect display_rect, SDL_Point position) {
+EntityID POOL_NewEntityClassic(EntityPool *pool, TextureLocation tex_location, SDL_Rect display_rect, SDL_Point position) {
     // Create new entity with new a new unique id and a designated position in the pool
-    EntityID new_id = POOL_New_entity(pool);
+    EntityID new_id = POOL_NewEntity(pool);
 
     pool->tex_location[new_id.location] = tex_location;
     pool->display_rect[new_id.location] = display_rect;
@@ -66,7 +66,7 @@ EntityID POOL_New_entity_classic(EntityPool *pool, TextureLocation tex_location,
     return new_id;
 }
 
-void POOL_Destroy_entity(EntityPool *pool, EntityID id) {
+void POOL_DestroyEntity(EntityPool *pool, EntityID id) {
     // Check if entity has not yet been destroyed
     if (pool->id[id.location].unique_id != id.unique_id) {
         return;
@@ -89,7 +89,7 @@ void POOL_Destroy_entity(EntityPool *pool, EntityID id) {
     pool->position_map[id.location] = SDL_FALSE;
 }
 
-void POOL_Display_All(AssetManager *assetManager, EntityPool *pool, SDL_Renderer *renderer) {
+void POOL_DisplayAll(AssetManager *assetManager, EntityPool *pool, SDL_Renderer *renderer) {
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Starting displaying entities");
 
     for (int i = 0; i < pool->lastEntitylocation; i++) {

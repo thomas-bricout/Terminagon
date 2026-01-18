@@ -9,7 +9,7 @@ const double TARGET_FRAME_TIME =  1000.0 / TARGET_FPS; // in ms
 
 const double MAX_PLAYER_SPEED;
 
-void GAME_init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetManager *asset_manager, EntityPool *pool) {
+void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetManager *asset_manager, EntityPool *pool) {
     game->renderer = renderer;
     game->window = window;
     game->asset_manager = asset_manager;
@@ -79,7 +79,7 @@ SDL_bool readEvents(Game *game) {
 }
 
 // Gestion de la boucle principale, et de la limitation des fps
-void GAME_run(Game *game) {
+void GAME_Run(Game *game) {
     SDL_bool quit = SDL_FALSE;
 
     Uint64 perf_freq = SDL_GetPerformanceFrequency();
@@ -105,7 +105,7 @@ void GAME_run(Game *game) {
         POOL_ApplyVelocity(game->pool, deltaTime);
         
         // Création du rendu
-        POOL_Display_All(game->asset_manager, game->pool, game->renderer);
+        POOL_DisplayAll(game->asset_manager, game->pool, game->renderer);
 
         // Affichage à l'écran
         SDL_RenderPresent(game->renderer);

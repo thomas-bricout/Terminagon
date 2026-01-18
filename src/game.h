@@ -12,7 +12,7 @@ typedef struct {
     EntityPool *pool;
 } Game;
 
-void GAME_init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetManager *asset_manager, EntityPool *pool);
-void GAME_run(Game *game);
+void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetManager *asset_manager, EntityPool *pool);
+void GAME_Run(Game *game);
 
 #endif

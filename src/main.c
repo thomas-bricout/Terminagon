@@ -52,10 +52,10 @@ int main(int argc, char *argv[])
 
     // Création du jeu
     Game game;
-    GAME_init(&game, renderer, window, &asset_manager, &pool);
+    GAME_Init(&game, renderer, window, &asset_manager, &pool);
 
     // Appelle de la boucle principale de jeu
-    GAME_run(&game);
+    GAME_Run(&game);
 
     // Clean up sortie normal 
     ASSETS_Destroy(&asset_manager); // Détruit l'asset_manager

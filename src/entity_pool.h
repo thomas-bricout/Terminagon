@@ -41,10 +41,10 @@ typedef struct {
 
 void POOL_Init(EntityPool *pool);
 void POOL_Load(EntityPool *pool);
-EntityID POOL_New_entity(EntityPool *pool);
-EntityID POOL_New_entity_classic(EntityPool *pool, TextureLocation tex_location, SDL_Rect display_rect, SDL_Point point);
-void POOL_Destroy_entity(EntityPool *pool, EntityID id);
-void POOL_Display_All(AssetManager *assetManager, EntityPool *pool, SDL_Renderer *renderer);
+EntityID POOL_NewEntity(EntityPool *pool);
+EntityID POOL_NewEntityClassic(EntityPool *pool, TextureLocation tex_location, SDL_Rect display_rect, SDL_Point point);
+void POOL_DestroyEntity(EntityPool *pool, EntityID id);
+void POOL_DisplayAll(AssetManager *assetManager, EntityPool *pool, SDL_Renderer *renderer);
 void POOL_ApplyVelocity(EntityPool *pool, double deltaTime);
 
 #endif
