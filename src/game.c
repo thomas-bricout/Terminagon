@@ -39,8 +39,6 @@ SDL_bool readEvents(Game *game) {
             // Game play related event
             case SDL_KEYDOWN:
                 switch (event.key.keysym.scancode) {
-                    case SDL_SCANCODE_UNKNOWN:
-                        break;
                     case SDL_SCANCODE_UP:
                         HoldingUP = SDL_TRUE;
                         break;
@@ -63,13 +61,13 @@ SDL_bool readEvents(Game *game) {
                             SDL_SetWindowFullscreen(game->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
                         }
                         break;
+                    default:
+                        break;
                 }
 
                 break;
             case SDL_KEYUP:
                 switch (event.key.keysym.scancode) {
-                    case SDL_SCANCODE_UNKNOWN:
-                        break;
                     case SDL_SCANCODE_UP:
                         HoldingUP = SDL_FALSE;
                         break;
@@ -81,6 +79,8 @@ SDL_bool readEvents(Game *game) {
                         break;
                     case SDL_SCANCODE_RIGHT:
                         HoldingRIGHT = SDL_FALSE;
+                        break;
+                    default:
                         break;
                 }
 
