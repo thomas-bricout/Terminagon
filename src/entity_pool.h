@@ -25,12 +25,16 @@ typedef struct {
     // Each list contains a specific component for all entities in the game
     EntityID id[MAX_ENTITY_COUNT];
     TextureLocation tex_location[MAX_ENTITY_COUNT];
-    SDL_Rect display_rect[MAX_ENTITY_COUNT];
+    SDL_Rect display_rect[MAX_ENTITY_COUNT]; // Where to display the entity relative to its position
+
+    SDL_Point position[MAX_ENTITY_COUNT];
     SDL_Point velocity[MAX_ENTITY_COUNT];
 
     // Bitmaps ( whether a specific entity has a component )
     SDL_bool tex_location_map[MAX_ENTITY_COUNT];
     SDL_bool display_rect_map[MAX_ENTITY_COUNT];
+
+    SDL_bool position_map[MAX_ENTITY_COUNT];
     SDL_bool velocity_map[MAX_ENTITY_COUNT];
 
 } EntityPool ;
@@ -38,7 +42,7 @@ typedef struct {
 void POOL_Init(EntityPool *pool);
 void POOL_Load(EntityPool *pool);
 EntityID POOL_New_entity(EntityPool *pool);
-EntityID POOL_New_entity_classic(EntityPool *pool, TextureLocation tex_location, SDL_Rect display_rect);
+EntityID POOL_New_entity_classic(EntityPool *pool, TextureLocation tex_location, SDL_Rect display_rect, SDL_Point point);
 void POOL_Destroy_entity(EntityPool *pool, EntityID id);
 void POOL_Display_All(AssetManager *assetManager, EntityPool *pool, SDL_Renderer *renderer);
 void POOL_ApplyVelocity(EntityPool *pool, double deltaTime);

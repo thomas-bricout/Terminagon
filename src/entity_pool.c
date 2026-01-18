@@ -21,8 +21,9 @@ void POOL_Init(EntityPool *pool) {
 
 void POOL_Load(EntityPool *pool) {
     // Adds the main player
-    SDL_Rect player_display_rect = {100, 100, 100, 100};
-    pool->player = POOL_New_entity_classic(pool, TEX_DEBUG, player_display_rect);
+    SDL_Rect player_display_rect = {-50, -50, 100, 100};
+
+    pool->player = POOL_New_entity_classic(pool, TEX_DEBUG, player_display_rect, (SDL_Point) {0, 0});
     pool->velocity[pool->player.location] = (SDL_Point) {0.0, 0.0};
     pool->velocity_map[pool->player.location] = SDL_TRUE;
 }
@@ -50,14 +51,17 @@ EntityID POOL_New_entity(EntityPool *pool) {
     return new_id;
 }
 
-EntityID POOL_New_entity_classic(EntityPool *pool, TextureLocation tex_location, SDL_Rect display_rect) {
+EntityID POOL_New_entity_classic(EntityPool *pool, TextureLocation tex_location, SDL_Rect display_rect, SDL_Point position) {
     // Create new entity with new a new unique id and a designated position in the pool
     EntityID new_id = POOL_New_entity(pool);
 
     pool->tex_location[new_id.location] = tex_location;
     pool->display_rect[new_id.location] = display_rect;
+    pool->position[new_id.location] = position;
+
     pool->tex_location_map[new_id.location] = SDL_TRUE;
     pool->display_rect_map[new_id.location] = SDL_TRUE;
+    pool->position_map[new_id.location] = SDL_TRUE;
 
     return new_id;
 }
@@ -82,17 +86,23 @@ void POOL_Destroy_entity(EntityPool *pool, EntityID id) {
     pool->tex_location_map[id.location] = SDL_FALSE;
     pool->display_rect_map[id.location] = SDL_FALSE;
     pool->velocity_map[id.location] = SDL_FALSE;
+    pool->position_map[id.location] = SDL_FALSE;
 }
 
 void POOL_Display_All(AssetManager *assetManager, EntityPool *pool, SDL_Renderer *renderer) {
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Starting displaying entities");
 
     for (int i = 0; i < pool->lastEntitylocation; i++) {
-        // Skip entities that don't have texture / display rect
-        if (!pool->display_rect_map[i] || !pool->tex_location_map[i]) { continue; }
+        // Skip entities that don't have texture / display rect / position
+        if (!pool->position_map || !pool->display_rect_map[i] || !pool->tex_location_map[i]) { continue; }
 
         SDL_Texture *tex = assetManager->asset_array[pool->tex_location[i]];
-        SDL_RenderCopy(renderer, tex, NULL, &pool->display_rect[i]);
+        SDL_Rect dst = pool->display_rect[i];
+
+        dst.x += pool->position[i].x;
+        dst.y += pool->position[i].y;
+
+        SDL_RenderCopy(renderer, tex, NULL, &dst);
 
         SDL_LogDebug(
             SDL_LOG_CATEGORY_RENDER,
@@ -104,8 +114,8 @@ void POOL_Display_All(AssetManager *assetManager, EntityPool *pool, SDL_Renderer
 
 void POOL_ApplyVelocity(EntityPool *pool, double deltaTime) {
     for (int i = 0; i < pool->lastEntitylocation; i++) {
-        if (!pool->display_rect_map[i] || !pool->velocity_map[i]) { continue; }
-        pool->display_rect[i].x += pool->velocity[i].x * deltaTime;
-        pool->display_rect[i].y += pool->velocity[i].y * deltaTime;
+        if (!pool->position_map[i] || !pool->velocity_map[i]) { continue; }
+        pool->position[i].x += pool->velocity[i].x * deltaTime;
+        pool->position[i].y += pool->velocity[i].y * deltaTime;
     }
 }
