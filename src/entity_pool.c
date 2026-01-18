@@ -6,16 +6,19 @@ void POOL_Init(EntityPool *pool) {
     pool->lastEntitylocation = 0;
     pool->emptyLocationsAmount = 0;
 
-    SDL_Rect default_rect = {0, 0, 0, 0};
     EntityID default_id = {0, 0};
 
     for (int i = 0; i < MAX_ENTITY_COUNT; i++) {
         pool->id[i] = default_id;
-        pool->display_rect[i] = default_rect;
         pool->tex_location[i] = TEX_DEBUG;
 
-        pool->display_rect_map[i] = SDL_FALSE;
         pool->tex_location[i] = SDL_FALSE;
+
+        pool->display_rect_map[i] = SDL_FALSE;
+        pool->collision_map[i] = SDL_FALSE;
+
+        pool->position_map[i] = SDL_FALSE;
+        pool->velocity_map[i] = SDL_FALSE;
     }
 }
 
@@ -24,8 +27,17 @@ void POOL_Load(EntityPool *pool) {
     SDL_Rect player_display_rect = {-50, -50, 100, 100};
 
     pool->player = POOL_NewEntityClassic(pool, TEX_DEBUG, player_display_rect, (SDL_FPoint) {0, 0});
-    pool->velocity[pool->player.location] = (SDL_FPoint) {10., 10.};
-    pool->velocity_map[pool->player.location] = SDL_TRUE;
+
+    int player_loc = pool->player.location;
+    pool->velocity[player_loc] = (SDL_FPoint) {10., 10.};
+    pool->velocity_map[player_loc] = SDL_TRUE;
+
+    pool->collision_box[player_loc] = (SDL_FRect) {-50., -50., 100., 100.};
+    pool->collision_map[player_loc] = SDL_TRUE;
+
+    EntityID tree = POOL_NewEntityClassic(pool, TEX_DEBUG, player_display_rect, (SDL_FPoint) {300., 300.});
+    pool->collision_box[tree.location] = (SDL_FRect) {-50., -50., 100., 100.};
+    pool->collision_map[tree.location] = SDL_TRUE;
 }
 
 EntityID POOL_NewEntity(EntityPool *pool) {
@@ -115,11 +127,48 @@ void POOL_DisplayAll(AssetManager *assetManager, EntityPool *pool, SDL_Renderer 
 }
 
 void POOL_ApplyVelocity(EntityPool *pool, double deltaTime) {
-    SDL_Log("Running POOL_ApplyVelocity");
     for (int i = 0; i < pool->lastEntitylocation; i++) {
         if (!pool->position_map[i] || !pool->velocity_map[i]) { continue; }
-        pool->position[i].x += pool->velocity[i].x * deltaTime;
-        pool->position[i].y += pool->velocity[i].y * deltaTime;
+
+        if (pool->collision_map[i]) { // If entity has a collision map, check possible collisions with every other entities
+            SDL_bool collided = SDL_FALSE;
+            for (int j = 0; j < pool->lastEntitylocation; j++) { 
+                if ( i == j ) { continue; }
+                if ( !pool->collision_map[j] || !pool->position_map[j] ) { continue; }
+
+                SDL_Log("Here");
+                SDL_FPoint obstacle_pos = pool->position[j];
+                SDL_FRect obstacle_box = pool->collision_box[j];
+
+                SDL_FPoint collider_pos = pool->position[i];
+                SDL_FRect collider_box = pool->collision_box[i];
+
+                // Shift collision boxes according to their entity position and velocity
+                obstacle_box.x += obstacle_pos.x;
+                obstacle_box.y += obstacle_pos.y;
+                collider_box.x += collider_pos.x + pool->velocity[i].x * deltaTime;
+                collider_box.y += collider_pos.y + pool->velocity[i].y * deltaTime;
+
+                // Continue there if there is no collision
+                if (!SDL_HasIntersectionF(&collider_box, &obstacle_box)) { continue; }
+                SDL_Log("there");
+
+                SDL_FRect intersect_box;
+                SDL_IntersectFRect(&collider_box, &obstacle_box, &intersect_box);
+
+                // TODO: Compute proper position
+                collided = SDL_TRUE;
+            }
+            // Proceed as normal if it does not result in a collision
+            if (!collided) {
+                pool->position[i].x += pool->velocity[i].x * deltaTime;
+                pool->position[i].y += pool->velocity[i].y * deltaTime;
+            }
+        } else {                     // ELSE: proceed without dealing with collisions
+            pool->position[i].x += pool->velocity[i].x * deltaTime;
+            pool->position[i].y += pool->velocity[i].y * deltaTime;
+        }
+
 
         SDL_LogDebug(
             SDL_LOG_CATEGORY_CUSTOM,
