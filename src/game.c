@@ -18,12 +18,12 @@ void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetMana
 
 SDL_bool readEvents(Game *game) {
     SDL_Event event;
-    SDL_bool quit = SDL_FALSE;
+    SDL_bool quit = false;
 
-    static SDL_bool HoldingUP;
-    static SDL_bool HoldingDOWN;
-    static SDL_bool HoldingLEFT;
-    static SDL_bool HoldingRIGHT;
+    static bool HoldingUP;
+    static bool HoldingDOWN;
+    static bool HoldingLEFT;
+    static bool HoldingRIGHT;
 
     while (SDL_PollEvent(&event) && !quit) {
         SDL_Log("TREATING EVENT: TYPE: %d, TIMESTAMP: %dms", event.type, event.common.timestamp);
@@ -31,7 +31,7 @@ SDL_bool readEvents(Game *game) {
         switch (event.type) {
             // Meta events
             case SDL_QUIT:
-                quit = SDL_TRUE;
+                quit = true;
                 break;
             case SDL_WINDOWEVENT:
                 break;
@@ -40,16 +40,16 @@ SDL_bool readEvents(Game *game) {
             case SDL_KEYDOWN:
                 switch (event.key.keysym.scancode) {
                     case SDL_SCANCODE_UP:
-                        HoldingUP = SDL_TRUE;
+                        HoldingUP = true;
                         break;
                     case SDL_SCANCODE_DOWN:
-                        HoldingDOWN = SDL_TRUE;
+                        HoldingDOWN = true;
                         break;
                     case SDL_SCANCODE_LEFT:
-                        HoldingLEFT = SDL_TRUE;
+                        HoldingLEFT = true;
                         break;
                     case SDL_SCANCODE_RIGHT:
-                        HoldingRIGHT = SDL_TRUE;
+                        HoldingRIGHT = true;
                         break;
                     case SDL_SCANCODE_F11:
                         Uint32 windowFlags = SDL_GetWindowFlags(game->window);
@@ -69,16 +69,16 @@ SDL_bool readEvents(Game *game) {
             case SDL_KEYUP:
                 switch (event.key.keysym.scancode) {
                     case SDL_SCANCODE_UP:
-                        HoldingUP = SDL_FALSE;
+                        HoldingUP = false;
                         break;
                     case SDL_SCANCODE_DOWN:
-                        HoldingDOWN = SDL_FALSE;
+                        HoldingDOWN = false;
                         break;
                     case SDL_SCANCODE_LEFT:
-                        HoldingLEFT = SDL_FALSE;
+                        HoldingLEFT = false;
                         break;
                     case SDL_SCANCODE_RIGHT:
-                        HoldingRIGHT = SDL_FALSE;
+                        HoldingRIGHT = false;
                         break;
                     default:
                         break;
@@ -112,7 +112,7 @@ SDL_bool readEvents(Game *game) {
 
 // Gestion de la boucle principale, et de la limitation des fps
 void GAME_Run(Game *game) {
-    SDL_bool quit = SDL_FALSE;
+    bool quit = false;
 
     Uint64 perf_freq = SDL_GetPerformanceFrequency();
     Uint64 NOW = SDL_GetPerformanceCounter();

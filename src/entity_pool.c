@@ -1,4 +1,6 @@
 #include <SDL2/SDL.h>
+#include <stdbool.h>
+
 #include "entity_pool.h"
 
 void POOL_Init(EntityPool *pool) {
@@ -12,13 +14,13 @@ void POOL_Init(EntityPool *pool) {
         pool->id[i] = default_id;
         pool->tex_location[i] = TEX_DEBUG;
 
-        pool->tex_location[i] = SDL_FALSE;
+        pool->tex_location[i] =     false;
 
-        pool->display_rect_map[i] = SDL_FALSE;
-        pool->collision_map[i] = SDL_FALSE;
+        pool->display_rect_map[i] = false;
+        pool->collision_map[i] =    false;
 
-        pool->position_map[i] = SDL_FALSE;
-        pool->velocity_map[i] = SDL_FALSE;
+        pool->position_map[i] =     false;
+        pool->velocity_map[i] =     false;
     }
 }
 
@@ -30,14 +32,14 @@ void POOL_Load(EntityPool *pool) {
 
     int player_loc = pool->player.location;
     pool->velocity[player_loc] = (SDL_FPoint) {10., 10.};
-    pool->velocity_map[player_loc] = SDL_TRUE;
+    pool->velocity_map[player_loc] = true;
 
     pool->collision_box[player_loc] = (SDL_FRect) {-50., -50., 100., 100.};
-    pool->collision_map[player_loc] = SDL_TRUE;
+    pool->collision_map[player_loc] = true;
 
     EntityID tree = POOL_NewEntityClassic(pool, TEX_DEBUG, player_display_rect, (SDL_FPoint) {300., 300.});
     pool->collision_box[tree.location] = (SDL_FRect) {-50., -50., 100., 100.};
-    pool->collision_map[tree.location] = SDL_TRUE;
+    pool->collision_map[tree.location] = true;
 }
 
 EntityID POOL_NewEntity(EntityPool *pool) {
@@ -71,9 +73,9 @@ EntityID POOL_NewEntityClassic(EntityPool *pool, TextureLocation tex_location, S
     pool->display_rect[new_id.location] = display_rect;
     pool->position[new_id.location] = position;
 
-    pool->tex_location_map[new_id.location] = SDL_TRUE;
-    pool->display_rect_map[new_id.location] = SDL_TRUE;
-    pool->position_map[new_id.location] = SDL_TRUE;
+    pool->tex_location_map[new_id.location] =   true;
+    pool->display_rect_map[new_id.location] =   true;
+    pool->position_map[new_id.location] =       true;
 
     return new_id;
 }
@@ -95,10 +97,11 @@ void POOL_DestroyEntity(EntityPool *pool, EntityID id) {
     pool->id[id.location] = (EntityID) {0, 0};
 
     // Reset all bitmaps
-    pool->tex_location_map[id.location] = SDL_FALSE;
-    pool->display_rect_map[id.location] = SDL_FALSE;
-    pool->velocity_map[id.location] = SDL_FALSE;
-    pool->position_map[id.location] = SDL_FALSE;
+    pool->tex_location_map[id.location] =   false;
+    pool->display_rect_map[id.location] =   false;
+    pool->collision_map[id.location] =      false;
+    pool->velocity_map[id.location] =       false;
+    pool->position_map[id.location] =       false;
 }
 
 void POOL_DisplayAll(AssetManager *assetManager, EntityPool *pool, SDL_Renderer *renderer) {
@@ -106,7 +109,7 @@ void POOL_DisplayAll(AssetManager *assetManager, EntityPool *pool, SDL_Renderer 
 
     for (int i = 0; i < pool->lastEntitylocation; i++) {
         // Skip entities that don't have texture / display rect / position
-        if (!pool->position_map || !pool->display_rect_map[i] || !pool->tex_location_map[i]) { continue; }
+        if (!pool->position_map[i] || !pool->display_rect_map[i] || !pool->tex_location_map[i]) { continue; }
 
         SDL_Texture *tex;
         ASSETS_AccessTexture(&tex, assetManager, pool->tex_location[i]);
@@ -131,7 +134,7 @@ void POOL_ApplyVelocity(EntityPool *pool, double deltaTime) {
         if (!pool->position_map[i] || !pool->velocity_map[i]) { continue; }
 
         if (pool->collision_map[i]) { // If entity has a collision map, check possible collisions with every other entities
-            SDL_bool collided = SDL_FALSE;
+            bool collided = false;
             for (int j = 0; j < pool->lastEntitylocation; j++) { 
                 if ( i == j ) { continue; }
                 if ( !pool->collision_map[j] || !pool->position_map[j] ) { continue; }
@@ -157,7 +160,7 @@ void POOL_ApplyVelocity(EntityPool *pool, double deltaTime) {
                 SDL_IntersectFRect(&collider_box, &obstacle_box, &intersect_box);
 
                 // TODO: Compute proper position
-                collided = SDL_TRUE;
+                collided = true;
             }
             // Proceed as normal if it does not result in a collision
             if (!collided) {

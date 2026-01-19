@@ -2,6 +2,8 @@
 #define ENTITY_POOL_H
 
 #include <SDL2/SDL.h>
+#include <stdbool.h>
+
 #include "assets.h"
 
 #define MAX_ENTITY_COUNT 500
@@ -33,13 +35,13 @@ typedef struct {
     SDL_FPoint velocity[MAX_ENTITY_COUNT];
 
     // Bitmaps ( whether a specific entity has a component )
-    SDL_bool tex_location_map[MAX_ENTITY_COUNT];
+    bool tex_location_map[MAX_ENTITY_COUNT];
 
-    SDL_bool display_rect_map[MAX_ENTITY_COUNT];
-    SDL_bool collision_map[MAX_ENTITY_COUNT];
+    bool display_rect_map[MAX_ENTITY_COUNT];
+    bool collision_map[MAX_ENTITY_COUNT];
 
-    SDL_bool position_map[MAX_ENTITY_COUNT];
-    SDL_bool velocity_map[MAX_ENTITY_COUNT];
+    bool position_map[MAX_ENTITY_COUNT];
+    bool velocity_map[MAX_ENTITY_COUNT];
 
 } EntityPool ;
 
