@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,6 +39,7 @@ int main(int argc, char *argv[])
     }
 
     // Chargement des assets
+    TTF_Init();
     AssetManager asset_manager;
     ASSETS_Init(&asset_manager, renderer);
     ASSETS_Load(&asset_manager, renderer);

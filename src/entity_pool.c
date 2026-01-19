@@ -139,7 +139,6 @@ void POOL_ApplyVelocity(EntityPool *pool, double deltaTime) {
                 if ( i == j ) { continue; }
                 if ( !pool->collision_map[j] || !pool->position_map[j] ) { continue; }
 
-                SDL_Log("Here");
                 SDL_FPoint obstacle_pos = pool->position[j];
                 SDL_FRect obstacle_box = pool->collision_box[j];
 
@@ -154,7 +153,6 @@ void POOL_ApplyVelocity(EntityPool *pool, double deltaTime) {
 
                 // Continue there if there is no collision
                 if (!SDL_HasIntersectionF(&collider_box, &obstacle_box)) { continue; }
-                SDL_Log("there");
 
                 SDL_FRect intersect_box;
                 SDL_IntersectFRect(&collider_box, &obstacle_box, &intersect_box);

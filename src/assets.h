@@ -2,6 +2,7 @@
 #define ASSETS_H
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 #define ASSET_ARRAY_LENGTH 100
 
@@ -11,6 +12,8 @@ typedef enum {
 } TextureLocation ;
 
 typedef struct {
+    TTF_Font *debug_font;
+
     SDL_Texture *asset_table;
     SDL_Texture *asset_array[ASSET_ARRAY_LENGTH];
 } AssetManager;
