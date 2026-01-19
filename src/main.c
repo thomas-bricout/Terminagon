@@ -7,6 +7,7 @@
 #include "game.h"
 #include "assets.h"
 #include "entity_pool.h"
+#include "input.h"
 
 #define GAMENAME "Mon jeu"
 #define VERSION "0.0.0"
@@ -44,6 +45,10 @@ int main(int argc, char *argv[])
     ASSETS_Init(&asset_manager, renderer);
     ASSETS_Load(&asset_manager, renderer);
 
+    // Création de InputSituation
+    InputSituation inputSituation;
+    InputSituation_Init(&inputSituation);
+
     // Dit au renderer de dessiner directement sur la fenêtre
     SDL_SetRenderTarget(renderer, NULL);
 
@@ -54,7 +59,7 @@ int main(int argc, char *argv[])
 
     // Création du jeu
     Game game;
-    GAME_Init(&game, renderer, window, &asset_manager, &pool);
+    GAME_Init(&game, renderer, window, &asset_manager, &pool, &inputSituation);
 
     // Appelle de la boucle principale de jeu
     GAME_Run(&game);
