@@ -3,6 +3,7 @@
 #include "game.h"
 #include "assets.h"
 #include "entity_pool.h"
+#include "input.h"
 
 const double TARGET_FPS = 60.0;
 const double TARGET_FRAME_TIME =  1000.0 / TARGET_FPS; // in ms
@@ -11,111 +12,44 @@ const double MAX_PLAYER_SPEED = 0.1;
 
 void GAME_DisplayF3(Game *game, double deltaTime, double FPS, double elapsed);
 
-void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetManager *asset_manager, EntityPool *pool) {
+void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetManager *asset_manager, EntityPool *pool, InputSituation *inputSituation) {
     game->renderer = renderer;
     game->window = window;
     game->asset_manager = asset_manager;
     game->pool = pool;
+    game->inputSituation = inputSituation;
 }
 
-SDL_bool readEvents(Game *game) {
+void readEvents(Game *game) {
     SDL_Event event;
-    SDL_bool quit = false;
+    InputSituation *inputSituation = game->inputSituation;
 
-    static bool HoldingUP;
-    static bool HoldingDOWN;
-    static bool HoldingLEFT;
-    static bool HoldingRIGHT;
-
-    while (SDL_PollEvent(&event) && !quit) {
+    while (SDL_PollEvent(&event)) {
         SDL_Log("TREATING EVENT: TYPE: %d, TIMESTAMP: %dms", event.type, event.common.timestamp);
-
-        switch (event.type) {
-            // Meta events
-            case SDL_QUIT:
-                quit = true;
-                break;
-            case SDL_WINDOWEVENT:
-                break;
-
-            // Game play related event
-            case SDL_KEYDOWN:
-                switch (event.key.keysym.scancode) {
-                    case SDL_SCANCODE_UP:
-                        HoldingUP = true;
-                        break;
-                    case SDL_SCANCODE_DOWN:
-                        HoldingDOWN = true;
-                        break;
-                    case SDL_SCANCODE_LEFT:
-                        HoldingLEFT = true;
-                        break;
-                    case SDL_SCANCODE_RIGHT:
-                        HoldingRIGHT = true;
-                        break;
-                    case SDL_SCANCODE_F11:
-                        Uint32 windowFlags = SDL_GetWindowFlags(game->window);
-                        if (windowFlags & SDL_WINDOW_FULLSCREEN_DESKTOP) {
-                            SDL_SetWindowFullscreen(game->window, 0);
-                        } else if (windowFlags & SDL_WINDOW_FULLSCREEN) {
-                            SDL_SetWindowFullscreen(game->window, 0);
-                        } else {
-                            SDL_SetWindowFullscreen(game->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-
-                break;
-            case SDL_KEYUP:
-                switch (event.key.keysym.scancode) {
-                    case SDL_SCANCODE_UP:
-                        HoldingUP = false;
-                        break;
-                    case SDL_SCANCODE_DOWN:
-                        HoldingDOWN = false;
-                        break;
-                    case SDL_SCANCODE_LEFT:
-                        HoldingLEFT = false;
-                        break;
-                    case SDL_SCANCODE_RIGHT:
-                        HoldingRIGHT = false;
-                        break;
-                    default:
-                        break;
-                }
-
-                break;
-            case SDL_MOUSEMOTION:
-                break;
-            case SDL_MOUSEBUTTONDOWN:
-                break;
+        InputSituation_Update(game->inputSituation, event.type, event.key.keysym.scancode);
+        if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_F11) {
+            Uint32 windowFlags = SDL_GetWindowFlags(game->window);
+            if (windowFlags & SDL_WINDOW_FULLSCREEN_DESKTOP) {
+                SDL_SetWindowFullscreen(game->window, 0);
+            } else if (windowFlags & SDL_WINDOW_FULLSCREEN) {
+                SDL_SetWindowFullscreen(game->window, 0);
+            } else {
+                SDL_SetWindowFullscreen(game->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+            }
         }
     }
 
     // Treat holden keys
     int playerLocation = game->pool->player.location;
-
     if ( game->pool->id[playerLocation].unique_id == game->pool->player.unique_id ) {
         SDL_FPoint *playerVelocity = &game->pool->velocity[playerLocation];
-        playerVelocity->x = MAX_PLAYER_SPEED * ( (int) HoldingRIGHT - (int) HoldingLEFT );
-        playerVelocity->y = MAX_PLAYER_SPEED * ( (int) HoldingDOWN - (int) HoldingUP );
+        playerVelocity->x = MAX_PLAYER_SPEED * ( (int) inputSituation->RIGHT - (int) inputSituation->LEFT );
+        playerVelocity->y = MAX_PLAYER_SPEED * ( (int) inputSituation->DOWN - (int) inputSituation->UP );
     }
-
-    SDL_LogInfo(
-        SDL_LOG_CATEGORY_INPUT,
-        "Holding: UP %d DOWN %d LEFT %d RIGHT %d",
-        HoldingUP, HoldingDOWN, HoldingLEFT, HoldingRIGHT
-    );
-
-    return quit;
 }
 
 // Gestion de la boucle principale, et de la limitation des fps
 void GAME_Run(Game *game) {
-    bool quit = false;
-
     Uint64 perf_freq = SDL_GetPerformanceFrequency();
     Uint64 NOW = SDL_GetPerformanceCounter();
     Uint64 LAST = 0;
@@ -124,7 +58,7 @@ void GAME_Run(Game *game) {
     double FPS = 0;
     double elapsed = 0;
 
-    while (!quit) {
+    while (!game->inputSituation->QUIT) {
         // Calculating deltaTime, FPS and logging them
         LAST = NOW;
         NOW = SDL_GetPerformanceCounter();
@@ -133,7 +67,7 @@ void GAME_Run(Game *game) {
         FPS = 1000 / deltaTime;
 
         // Read game events
-        quit = readEvents(game);
+        readEvents(game);
         
         // Physique
         POOL_ApplyVelocity(game->pool, deltaTime);
@@ -159,17 +93,23 @@ void GAME_Run(Game *game) {
 }
 
 void GAME_DisplayF3(Game *game, double deltaTime, double FPS, double elapsed) {
+    // Quit if F3 is not toggled
+    InputSituation *in = game->inputSituation;
+    if (!in->ToggledF3) { return; }
+
     // Compiling things to print
-    char *str[1000];
+    char *str[500];
     sprintf(
         str,
         "ENTITY COUNT: %d\n"
         "deltaTime: %4.2fms FPS: %4.1f\n"
         "COMPUTE TIME PER FRAME: %4.2fms\n"
+        "LEFT %d RIGHT %d UP %d DOWN %d\n"
         , 
         game->pool->currentCount, 
         deltaTime, FPS,
-        elapsed
+        elapsed,
+        in->LEFT, in->RIGHT, in->UP, in->DOWN
     );
 
     // Display the string on the screen
