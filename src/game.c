@@ -80,6 +80,7 @@ void GAME_Run(Game *game) {
 
         // Affichage à l'écran
         SDL_RenderPresent(game->renderer);
+        SDL_SetRenderDrawColor(game->renderer, 0, 0, 0, 255);
         SDL_RenderClear(game->renderer);
 
         // Limitation des FPS
@@ -97,8 +98,11 @@ void GAME_DisplayF3(Game *game, double deltaTime, double FPS, double elapsed) {
     InputSituation *in = game->inputSituation;
     if (!in->ToggledF3) { return; }
 
+    // Display the collision rects
+    POOL_DisplayDebugRects(game->pool, game->renderer);
+
     // Compiling things to print
-    char *str[500];
+    char str[500];
     sprintf(
         str,
         "ENTITY COUNT: %d\n"

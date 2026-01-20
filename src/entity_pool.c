@@ -1,7 +1,28 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_rect.h>
+
 #include <stdbool.h>
+#include <math.h>
 
 #include "entity_pool.h"
+
+SDL_Rect FRectToRect(SDL_FRect frect) {
+    SDL_Rect rect;
+    rect.x = (int) frect.x;
+    rect.y = (int) frect.y;
+    rect.h = (int) frect.h;
+    rect.w = (int) frect.w;
+    return rect;
+}
+
+SDL_FRect OffsetFRect(SDL_FRect rect, SDL_FPoint position) {
+    SDL_FRect res;
+    res.x = rect.x + position.x;
+    res.y = rect.y + position.y;
+    res.w = rect.w;
+    res.h = rect.h;
+    return res;
+}
 
 void POOL_Init(EntityPool *pool) {
     pool->currentCount = 0;
@@ -176,5 +197,21 @@ void POOL_ApplyVelocity(EntityPool *pool, double deltaTime) {
             "Current player velocity: (%f, %f)",
             pool->velocity[i].x, pool->velocity[i].y
         );
+    }
+}
+
+void POOL_DisplayDebugRects(EntityPool *pool, SDL_Renderer *renderer) {
+    for (int i = 0; i < pool->lastEntitylocation; i++) {
+        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+        
+        if (!pool->position_map[i]) { continue; }
+
+        // Display the collision boxes
+        if (pool->collision_map[i]) {
+            SDL_SetRenderDrawColor(renderer, 0, 255, 0, 100);
+            SDL_FRect rect = OffsetFRect(pool->collision_box[i], pool->position[i]);
+            SDL_RenderFillRectF(renderer, &rect);
+            printf("%f, %f, %f, %f\n", rect.x, rect.y, rect.h, rect.w);
+        }
     }
 }
