@@ -3,6 +3,8 @@
 #include "assets.h"
 #include "player.h"
 
+#include <math.h>
+
 const double DEFAULT_PLAYER_SPEED = 0.2;
 const double DASHING_PLAYER_SPEED = 0.4;
 const double AIMING_PLAYER_SPEED = 0.1;
@@ -98,5 +100,10 @@ void PlayerSystem(EntityPool *pool, InputSituation *inputSituation, double curre
     if ( pool->id[playerLocation].unique_id == pool->player.unique_id ) {
         playerVelocity->x = player_speed * ( (int) inputSituation->RIGHT - (int) inputSituation->LEFT );
         playerVelocity->y = player_speed * ( (int) inputSituation->DOWN - (int) inputSituation->UP );
+    }
+
+    // Determine the angle
+    if ((int) inputSituation->RIGHT - (int) inputSituation->LEFT != 0 || (int) inputSituation->DOWN - (int) inputSituation->UP != 0) {
+        pc->angle = atan2((double) inputSituation->RIGHT - (double) inputSituation->LEFT, (double) inputSituation->DOWN - (double) inputSituation->UP);
     }
 }
