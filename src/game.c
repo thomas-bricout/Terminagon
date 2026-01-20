@@ -4,11 +4,10 @@
 #include "assets.h"
 #include "entity_pool.h"
 #include "input.h"
+#include "debug.h"
 
 const double TARGET_FPS = 60.0;
 const double TARGET_FRAME_TIME =  1000.0 / TARGET_FPS; // in ms
-
-void DEBUG_DisplayDebugInfo(Game *game, double deltaTime, double FPS, double elapsed, double current_time);
 
 void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetManager *asset_manager, EntityPool *pool, InputSituation *inputSituation) {
     game->renderer = renderer;
