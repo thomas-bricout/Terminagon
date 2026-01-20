@@ -1,10 +1,13 @@
 #ifndef ENTITY_POOL_H
 #define ENTITY_POOL_H
 
+typedef struct EntityPool EntityPool;
+
 #include <SDL2/SDL.h>
 #include <stdbool.h>
 
 #include "assets.h"
+#include "player.h"
 
 #define MAX_ENTITY_COUNT 500
 
@@ -13,7 +16,7 @@ typedef struct {
     int unique_id;
 } EntityID;
 
-typedef struct {
+struct EntityPool {
     // Keeping track of which spots are occupied by valid entities
     int currentCount;
     int lastEntitylocation; // Available spot
@@ -23,6 +26,7 @@ typedef struct {
 
     // Keep track of specific entities or entity lists ( for example, all entities which might damage the player )
     EntityID player;
+    PlayerComponent player_c;
 
     // Each list contains a specific component for all entities in the game
     EntityID id[MAX_ENTITY_COUNT];
@@ -43,7 +47,7 @@ typedef struct {
     bool position_map[MAX_ENTITY_COUNT];
     bool velocity_map[MAX_ENTITY_COUNT];
 
-} EntityPool ;
+};
 
 void POOL_Init(EntityPool *pool);
 void POOL_Load(EntityPool *pool);

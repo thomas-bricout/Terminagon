@@ -8,8 +8,6 @@
 const double TARGET_FPS = 60.0;
 const double TARGET_FRAME_TIME =  1000.0 / TARGET_FPS; // in ms
 
-const double MAX_PLAYER_SPEED = 0.1;
-
 void GAME_DisplayF3(Game *game, double deltaTime, double FPS, double elapsed);
 
 void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetManager *asset_manager, EntityPool *pool, InputSituation *inputSituation) {
@@ -26,7 +24,7 @@ void readEvents(Game *game) {
 
     while (SDL_PollEvent(&event)) {
         SDL_Log("TREATING EVENT: TYPE: %d, TIMESTAMP: %dms", event.type, event.common.timestamp);
-        InputSituation_Update(game->inputSituation, event.type, event.key.keysym.scancode);
+        InputSituation_Update(inputSituation, event.type, event.key.keysym.scancode);
         if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_F11) {
             Uint32 windowFlags = SDL_GetWindowFlags(game->window);
             if (windowFlags & SDL_WINDOW_FULLSCREEN_DESKTOP) {
@@ -40,12 +38,6 @@ void readEvents(Game *game) {
     }
 
     // Treat holden keys
-    int playerLocation = game->pool->player.location;
-    if ( game->pool->id[playerLocation].unique_id == game->pool->player.unique_id ) {
-        SDL_FPoint *playerVelocity = &game->pool->velocity[playerLocation];
-        playerVelocity->x = MAX_PLAYER_SPEED * ( (int) inputSituation->RIGHT - (int) inputSituation->LEFT );
-        playerVelocity->y = MAX_PLAYER_SPEED * ( (int) inputSituation->DOWN - (int) inputSituation->UP );
-    }
 }
 
 // Gestion de la boucle principale, et de la limitation des fps
@@ -69,7 +61,8 @@ void GAME_Run(Game *game) {
         // Read game events
         readEvents(game);
         
-        // Physique
+        // Physiques
+        PlayerSystem(game->pool, game->inputSituation);
         POOL_ApplyVelocity(game->pool, deltaTime);
         
         // Création du rendu

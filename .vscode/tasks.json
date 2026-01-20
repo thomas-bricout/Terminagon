@@ -10,6 +10,7 @@
                 "src/game.c",
                 "src/entity_pool.c",
                 "src/input.c",
+                "src/player.c",
                 "-o",
                 "app",
                 "-fdiagnostics-color=always",
