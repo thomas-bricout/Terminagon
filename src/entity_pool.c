@@ -23,7 +23,9 @@ void POOL_Init(EntityPool *pool) {
         pool->tex_location[i] =     false;
 
         pool->display_rect_map[i] = false;
-        pool->collision_map[i] =    false;
+        pool->collision_box_map[i] =    false;
+        pool->damage_box_map[i] = false;
+        pool->hit_box_map[i] = false;
 
         pool->position_map[i] =     false;
         pool->velocity_map[i] =     false;
@@ -42,11 +44,11 @@ void POOL_Load(EntityPool *pool) {
     pool->velocity_map[player_loc] = true;
 
     pool->collision_box[player_loc] = (SDL_FRect) {-50., -50., 100., 100.};
-    pool->collision_map[player_loc] = true;
+    pool->collision_box_map[player_loc] = true;
 
     EntityID tree = POOL_NewEntityClassic(pool, TEX_DEBUG, player_display_rect, (SDL_FPoint) {300., 300.});
     pool->collision_box[tree.location] = (SDL_FRect) {-50., -50., 100., 100.};
-    pool->collision_map[tree.location] = true;
+    pool->collision_box_map[tree.location] = true;
 }
 
 EntityID POOL_NewEntity(EntityPool *pool) {
@@ -107,7 +109,9 @@ void POOL_DestroyEntity(EntityPool *pool, EntityID id) {
     // Reset all bitmaps
     pool->tex_location_map[id.location] =   false;
     pool->display_rect_map[id.location] =   false;
-    pool->collision_map[id.location] =      false;
+    pool->collision_box_map[id.location] =  false;
+    pool->damage_box_map[id.location] =     false;
+    pool->hit_box_map[id.location]  =       false;
     pool->velocity_map[id.location] =       false;
     pool->position_map[id.location] =       false;
 }
@@ -141,11 +145,11 @@ void POOL_ApplyVelocity(EntityPool *pool, double deltaTime) {
     for (int i = 0; i < pool->lastEntitylocation; i++) {
         if (!pool->position_map[i] || !pool->velocity_map[i]) { continue; }
 
-        if (pool->collision_map[i]) { // If entity has a collision map, check possible collisions with every other entities
+        if (pool->collision_box_map[i]) { // If entity has a collision map, check possible collisions with every other entities
             bool collided = false;
             for (int j = 0; j < pool->lastEntitylocation; j++) { 
                 if ( i == j ) { continue; }
-                if ( !pool->collision_map[j] || !pool->position_map[j] ) { continue; }
+                if ( !pool->collision_box_map[j] || !pool->position_map[j] ) { continue; }
 
                 SDL_FPoint obstacle_pos = pool->position[j];
                 SDL_FRect obstacle_box = pool->collision_box[j];

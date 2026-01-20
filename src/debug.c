@@ -10,6 +10,9 @@ void DEBUG_DisplayDebug(Game *game, double deltaTime, double FPS, double elapsed
     if (!in->ToggledF3) { return; }
 
     DEBUG_DisplayCollisionRects(game->pool, game->renderer);
+    DEBUG_DisplayDamageRects(game->pool, game->renderer);
+    DEBUG_DisplayHitboxRects(game->pool, game->renderer);
+
     DEBUG_DisplayDebugInfo(game, deltaTime, FPS, elapsed, current_time);
 }
 
@@ -65,11 +68,38 @@ void DEBUG_DisplayDebugInfo(Game *game, double deltaTime, double FPS, double ela
 void DEBUG_DisplayCollisionRects(EntityPool *pool, SDL_Renderer *renderer) {
     SDL_SetRenderDrawColor(renderer, 0, 255, 0, 100);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
     for (int i = 0; i < pool->lastEntitylocation; i++) {
         
-        if (!pool->position_map[i] || !pool->collision_map[i]) { continue; }
+        if (!pool->position_map[i] || !pool->collision_box_map[i]) { continue; }
 
         SDL_FRect rect = OffsetFRect(pool->collision_box[i], pool->position[i]);
+        SDL_RenderFillRectF(renderer, &rect);
+    }
+}
+
+void DEBUG_DisplayDamageRects(EntityPool *pool, SDL_Renderer *renderer) {
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 100);
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
+    for (int i = 0; i < pool->lastEntitylocation; i++) {
+        
+        if (!pool->position_map[i] || !pool->damage_box_map[i]) { continue; }
+
+        SDL_FRect rect = OffsetFRect(pool->damage_box[i], pool->position[i]);
+        SDL_RenderFillRectF(renderer, &rect);
+    }
+}
+
+void DEBUG_DisplayHitboxRects(EntityPool *pool, SDL_Renderer *renderer) {
+    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 100);
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
+    for (int i = 0; i < pool->lastEntitylocation; i++) {
+        
+        if (!pool->position_map[i] || !pool->hit_box_map[i]) { continue; }
+
+        SDL_FRect rect = OffsetFRect(pool->hit_box[i], pool->position[i]);
         SDL_RenderFillRectF(renderer, &rect);
     }
 }
