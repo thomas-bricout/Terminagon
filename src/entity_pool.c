@@ -167,8 +167,7 @@ void POOL_ApplyVelocity(EntityPool *pool, double deltaTime) {
                 SDL_FRect collider_box = pool->collision_box[i];
 
                 // Shift collision boxes according to their entity position and velocity
-                obstacle_box.x += obstacle_pos.x;
-                obstacle_box.y += obstacle_pos.y;
+                obstacle_box = OffsetFRect(obstacle_box, obstacle_pos);
                 collider_box.x += collider_pos.x + pool->velocity[i].x * deltaTime;
                 collider_box.y += collider_pos.y + pool->velocity[i].y * deltaTime;
 
@@ -211,7 +210,6 @@ void POOL_DisplayDebugRects(EntityPool *pool, SDL_Renderer *renderer) {
             SDL_SetRenderDrawColor(renderer, 0, 255, 0, 100);
             SDL_FRect rect = OffsetFRect(pool->collision_box[i], pool->position[i]);
             SDL_RenderFillRectF(renderer, &rect);
-            printf("%f, %f, %f, %f\n", rect.x, rect.y, rect.h, rect.w);
         }
     }
 }
