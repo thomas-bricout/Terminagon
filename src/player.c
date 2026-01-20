@@ -9,6 +9,7 @@ const double AIMING_PLAYER_SPEED = 0.1;
 
 const double BOW_AIMING_TIME = 1000;
 const double DASHING_TIME = 500;
+const double RECOVERY_TIME = 100;
 
 PlayerComponent PLAYER_NewComponent() {
     PlayerComponent p_c;
@@ -36,12 +37,16 @@ void PlayerSystem(EntityPool *pool, InputSituation *inputSituation, double curre
     SDL_FPoint *playerVelocity = &pool->velocity[playerLocation];
     SDL_FPoint *playerPosition = &pool->position[playerLocation];
     PlayerComponent *pc = &pool->player_c;
+    double elapsed_time = current_time - pc->actionTimeStamp;
     
     // Whether player is ready to start a new action
-    bool available = pc->action == 0;
+    bool available = pc->action == 0 && elapsed_time >= RECOVERY_TIME;
     if (available) { // Treat new actions
         if (inputSituation->X) {
             pc->action = ACTION_DASHING;
+            pc->actionTimeStamp = current_time;
+        } else if (inputSituation->W) {
+            pc->action = ACTION_SHIELDING;
             pc->actionTimeStamp = current_time;
         } else if (inputSituation->C) {
             pc->action = ACTION_BOW_AIMING;
@@ -50,14 +55,14 @@ void PlayerSystem(EntityPool *pool, InputSituation *inputSituation, double curre
     } else {        // Treat current action
         switch(pc->action) {
             case ACTION_DASHING:
-                if (current_time - pc->actionTimeStamp >= DASHING_TIME) {
+                if (elapsed_time >= DASHING_TIME) {
                     pc->action = ACTION_NONE;
                     pc->actionTimeStamp = current_time;
                 }
                 break;
             case ACTION_BOW_AIMING:
                 if (!inputSituation->C) {
-                    if (current_time - pc->actionTimeStamp >= BOW_AIMING_TIME) {
+                    if (elapsed_time >= BOW_AIMING_TIME) {
                         POOL_SpawnArrow(pool, *playerPosition);
                     }
                     pc->action = ACTION_NONE;
@@ -65,6 +70,10 @@ void PlayerSystem(EntityPool *pool, InputSituation *inputSituation, double curre
                 }
                 break;
             case ACTION_SHIELDING:
+                if (!inputSituation->W) {
+                    pc->action = ACTION_NONE;
+                    pc->actionTimeStamp = current_time;
+                }
                 break;
             case ACTION_NONE:
                 break;
