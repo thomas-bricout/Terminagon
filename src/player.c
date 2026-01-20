@@ -5,6 +5,8 @@
 
 const double DEFAULT_PLAYER_SPEED = 0.2;
 const double DASHING_PLAYER_SPEED = 0.4;
+const double AIMING_PLAYER_SPEED = 0.1;
+
 const double BOW_AIMING_TIME = 1000;
 const double DASHING_TIME = 500;
 
@@ -70,10 +72,22 @@ void PlayerSystem(EntityPool *pool, InputSituation *inputSituation, double curre
     }
 
     // Set playerVelocity
-    double player_speed = pc->action == ACTION_DASHING ? DASHING_PLAYER_SPEED : DEFAULT_PLAYER_SPEED;
+    double player_speed = 1.;
+    switch (pc->action) {
+        case ACTION_BOW_AIMING:
+            player_speed = AIMING_PLAYER_SPEED;
+            break;
+        case ACTION_DASHING:
+            player_speed = DASHING_PLAYER_SPEED;
+            break;
+        case ACTION_NONE:
+        default:
+            player_speed = DEFAULT_PLAYER_SPEED;
+            break;
+    }
+
     if ( pool->id[playerLocation].unique_id == pool->player.unique_id ) {
         playerVelocity->x = player_speed * ( (int) inputSituation->RIGHT - (int) inputSituation->LEFT );
         playerVelocity->y = player_speed * ( (int) inputSituation->DOWN - (int) inputSituation->UP );
     }
-
 }
