@@ -1,4 +1,5 @@
 # PROJETC
+## Gameplay et idées
 
 ## Compilation
 - Compiler et lancer le jeu avec la touche F5 ( dans l'éditeur ).
@@ -22,6 +23,14 @@
 
 ### game.c
 - Définit la boucle principale du jeu et limite les FPS
-- Gère les Events ( Fermeture fenêtre, appuis claviers)
+- Game permet d'accéder à l'entièreté du jeu
 
-## Gameplay et idées
+### input.c
+- Enregistre les Inputs claviers dans InputSituation pour être utilisé par les autres systèmes
+
+### entity_pool.c
+- Définit la structure de donné stockant toutes les unités
+- Création, Initialisation, Destruction, Lecture de l'ensemble des entités
+
+### player.c
+- Définit les actions et déplacements possible par le joueur
