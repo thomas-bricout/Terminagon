@@ -185,11 +185,13 @@ void POOL_ApplyVelocity(EntityPool *pool, double deltaTime) {
                 pool->position[i].x += pool->velocity[i].x * deltaTime;
                 pool->position[i].y += pool->velocity[i].y * deltaTime;
             }
-        } else {                     // ELSE: proceed without dealing with collisions
-            pool->position[i].x += pool->velocity[i].x * deltaTime;
-            pool->position[i].y += pool->velocity[i].y * deltaTime;
+            // Do not check other possibilities
+            continue;
         }
 
+        // ELSE: proceed without dealing with collisions
+        pool->position[i].x += pool->velocity[i].x * deltaTime;
+        pool->position[i].y += pool->velocity[i].y * deltaTime;
 
         SDL_LogDebug(
             SDL_LOG_CATEGORY_CUSTOM,
