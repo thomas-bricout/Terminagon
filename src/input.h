@@ -11,6 +11,10 @@ typedef struct {
     bool LEFT;
     bool RIGHT;
 
+    bool W;
+    bool X;
+    bool C;
+
     bool ToggledF3;
 } InputSituation;
 

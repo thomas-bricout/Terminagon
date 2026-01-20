@@ -10,6 +10,9 @@ void InputSituation_Init(InputSituation *inputSituation) {
     inputSituation->DOWN    = false;
     inputSituation->LEFT    = false;
     inputSituation->RIGHT   = false;
+    inputSituation->W       = false;
+    inputSituation->X       = false;
+    inputSituation->C       = false;
 
     inputSituation->ToggledF3 = false;
 }
@@ -33,7 +36,16 @@ void InputSituation_Update(InputSituation *inputSituation, SDL_EventType type, S
                 case SDL_SCANCODE_RIGHT:
                     inputSituation->RIGHT = true;
                     break;
-                
+                case SDL_SCANCODE_W:
+                    inputSituation->W = true;
+                    break;
+                case SDL_SCANCODE_X:
+                    inputSituation->X = true;
+                    break;
+                case SDL_SCANCODE_C:
+                    inputSituation->C = true;
+                    break;
+
                 case SDL_SCANCODE_F3:
                     inputSituation->ToggledF3 = !inputSituation->ToggledF3;
                     break;
@@ -54,6 +66,15 @@ void InputSituation_Update(InputSituation *inputSituation, SDL_EventType type, S
                     break;
                 case SDL_SCANCODE_RIGHT:
                     inputSituation->RIGHT = false;
+                    break;
+                case SDL_SCANCODE_W:
+                    inputSituation->W = false;
+                    break;
+                case SDL_SCANCODE_X:
+                    inputSituation->X = false;
+                    break;
+                case SDL_SCANCODE_C:
+                    inputSituation->C = false;
                     break;
                 default:
                     break;
