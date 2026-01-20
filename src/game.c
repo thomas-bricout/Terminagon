@@ -109,11 +109,14 @@ void GAME_DisplayF3(Game *game, double deltaTime, double FPS, double elapsed) {
         "deltaTime: %4.2fms FPS: %4.1f\n"
         "COMPUTE TIME PER FRAME: %4.2fms\n"
         "LEFT %d RIGHT %d UP %d DOWN %d\n"
+        "PLAYER POSITION (%4.2f, %4.2f)"
         , 
         game->pool->currentCount, 
         deltaTime, FPS,
         elapsed,
-        in->LEFT, in->RIGHT, in->UP, in->DOWN
+        in->LEFT, in->RIGHT, in->UP, in->DOWN,
+        game->pool->position[game->pool->player.location].x,
+        game->pool->position[game->pool->player.location].y
     );
 
     // Display the string on the screen
