@@ -56,6 +56,6 @@ EntityID POOL_NewEntityClassic(EntityPool *pool, TextureLocation tex_location, S
 void POOL_DestroyEntity(EntityPool *pool, EntityID id);
 void POOL_DisplayAll(AssetManager *assetManager, EntityPool *pool, SDL_Renderer *renderer);
 void POOL_ApplyVelocity(EntityPool *pool, double deltaTime);
-void POOL_DisplayDebugRects(EntityPool *pool, SDL_Renderer *renderer);
+void DEBUG_DisplayCollisionRects(EntityPool *pool, SDL_Renderer *renderer);
 
 #endif
