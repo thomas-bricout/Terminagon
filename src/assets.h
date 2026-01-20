@@ -9,6 +9,7 @@
 typedef enum {
     TEX_DEBUG = 0,
     TEX_PLAYER_STILL = 1,
+    TEX_ARROW = 2,
 } TextureLocation ;
 
 typedef struct {

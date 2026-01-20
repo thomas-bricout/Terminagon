@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_rect.h>
 
+#include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
 
@@ -70,6 +71,7 @@ EntityID POOL_NewEntity(EntityPool *pool) {
     if (pool->emptyLocationsAmount == 0) {  // Append to the end of the list
         new_id.location = pool->lastEntitylocation;
         pool->lastEntitylocation ++;
+        if ( pool->lastEntitylocation == MAX_ENTITY_COUNT) { abort(); }
     } else {                                // Fill one of the empty spots
         new_id.location = pool->emptyLocations[pool->emptyLocationsAmount - 1];
         pool->emptyLocationsAmount --;
