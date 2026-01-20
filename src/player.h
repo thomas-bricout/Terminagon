@@ -19,6 +19,7 @@ typedef struct {
     double actionTimeStamp;
 } PlayerComponent;
 
-void PlayerSystem(EntityPool *pool, InputSituation *inputSituation);
+void PlayerSystem(EntityPool *pool, InputSituation *inputSituation, double current_time);
+PlayerComponent PLAYER_NewComponent();
 
 #endif

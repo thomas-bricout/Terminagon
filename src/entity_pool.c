@@ -6,6 +6,7 @@
 #include <math.h>
 
 #include "entity_pool.h"
+#include "player.h"
 
 SDL_Rect FRectToRect(SDL_FRect frect) {
     SDL_Rect rect;
@@ -50,6 +51,7 @@ void POOL_Load(EntityPool *pool) {
     // Adds the main player
     SDL_Rect player_display_rect = {-50, -50, 100, 100};
 
+    pool->player_c = PLAYER_NewComponent();
     pool->player = POOL_NewEntityClassic(pool, TEX_DEBUG, player_display_rect, (SDL_FPoint) {0, 0});
 
     int player_loc = pool->player.location;

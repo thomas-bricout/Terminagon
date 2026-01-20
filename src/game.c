@@ -8,7 +8,7 @@
 const double TARGET_FPS = 60.0;
 const double TARGET_FRAME_TIME =  1000.0 / TARGET_FPS; // in ms
 
-void GAME_DisplayF3(Game *game, double deltaTime, double FPS, double elapsed);
+void GAME_DisplayF3(Game *game, double deltaTime, double FPS, double elapsed, double current_time);
 
 void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetManager *asset_manager, EntityPool *pool, InputSituation *inputSituation) {
     game->renderer = renderer;
@@ -54,6 +54,7 @@ void GAME_Run(Game *game) {
         // Calculating deltaTime, FPS and logging them
         LAST = NOW;
         NOW = SDL_GetPerformanceCounter();
+        double current_time = (double) NOW*1000/ (double) perf_freq;
 
         deltaTime = (double)((NOW - LAST)*1000) / (double)perf_freq;
         FPS = 1000 / deltaTime;
@@ -62,14 +63,14 @@ void GAME_Run(Game *game) {
         readEvents(game);
         
         // Physiques
-        PlayerSystem(game->pool, game->inputSituation);
+        PlayerSystem(game->pool, game->inputSituation, current_time);
         POOL_ApplyVelocity(game->pool, deltaTime);
         
         // Création du rendu
         POOL_DisplayAll(game->asset_manager, game->pool, game->renderer);
         
         // Logging
-        GAME_DisplayF3(game, deltaTime, FPS, elapsed);
+        GAME_DisplayF3(game, deltaTime, FPS, elapsed, current_time);
 
         // Affichage à l'écran
         SDL_RenderPresent(game->renderer);
@@ -86,7 +87,7 @@ void GAME_Run(Game *game) {
     }
 }
 
-void GAME_DisplayF3(Game *game, double deltaTime, double FPS, double elapsed) {
+void GAME_DisplayF3(Game *game, double deltaTime, double FPS, double elapsed, double current_time) {
     // Quit if F3 is not toggled
     InputSituation *in = game->inputSituation;
     if (!in->ToggledF3) { return; }
@@ -103,7 +104,8 @@ void GAME_DisplayF3(Game *game, double deltaTime, double FPS, double elapsed) {
         "COMPUTE TIME PER FRAME: %4.2fms\n"
         "LEFT %d RIGHT %d UP %d DOWN %d\n"
         "W %d X %d C %d \n"
-        "PLAYER POSITION (%4.2f, %4.2f)"
+        "PLAYER POSITION (%4.2f, %4.2f)\n"
+        "CURRENT ACTION %d SINCE %5.0f"
         , 
         game->pool->currentCount, 
         deltaTime, FPS,
@@ -111,7 +113,9 @@ void GAME_DisplayF3(Game *game, double deltaTime, double FPS, double elapsed) {
         in->LEFT, in->RIGHT, in->UP, in->DOWN,
         in->W, in->X, in->C,
         game->pool->position[game->pool->player.location].x,
-        game->pool->position[game->pool->player.location].y
+        game->pool->position[game->pool->player.location].y,
+        game->pool->player_c.action,
+        current_time - game->pool->player_c.actionTimeStamp
     );
 
     // Display the string on the screen
