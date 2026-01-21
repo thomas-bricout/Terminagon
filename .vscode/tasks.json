@@ -17,6 +17,7 @@
                 "src/physics.c",
                 "-o",
                 "app",
+                "-Iinclude",
                 "-fdiagnostics-color=always",
                 "-I/usr/include/SDL2",
                 "-D_REENTRANT",
