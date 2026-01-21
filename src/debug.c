@@ -13,7 +13,7 @@ void DEBUG_DisplayCollisionRects(Game *game) {
 
     for (int i = 0; i < pool->lastEntitylocation; i++) {
         
-        if (!pool->position_map[i] || !pool->collision_box_map[i]) { continue; }
+        if (POOL_LacksComponentFlags(pool, COMPONENT_POSITION | COMPONENT_COLLISIONBOX, i)) { continue; }
 
         SDL_FRect rect = FRECT_Offset(pool->collision_box[i], FPOINT_RelativePoint(pool->position[i], game->camera_pos));
         SDL_RenderFillRectF(renderer, &rect);
@@ -29,7 +29,7 @@ void DEBUG_DisplayDamageRects(Game *game) {
 
     for (int i = 0; i < pool->lastEntitylocation; i++) {
         
-        if (!pool->position_map[i] || !pool->damage_box_map[i]) { continue; }
+        if (POOL_LacksComponentFlags(pool, COMPONENT_POSITION | COMPONENT_DAMAGEBOX, i)) { continue; }
 
         SDL_FRect rect = FRECT_Offset(pool->damage_box[i], pool->position[i]);
         SDL_RenderFillRectF(renderer, &rect);
@@ -44,8 +44,7 @@ void DEBUG_DisplayHitboxRects(Game *game) {
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
     for (int i = 0; i < pool->lastEntitylocation; i++) {
-        
-        if (!pool->position_map[i] || !pool->hit_box_map[i]) { continue; }
+        if (POOL_LacksComponentFlags(pool, COMPONENT_POSITION | COMPONENT_HITBOX, i)) { continue; }
 
         SDL_FRect rect = FRECT_Offset(pool->hit_box[i], pool->position[i]);
         SDL_RenderFillRectF(renderer, &rect);
@@ -78,7 +77,7 @@ void DEBUG_DisplayDebugInfo(Game *game, double deltaTime, double FPS, double ela
         "W %d X %d C %d \n"
         "PLAYER POSITION (%4.2f, %4.2f)\n"
         "CURRENT ACTION %d SINCE %5.0f\n"
-        "CURRENT ANGLE %f\n"
+        "CURRENT ANGLE %3.0f\n"
         , 
         game->pool->currentCount, 
         deltaTime, FPS,

@@ -10,6 +10,14 @@
 #include "geometry.h"
 #include "game.h"
 
+void POOL_AddComponentFlags(EntityPool *pool, ComponentFlags component_flags, int location) {
+    pool->component_flags[location] = pool->component_flags[location] | component_flags;
+}
+
+bool POOL_LacksComponentFlags(EntityPool *pool, ComponentFlags component_flags, int location) {
+    return (pool->component_flags[location] & component_flags) != component_flags;
+}
+
 void POOL_Init(EntityPool *pool) {
     pool->currentCount = 0;
     pool->lastEntitylocation = 0;
@@ -20,16 +28,7 @@ void POOL_Init(EntityPool *pool) {
     for (int i = 0; i < MAX_ENTITY_COUNT; i++) {
         pool->id[i] = default_id;
         pool->tex_location[i] = TEX_DEBUG;
-
-        pool->tex_location[i] =     false;
-
-        pool->display_rect_map[i] = false;
-        pool->collision_box_map[i] =    false;
-        pool->damage_box_map[i] = false;
-        pool->hit_box_map[i] = false;
-
-        pool->position_map[i] =     false;
-        pool->velocity_map[i] =     false;
+        pool->component_flags[i] = COMPONENT_NONE;
     }
 }
 
@@ -42,14 +41,14 @@ void POOL_Load(EntityPool *pool) {
 
     int player_loc = pool->player.location;
     pool->velocity[player_loc] = (SDL_FPoint) {10., 10.};
-    pool->velocity_map[player_loc] = true;
+    POOL_AddComponentFlags(pool, COMPONENT_VELOCITY, player_loc);
 
     pool->collision_box[player_loc] = (SDL_FRect) {-50., -50., 100., 100.};
-    pool->collision_box_map[player_loc] = true;
+    POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX, player_loc);
 
     EntityID tree = POOL_NewEntityClassic(pool, TEX_DEBUG, player_display_rect, (SDL_FPoint) {300., 300.});
     pool->collision_box[tree.location] = (SDL_FRect) {-50., -50., 100., 100.};
-    pool->collision_box_map[tree.location] = true;
+    POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX, tree.location);
 }
 
 EntityID POOL_NewEntity(EntityPool *pool) {
@@ -84,9 +83,7 @@ EntityID POOL_NewEntityClassic(EntityPool *pool, TextureLocation tex_location, S
     pool->display_rect[new_id.location] = display_rect;
     pool->position[new_id.location] = position;
 
-    pool->tex_location_map[new_id.location] =   true;
-    pool->display_rect_map[new_id.location] =   true;
-    pool->position_map[new_id.location] =       true;
+    POOL_AddComponentFlags(pool, COMPONENT_TEXTURE | COMPONENT_DISPLAYRECT | COMPONENT_POSITION, new_id.location);
 
     return new_id;
 }
@@ -108,13 +105,7 @@ void POOL_DestroyEntity(EntityPool *pool, EntityID id) {
     pool->id[id.location] = (EntityID) {0, 0};
 
     // Reset all bitmaps
-    pool->tex_location_map[id.location] =   false;
-    pool->display_rect_map[id.location] =   false;
-    pool->collision_box_map[id.location] =  false;
-    pool->damage_box_map[id.location] =     false;
-    pool->hit_box_map[id.location]  =       false;
-    pool->velocity_map[id.location] =       false;
-    pool->position_map[id.location] =       false;
+    pool->component_flags[id.location] = COMPONENT_NONE;
 }
 
 void POOL_DisplayAll(Game *game) {
@@ -127,7 +118,8 @@ void POOL_DisplayAll(Game *game) {
 
     for (int i = 0; i < pool->lastEntitylocation; i++) {
         // Skip entities that don't have texture / display rect / position
-        if (!pool->position_map[i] || !pool->display_rect_map[i] || !pool->tex_location_map[i]) { continue; }
+        // if (!pool->position_map[i] || !pool->display_rect_map[i] || !pool->tex_location_map[i]) { continue; }
+        if (POOL_LacksComponentFlags(pool, COMPONENT_POSITION | COMPONENT_DISPLAYRECT | COMPONENT_TEXTURE, i)) { continue; }
 
         SDL_Texture *tex;
         ASSETS_AccessTexture(&tex, asset_manager, pool->tex_location[i]);
@@ -140,13 +132,14 @@ void POOL_DisplayAll(Game *game) {
 
 void POOL_ApplyVelocity(EntityPool *pool, double deltaTime) {
     for (int i = 0; i < pool->lastEntitylocation; i++) {
-        if (!pool->position_map[i] || !pool->velocity_map[i]) { continue; }
+        // if (!pool->position_map[i] || !pool->velocity_map[i]) { continue; }
+        if (POOL_LacksComponentFlags(pool, COMPONENT_TEXTURE | COMPONENT_VELOCITY, i)) { continue; }
 
-        if (pool->collision_box_map[i]) { // If entity has a collision map, check possible collisions with every other entities
+        if (!POOL_LacksComponentFlags(pool, COMPONENT_COLLISIONBOX, i)) { // If entity has a collision map, check possible collisions with every other entities
             bool collided = false;
             for (int j = 0; j < pool->lastEntitylocation; j++) { 
                 if ( i == j ) { continue; }
-                if ( !pool->collision_box_map[j] || !pool->position_map[j] ) { continue; }
+                if (POOL_LacksComponentFlags(pool, COMPONENT_COLLISIONBOX | COMPONENT_POSITION, i)) { continue; }
 
                 SDL_FPoint obstacle_pos = pool->position[j];
                 SDL_FRect obstacle_box = pool->collision_box[j];

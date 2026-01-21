@@ -17,6 +17,17 @@ typedef struct {
     int unique_id;
 } EntityID;
 
+typedef enum ComponentFlags {
+    COMPONENT_NONE          = 0b00000000,
+    COMPONENT_TEXTURE       = 0b00000001,
+    COMPONENT_DISPLAYRECT   = 0b00000010,
+    COMPONENT_COLLISIONBOX  = 0b00000100,
+    COMPONENT_DAMAGEBOX     = 0b00001000,
+    COMPONENT_HITBOX        = 0b00010000,
+    COMPONENT_POSITION      = 0b00100000,
+    COMPONENT_VELOCITY      = 0b01000000,
+} ComponentFlags;
+
 struct EntityPool {
     // Keeping track of which spots are occupied by valid entities
     int currentCount;
@@ -41,17 +52,7 @@ struct EntityPool {
     SDL_FPoint position[MAX_ENTITY_COUNT];
     SDL_FPoint velocity[MAX_ENTITY_COUNT];
 
-    // Bitmaps ( whether a specific entity has a component )
-    bool tex_location_map[MAX_ENTITY_COUNT];
-
-    bool display_rect_map[MAX_ENTITY_COUNT];
-    bool collision_box_map[MAX_ENTITY_COUNT];
-    bool damage_box_map[MAX_ENTITY_COUNT];
-    bool hit_box_map[MAX_ENTITY_COUNT];
-
-    bool position_map[MAX_ENTITY_COUNT];
-    bool velocity_map[MAX_ENTITY_COUNT];
-
+    ComponentFlags component_flags[MAX_ENTITY_COUNT]; 
 };
 
 void POOL_Init(EntityPool *pool);
@@ -61,5 +62,7 @@ EntityID POOL_NewEntityClassic(EntityPool *pool, TextureLocation tex_location, S
 void POOL_DestroyEntity(EntityPool *pool, EntityID id);
 void POOL_DisplayAll(Game *game);
 void POOL_ApplyVelocity(EntityPool *pool, double deltaTime);
+void POOL_AddComponentFlags(EntityPool *pool, ComponentFlags component_flags, int location);
+bool POOL_LacksComponentFlags(EntityPool *pool, ComponentFlags component_flags, int location);
 
 #endif

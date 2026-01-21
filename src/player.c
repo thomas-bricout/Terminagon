@@ -31,7 +31,7 @@ EntityID POOL_SpawnArrow(EntityPool *pool, SDL_FPoint position, double angle) {
     EntityID id = POOL_NewEntityClassic(pool, TEX_ARROW, display_rect, position);
 
     pool->velocity[id.location] = (SDL_FPoint) { ARROW_SPEED * cos(angle) , ARROW_SPEED * sin(angle) };
-    pool->velocity_map[id.location] = true;
+    POOL_AddComponentFlags(pool, COMPONENT_VELOCITY, id.location);
 
     return id;
 }
