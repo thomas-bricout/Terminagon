@@ -3,7 +3,7 @@
 
 #include "input.h"
 
-void InputSituation_Init(InputSituation *inputSituation) {
+void InState_Init(InState *inputSituation) {
     inputSituation->QUIT    = false;
 
     inputSituation->UP      = false;
@@ -17,7 +17,7 @@ void InputSituation_Init(InputSituation *inputSituation) {
     inputSituation->ToggledF3 = false;
 }
 
-void InputSituation_Update(InputSituation *inputSituation, SDL_EventType type, SDL_Scancode scancode) {
+void InState_Update(InState *inputSituation, SDL_EventType type, SDL_Scancode scancode) {
     switch (type) {
         case SDL_QUIT:
             inputSituation->QUIT = true;

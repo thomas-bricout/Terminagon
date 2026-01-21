@@ -9,12 +9,12 @@ typedef struct {
     SDL_Renderer *renderer;
     SDL_Window *window;
 
-    InputSituation *inputSituation;
+    InState *inputSituation;
     AssetManager *asset_manager;
     EntityPool *pool;
 } Game;
 
-void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetManager *asset_manager, EntityPool *pool, InputSituation *inputSituation);
+void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetManager *asset_manager, EntityPool *pool, InState *inputSituation);
 void GAME_Run(Game *game);
 
 #endif

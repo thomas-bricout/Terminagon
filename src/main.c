@@ -45,9 +45,9 @@ int main(int argc, char *argv[])
     ASSETS_Init(&asset_manager, renderer);
     ASSETS_Load(&asset_manager, renderer);
 
-    // Création de InputSituation
-    InputSituation inputSituation;
-    InputSituation_Init(&inputSituation);
+    // Création de InState
+    InState inputSituation;
+    InState_Init(&inputSituation);
 
     // Dit au renderer de dessiner directement sur la fenêtre
     SDL_SetRenderTarget(renderer, NULL);

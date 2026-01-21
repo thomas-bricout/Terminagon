@@ -35,7 +35,7 @@ EntityID POOL_SpawnArrow(EntityPool *pool, SDL_FPoint position, double angle) {
     return id;
 }
 
-void PlayerSystem(EntityPool *pool, InputSituation *inputSituation, double current_time) {
+void PLAYER_System(EntityPool *pool, InState *inputSituation, double current_time) {
     int playerLocation = pool->player.location;
 
     SDL_FPoint *playerVelocity = &pool->velocity[playerLocation];

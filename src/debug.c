@@ -6,7 +6,7 @@
 
 void DEBUG_DisplayDebug(Game *game, double deltaTime, double FPS, double elapsed, double current_time) {
     // Quit if F3 is not toggled
-    InputSituation *in = game->inputSituation;
+    InState *in = game->inputSituation;
     if (!in->ToggledF3) { return; }
 
     DEBUG_DisplayCollisionRects(game->pool, game->renderer);
@@ -17,7 +17,7 @@ void DEBUG_DisplayDebug(Game *game, double deltaTime, double FPS, double elapsed
 }
 
 void DEBUG_DisplayDebugInfo(Game *game, double deltaTime, double FPS, double elapsed, double current_time) {
-    InputSituation *in = game->inputSituation;
+    InState *in = game->inputSituation;
 
     // Compiling things to print
     char str[500];

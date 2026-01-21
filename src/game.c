@@ -9,7 +9,7 @@
 const double TARGET_FPS = 60.0;
 const double TARGET_FRAME_TIME =  1000.0 / TARGET_FPS; // in ms
 
-void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetManager *asset_manager, EntityPool *pool, InputSituation *inputSituation) {
+void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetManager *asset_manager, EntityPool *pool, InState *inputSituation) {
     game->renderer = renderer;
     game->window = window;
     game->asset_manager = asset_manager;
@@ -19,11 +19,11 @@ void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetMana
 
 void readEvents(Game *game) {
     SDL_Event event;
-    InputSituation *inputSituation = game->inputSituation;
+    InState *inputSituation = game->inputSituation;
 
     while (SDL_PollEvent(&event)) {
         SDL_Log("TREATING EVENT: TYPE: %d, TIMESTAMP: %dms", event.type, event.common.timestamp);
-        InputSituation_Update(inputSituation, event.type, event.key.keysym.scancode);
+        InState_Update(inputSituation, event.type, event.key.keysym.scancode);
         if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_F11) {
             Uint32 windowFlags = SDL_GetWindowFlags(game->window);
             if (windowFlags & SDL_WINDOW_FULLSCREEN_DESKTOP) {
@@ -62,7 +62,7 @@ void GAME_Run(Game *game) {
         readEvents(game);
         
         // Physiques
-        PlayerSystem(game->pool, game->inputSituation, current_time);
+        PLAYER_System(game->pool, game->inputSituation, current_time);
         POOL_ApplyVelocity(game->pool, deltaTime);
         
         // Création du rendu
