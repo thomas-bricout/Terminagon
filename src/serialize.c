@@ -80,12 +80,25 @@ json_t *JSON_Rect(SDL_Rect rect) {
     return json;
 }
 
+json_t *JSON_EntityID(EntityID id) {
+    json_t *json = json_object();
+    json_object_set_new(json, "unique_id", json_integer(id.unique_id));
+    json_object_set_new(json, "location" , json_integer(id.location));
+    return json;
+}
+
+json_t *JSON_PlayerComponent(PlayerComponent player_c) {
+    json_t *json = json_object();
+    // TODO
+    return json;
+}
+
 json_t *JSON_FromEntity(EntityPool *pool, int loc) {
     json_t *entity = json_object();
 
     json_object_set_new(entity, "components", json_integer(pool->component_flags[loc]));
     
-    json_object_set_new(entity, "texture", json_integer(pool->component_flags[loc]));
+    json_object_set_new(entity, "texture", json_integer(pool->tex_location[loc]));
 
     json_object_set_new(entity, "displayrect", JSON_Rect(pool->display_rect[loc]));
 
@@ -134,7 +147,43 @@ void JSON_ToEntity(EntityPool *pool, json_t *json) {
     json_decref(velocity    );
 }
 
-void JSON_ToEntityFromFile(EntityPool *pool, const char *filepath) {
+void JSON_ToEntityAll(EntityPool *pool, json_t *json) {
+    size_t i;
+    json_t *entity;
+
+    json_array_foreach(json, i, entity) {
+        JSON_ToEntity(pool, entity);
+    }
+}
+
+void JSON_Save(Game *game, const char *filepath) {
+    FILE *fp = fopen(filepath, "w");
+    json_t *json = json_object();
+    json_t *entities = json_array();
+
+    if ( fp == NULL ) {
+        fprintf(stderr, "Failed to open file: %s", filepath);
+    }
+
+    // Save entity list
+    for (int i = 0; i < game->pool->lastEntitylocation; i++) {
+        json_array_append_new(entities, JSON_FromEntity(game->pool, i));
+    }
+    json_object_set_new(json, "entities", entities);
+
+    // Save other fields
+
+    // Dump json to file and free up space
+    json_dumpf(json, fp, JSON_INDENT(2));
+    json_decref(json);
+    fclose(fp);
+}
+
+void JSON_Load(Game *game, const char *filepath) {
+    // Empty current entity list
+    POOL_Init(game->pool);
+
+    // Open file
     FILE *fp = fopen(filepath, "r");
     json_t *json = NULL;
     json_error_t error;
@@ -146,21 +195,14 @@ void JSON_ToEntityFromFile(EntityPool *pool, const char *filepath) {
         fprintf(stderr, "Failed to open file: %s", filepath);
     }
 
-    JSON_ToEntity(pool, json);
+    // Load entities
+    json_t *entities = json_object_get(json, "entities");
+    JSON_ToEntityAll(game->pool, entities);
+
+    // Load other fiels
+    // TODO: Replace hard coded values
+    game->pool->player_c = PLAYER_NewComponent();
+    game->pool->player = (EntityID) {0, 0};
 
     json_decref(json);
-}
-
-void JSON_EntityToFile(EntityPool *pool, int loc, const char *filepath) {
-    json_t *entity = JSON_FromEntity(pool, loc);
-    FILE *fp = fopen(filepath, "ab");
-
-    if ( fp != NULL ) {
-        json_dumpf(entity, fp, 0);
-        fclose(fp);
-    } else {
-        fprintf(stderr, "Failed to open file: %s", filepath);
-    }
-
-    json_decref(entity);
 }

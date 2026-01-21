@@ -1,1 +1,0 @@
-{"components": 103, "texture": 1, "displayrect": {"x": -50, "y": -50, "w": 100, "h": 100}, "collisionbox": {"x": -50.0, "y": -50.0, "w": 100.0, "h": 100.0}, "damagebox": {"x": 0.0, "y": 0.0, "w": 0.0, "h": 0.0}, "hitbox": {"x": 0.0, "y": 0.0, "w": 0.0, "h": 0.0}, "position": {"x": 0.0, "y": 0.0}, "velocity": {"x": 10.0, "y": 10.0}}

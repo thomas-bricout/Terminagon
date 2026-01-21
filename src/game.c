@@ -7,6 +7,7 @@
 #include "debug.h"
 #include "rendering.h"
 #include "physics.h"
+#include "serialize.h"
 
 const double TARGET_FPS = 60.0;
 const double TARGET_FRAME_TIME =  1000.0 / TARGET_FPS; // in ms
@@ -35,6 +36,13 @@ void Game_ReadEvents(Game *game) {
             } else {
                 SDL_SetWindowFullscreen(game->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
             }
+        }
+
+        if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_S) {
+            JSON_Save(game, "saves/save.json");
+        }
+        if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_D) {
+            JSON_Load(game, "saves/save.json");
         }
     }
 }
@@ -85,6 +93,8 @@ void GAME_Run(Game *game) {
             SDL_Delay((Uint32) delay);
         }
     }
+
+    // JSON_EntityToFileAll(game->pool, "saves/save.json");
 }
 
 const float cameraSpeed = 0.4;

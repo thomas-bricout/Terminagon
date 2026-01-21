@@ -35,21 +35,18 @@ void POOL_Init(EntityPool *pool) {
 
 void POOL_Load(EntityPool *pool) {
     // Adds the main player
-    SDL_Rect player_display_rect = {-50, -50, 100, 100};
-
     pool->player_c = PLAYER_NewComponent();
-    // pool->player = POOL_NewEntityClassic(pool, TEX_DEBUG, player_display_rect, (SDL_FPoint) {0, 0});
 
-    // int player_loc = pool->player.location;
-    // pool->velocity[player_loc] = (SDL_FPoint) {10., 10.};
-    // POOL_AddComponentFlags(pool, COMPONENT_VELOCITY, player_loc);
+    SDL_Rect player_display_rect = {-50, -50, 100, 100};
+    pool->player = POOL_NewEntityClassic(pool, TEX_DEBUG, player_display_rect, (SDL_FPoint) {0, 0});
 
-    // pool->collision_box[player_loc] = (SDL_FRect) {-50., -50., 100., 100.};
-    // POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX, player_loc);
+    int player_loc = pool->player.location;
+    pool->velocity[player_loc] = (SDL_FPoint) {10., 10.};
+    POOL_AddComponentFlags(pool, COMPONENT_VELOCITY, player_loc);
+
+    pool->collision_box[player_loc] = (SDL_FRect) {-50., -50., 100., 100.};
+    POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX, player_loc);
     
-    // JSON_EntityToFile(pool, player_loc, "test.json");
-    pool->player = JSON_ToEntityFromFile(pool, "test.json");
-
     EntityID tree = POOL_NewEntityClassic(pool, TEX_DEBUG, player_display_rect, (SDL_FPoint) {300., 300.});
     pool->collision_box[tree.location] = (SDL_FRect) {-50., -50., 100., 100.};
     POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX, tree.location);
