@@ -9,6 +9,7 @@
 #include "player.h"
 #include "geometry.h"
 #include "game.h"
+#include "serialize.h"
 
 void POOL_AddComponentFlags(EntityPool *pool, ComponentFlags component_flags, int location) {
     pool->component_flags[location] = pool->component_flags[location] | component_flags;
@@ -37,14 +38,17 @@ void POOL_Load(EntityPool *pool) {
     SDL_Rect player_display_rect = {-50, -50, 100, 100};
 
     pool->player_c = PLAYER_NewComponent();
-    pool->player = POOL_NewEntityClassic(pool, TEX_DEBUG, player_display_rect, (SDL_FPoint) {0, 0});
+    // pool->player = POOL_NewEntityClassic(pool, TEX_DEBUG, player_display_rect, (SDL_FPoint) {0, 0});
 
-    int player_loc = pool->player.location;
-    pool->velocity[player_loc] = (SDL_FPoint) {10., 10.};
-    POOL_AddComponentFlags(pool, COMPONENT_VELOCITY, player_loc);
+    // int player_loc = pool->player.location;
+    // pool->velocity[player_loc] = (SDL_FPoint) {10., 10.};
+    // POOL_AddComponentFlags(pool, COMPONENT_VELOCITY, player_loc);
 
-    pool->collision_box[player_loc] = (SDL_FRect) {-50., -50., 100., 100.};
-    POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX, player_loc);
+    // pool->collision_box[player_loc] = (SDL_FRect) {-50., -50., 100., 100.};
+    // POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX, player_loc);
+    
+    // JSON_EntityToFile(pool, player_loc, "test.json");
+    pool->player = JSON_ToEntityFromFile(pool, "test.json");
 
     EntityID tree = POOL_NewEntityClassic(pool, TEX_DEBUG, player_display_rect, (SDL_FPoint) {300., 300.});
     pool->collision_box[tree.location] = (SDL_FRect) {-50., -50., 100., 100.};
