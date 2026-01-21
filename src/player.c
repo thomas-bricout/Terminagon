@@ -2,18 +2,19 @@
 #include "entity_pool.h"
 #include "assets.h"
 #include "player.h"
+#include "geometry.h"
 
 #include <math.h>
 
-const double DEFAULT_PLAYER_SPEED = 0.2;
-const double DASHING_PLAYER_SPEED = 0.6;
-const double AIMING_PLAYER_SPEED = 0.1;
+const float DEFAULT_PLAYER_SPEED = 0.2;
+const float DASHING_PLAYER_SPEED = 0.6;
+const float AIMING_PLAYER_SPEED = 0.1;
 
 const double BOW_AIMING_TIME = 1000;
 const double DASHING_TIME = 200;
 const double RECOVERY_TIME = 100;
 
-const double ARROW_SPEED = 0.5;
+const float ARROW_SPEED = 0.5;
 
 PlayerComponent PLAYER_NewComponent() {
     PlayerComponent p_c;
@@ -113,10 +114,8 @@ void PLAYER_System(EntityPool *pool, InState *inState, double current_time) {
 
     // Move player according to walking and angle
     if ( pc->walking ) {
-        playerVelocity->x = player_speed * cos(pc->angle);
-        playerVelocity->y = player_speed * sin(pc->angle);
+        *playerVelocity = FPOINT_VelocityFromAngle(pc->angle, player_speed);
     } else {
-        playerVelocity->x = 0;
-        playerVelocity->y = 0;
+        *playerVelocity = (SDL_FPoint) {0., 0.};
     }
 }

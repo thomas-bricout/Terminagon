@@ -75,7 +75,7 @@ void DEBUG_DisplayCollisionRects(EntityPool *pool, SDL_Renderer *renderer) {
         
         if (!pool->position_map[i] || !pool->collision_box_map[i]) { continue; }
 
-        SDL_FRect rect = OffsetFRect(pool->collision_box[i], pool->position[i]);
+        SDL_FRect rect = FRECT_Offset(pool->collision_box[i], pool->position[i]);
         SDL_RenderFillRectF(renderer, &rect);
     }
 }
@@ -88,7 +88,7 @@ void DEBUG_DisplayDamageRects(EntityPool *pool, SDL_Renderer *renderer) {
         
         if (!pool->position_map[i] || !pool->damage_box_map[i]) { continue; }
 
-        SDL_FRect rect = OffsetFRect(pool->damage_box[i], pool->position[i]);
+        SDL_FRect rect = FRECT_Offset(pool->damage_box[i], pool->position[i]);
         SDL_RenderFillRectF(renderer, &rect);
     }
 }
@@ -101,7 +101,7 @@ void DEBUG_DisplayHitboxRects(EntityPool *pool, SDL_Renderer *renderer) {
         
         if (!pool->position_map[i] || !pool->hit_box_map[i]) { continue; }
 
-        SDL_FRect rect = OffsetFRect(pool->hit_box[i], pool->position[i]);
+        SDL_FRect rect = FRECT_Offset(pool->hit_box[i], pool->position[i]);
         SDL_RenderFillRectF(renderer, &rect);
     }
 }
