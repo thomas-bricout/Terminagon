@@ -130,12 +130,6 @@ void POOL_DisplayAll(AssetManager *assetManager, EntityPool *pool, SDL_Renderer 
         dst = RECT_Offset(dst, FPOINT_ToPoint(pool->position[i]));
 
         SDL_RenderCopy(renderer, tex, NULL, &dst);
-
-        SDL_LogDebug(
-            SDL_LOG_CATEGORY_RENDER,
-            "Rendering Entity with location %d, unique_id %d, texture %d, coordinates (%f, %f)",
-             i, pool->id[i].unique_id, pool->tex_location[i], pool->position[i].x, pool->position[i].y
-        );
     }
 }
 
@@ -178,11 +172,5 @@ void POOL_ApplyVelocity(EntityPool *pool, double deltaTime) {
 
         // ELSE: proceed without dealing with collisions
         pool->position[i] = FPOINT_ApplyVelocity(pool->position[i], pool->velocity[i], deltaTime); 
-
-        SDL_LogDebug(
-            SDL_LOG_CATEGORY_CUSTOM,
-            "Current player velocity: (%f, %f)",
-            pool->velocity[i].x, pool->velocity[i].y
-        );
     }
 }

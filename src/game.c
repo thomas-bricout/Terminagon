@@ -17,12 +17,11 @@ void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetMana
     game->inState = inState;
 }
 
-void readEvents(Game *game) {
+void Game_ReadEvents(Game *game) {
     SDL_Event event;
     InState *inState = game->inState;
 
     while (SDL_PollEvent(&event)) {
-        SDL_Log("TREATING EVENT: TYPE: %d, TIMESTAMP: %dms", event.type, event.common.timestamp);
         InState_Update(inState, event.type, event.key.keysym.scancode);
         if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_F11) {
             Uint32 windowFlags = SDL_GetWindowFlags(game->window);
@@ -35,8 +34,6 @@ void readEvents(Game *game) {
             }
         }
     }
-
-    // Treat holden keys
 }
 
 // Gestion de la boucle principale, et de la limitation des fps
@@ -59,7 +56,7 @@ void GAME_Run(Game *game) {
         FPS = 1000 / deltaTime;
 
         // Read game events
-        readEvents(game);
+        Game_ReadEvents(game);
         
         // Physiques
         PLAYER_System(game->pool, game->inState, current_time);
