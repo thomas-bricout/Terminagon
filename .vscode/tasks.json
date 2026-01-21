@@ -16,6 +16,7 @@
                 "src/rendering.c",
                 "src/physics.c",
                 "src/serialize.c",
+                "src/editor.c",
                 "-o",
                 "app",
                 "-ljansson",

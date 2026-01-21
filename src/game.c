@@ -8,6 +8,7 @@
 #include "rendering.h"
 #include "physics.h"
 #include "serialize.h"
+#include "editor.h"
 
 const double TARGET_FPS = 60.0;
 const double TARGET_FRAME_TIME =  1000.0 / TARGET_FPS; // in ms
@@ -27,6 +28,7 @@ void Game_ReadEvents(Game *game) {
 
     while (SDL_PollEvent(&event)) {
         InState_Update(inState, event);
+
         if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_F11) {
             Uint32 windowFlags = SDL_GetWindowFlags(game->window);
             if (windowFlags & SDL_WINDOW_FULLSCREEN_DESKTOP) {
@@ -43,6 +45,10 @@ void Game_ReadEvents(Game *game) {
         }
         if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_D) {
             JSON_Load(game, "saves/save.json");
+        }
+        if (event.type == SDL_MOUSEBUTTONDOWN && inState->ToggledF4) {
+            printf("here");
+            EDITOR_PlaceEntity(game);
         }
     }
 }

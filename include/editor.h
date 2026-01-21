@@ -1,6 +1,9 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 
+#include "game.h"
+#include "assets.h"
+
 void EDITOR_PlaceEntity(Game *game);
 
 typedef struct {
