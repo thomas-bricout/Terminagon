@@ -29,8 +29,14 @@
 - Enregistre les Inputs claviers dans InputSituation pour être utilisé par les autres systèmes
 
 ### entity_pool.c
-- Définit la structure de donné stockant toutes les unités
+- Définit la structure de donnée stockant toutes les unités ( EntityPool )
 - Création, Initialisation, Destruction, Lecture de l'ensemble des entités
 
 ### player.c
 - Définit les actions et déplacements possible par le joueur
+
+### debug.c
+- Permet d'afficher des informations de débugage lors de l'appui de la touche F3
+
+### geometry.c
+- Permet de manipuler plus rapidement les Rect, FRect et FPoint
