@@ -5,6 +5,7 @@
 #include "assets.h"
 
 void EDITOR_PlaceEntity(Game *game);
+void EDITOR_EntityFromBundle(Game *game, EntityBundle bundle, SDL_FPoint pos);
 
 typedef struct {
     TextureLocation texture;
