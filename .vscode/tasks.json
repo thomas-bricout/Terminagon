@@ -13,6 +13,8 @@
                 "src/player.c",
                 "src/geometry.c",
                 "src/debug.c",
+                "src/rendering.c",
+                "src/physics.c",
                 "-o",
                 "app",
                 "-fdiagnostics-color=always",
