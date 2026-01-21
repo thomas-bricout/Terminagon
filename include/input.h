@@ -22,9 +22,11 @@ typedef struct {
     bool L;
 
     bool ToggledF3;
+
+    SDL_FPoint mouse;
 } InState;
 
 void InState_Init(InState *inState);
-void InState_Update(InState *inState, SDL_EventType type, SDL_Scancode scancode);
+void InState_Update(InState *inState, SDL_Event event);
 
 #endif

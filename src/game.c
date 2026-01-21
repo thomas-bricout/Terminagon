@@ -26,7 +26,7 @@ void Game_ReadEvents(Game *game) {
     InState *inState = game->inState;
 
     while (SDL_PollEvent(&event)) {
-        InState_Update(inState, event.type, event.key.keysym.scancode);
+        InState_Update(inState, event);
         if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_F11) {
             Uint32 windowFlags = SDL_GetWindowFlags(game->window);
             if (windowFlags & SDL_WINDOW_FULLSCREEN_DESKTOP) {

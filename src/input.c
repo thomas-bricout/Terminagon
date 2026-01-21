@@ -15,10 +15,19 @@ void InState_Init(InState *inState) {
     inState->C       = false;
 
     inState->ToggledF3 = false;
+
+    inState->mouse = (SDL_FPoint) {0., 0.};
 }
 
-void InState_Update(InState *inState, SDL_EventType type, SDL_Scancode scancode) {
+void InState_Update(InState *inState, SDL_Event event) {
+    SDL_EventType type = event.type;
+    SDL_Scancode scancode = event.key.keysym.scancode;
+
     switch (type) {
+        case SDL_MOUSEMOTION:
+            inState->mouse.x = event.motion.x;
+            inState->mouse.y = event.motion.y;
+            break;
         case SDL_QUIT:
             inState->QUIT = true;
             break;
