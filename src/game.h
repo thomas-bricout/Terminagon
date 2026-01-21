@@ -19,5 +19,6 @@ struct Game {
 
 void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetManager *asset_manager, EntityPool *pool, InState *inState);
 void GAME_Run(Game *game);
+void MoveCameraIJKL(Game *game, float deltaTime);
 
 #endif

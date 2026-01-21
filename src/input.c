@@ -45,6 +45,18 @@ void InState_Update(InState *inState, SDL_EventType type, SDL_Scancode scancode)
                 case SDL_SCANCODE_C:
                     inState->C = true;
                     break;
+                case SDL_SCANCODE_I:
+                    inState->I = true;
+                    break;
+                case SDL_SCANCODE_J:
+                    inState->J = true;
+                    break;
+                case SDL_SCANCODE_K:
+                    inState->K = true;
+                    break;
+                case SDL_SCANCODE_L:
+                    inState->L = true;
+                    break;
 
                 case SDL_SCANCODE_F3:
                     inState->ToggledF3 = !inState->ToggledF3;
@@ -75,6 +87,18 @@ void InState_Update(InState *inState, SDL_EventType type, SDL_Scancode scancode)
                     break;
                 case SDL_SCANCODE_C:
                     inState->C = false;
+                    break;
+                case SDL_SCANCODE_I:
+                    inState->I = false;
+                    break;
+                case SDL_SCANCODE_J:
+                    inState->J = false;
+                    break;
+                case SDL_SCANCODE_K:
+                    inState->K = false;
+                    break;
+                case SDL_SCANCODE_L:
+                    inState->L = false;
                     break;
                 default:
                     break;

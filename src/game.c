@@ -59,10 +59,11 @@ void GAME_Run(Game *game) {
         // Read game events
         Game_ReadEvents(game);
         
-        // Physiques
+        // Physiques et Mécaniques
         PLAYER_System(game->pool, game->inState, current_time);
         POOL_ApplyVelocity(game->pool, deltaTime);
-        
+        MoveCameraIJKL(game, deltaTime);
+
         // Création du rendu
         POOL_DisplayAll(game);
         
@@ -82,4 +83,12 @@ void GAME_Run(Game *game) {
             SDL_Delay((Uint32) delay);
         }
     }
+}
+
+const float cameraSpeed = 0.4;
+void MoveCameraIJKL(Game *game, float deltaTime) {
+    if (game->inState->I) { game->camera_pos.y -= cameraSpeed * deltaTime; }
+    if (game->inState->K) { game->camera_pos.y += cameraSpeed * deltaTime; }
+    if (game->inState->J) { game->camera_pos.x -= cameraSpeed * deltaTime; }
+    if (game->inState->L) { game->camera_pos.x += cameraSpeed * deltaTime; }
 }

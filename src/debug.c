@@ -89,7 +89,7 @@ void DEBUG_DisplayDebugInfo(Game *game, double deltaTime, double FPS, double ela
         game->pool->position[game->pool->player.location].y,
         game->pool->player_c.action,
         current_time - game->pool->player_c.actionTimeStamp,
-        game->pool->player_c.angle * 360. / 3.1415
+        game->pool->player_c.angle * 180. / 3.1415
     );
 
     // Display the string on the screen

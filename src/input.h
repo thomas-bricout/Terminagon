@@ -16,6 +16,11 @@ typedef struct {
     bool X;
     bool C;
 
+    bool I;
+    bool J;
+    bool K;
+    bool L;
+
     bool ToggledF3;
 } InState;
 
