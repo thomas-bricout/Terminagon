@@ -38,5 +38,5 @@
 ### debug.c
 - Permet d'afficher des informations de débugage lors de l'appui de la touche F3
 
-### geometry.c
+### geometry.c
 - Permet de manipuler plus rapidement les Rect, FRect et FPoint
