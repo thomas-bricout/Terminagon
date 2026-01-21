@@ -8,6 +8,7 @@ typedef struct EntityPool EntityPool;
 
 #include "assets.h"
 #include "player.h"
+#include "game.h"
 
 #define MAX_ENTITY_COUNT 500
 
@@ -58,8 +59,7 @@ void POOL_Load(EntityPool *pool);
 EntityID POOL_NewEntity(EntityPool *pool);
 EntityID POOL_NewEntityClassic(EntityPool *pool, TextureLocation tex_location, SDL_Rect display_rect, SDL_FPoint position);
 void POOL_DestroyEntity(EntityPool *pool, EntityID id);
-void POOL_DisplayAll(AssetManager *assetManager, EntityPool *pool, SDL_Renderer *renderer);
+void POOL_DisplayAll(Game *game);
 void POOL_ApplyVelocity(EntityPool *pool, double deltaTime);
-void DEBUG_DisplayCollisionRects(EntityPool *pool, SDL_Renderer *renderer);
 
 #endif

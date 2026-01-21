@@ -8,6 +8,7 @@
 #include "entity_pool.h"
 #include "player.h"
 #include "geometry.h"
+#include "game.h"
 
 void POOL_Init(EntityPool *pool) {
     pool->currentCount = 0;
@@ -116,7 +117,12 @@ void POOL_DestroyEntity(EntityPool *pool, EntityID id) {
     pool->position_map[id.location] =       false;
 }
 
-void POOL_DisplayAll(AssetManager *assetManager, EntityPool *pool, SDL_Renderer *renderer) {
+void POOL_DisplayAll(Game *game) {
+    EntityPool *pool = game->pool;
+    AssetManager *asset_manager = game->asset_manager;
+    SDL_Renderer *renderer = game->renderer;
+    SDL_FPoint camera_pos = game->camera_pos;
+
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Starting displaying entities");
 
     for (int i = 0; i < pool->lastEntitylocation; i++) {
@@ -124,10 +130,9 @@ void POOL_DisplayAll(AssetManager *assetManager, EntityPool *pool, SDL_Renderer 
         if (!pool->position_map[i] || !pool->display_rect_map[i] || !pool->tex_location_map[i]) { continue; }
 
         SDL_Texture *tex;
-        ASSETS_AccessTexture(&tex, assetManager, pool->tex_location[i]);
-
-        SDL_Rect dst = pool->display_rect[i];
-        dst = RECT_Offset(dst, FPOINT_ToPoint(pool->position[i]));
+        ASSETS_AccessTexture(&tex, asset_manager, pool->tex_location[i]);
+        
+        SDL_Rect dst = RECT_Offset(pool->display_rect[i], FPOINT_ToPoint(FPOINT_RelativePoint(pool->position[i], camera_pos)));
 
         SDL_RenderCopy(renderer, tex, NULL, &dst);
     }

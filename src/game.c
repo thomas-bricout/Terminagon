@@ -15,6 +15,7 @@ void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetMana
     game->asset_manager = asset_manager;
     game->pool = pool;
     game->inState = inState;
+    game->camera_pos = (SDL_FPoint) {0., 0.};
 }
 
 void Game_ReadEvents(Game *game) {
@@ -63,7 +64,7 @@ void GAME_Run(Game *game) {
         POOL_ApplyVelocity(game->pool, deltaTime);
         
         // Création du rendu
-        POOL_DisplayAll(game->asset_manager, game->pool, game->renderer);
+        POOL_DisplayAll(game);
         
         // Logging
         DEBUG_DisplayDebug(game, deltaTime, FPS, elapsed, current_time);

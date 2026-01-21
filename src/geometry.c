@@ -49,6 +49,13 @@ SDL_FPoint FPOINT_VelocityFromAngle(double angle, float speed) {
     return res;
 }
 
+SDL_FPoint FPOINT_RelativePoint(SDL_FPoint point, SDL_FPoint camera) {
+    SDL_FPoint res;
+    res.x = point.x - camera.x;
+    res.y = point.y - camera.y;
+    return res;
+}
+
 SDL_Point FPOINT_ToPoint(SDL_FPoint point) {
     SDL_Point res;
     res.x = (int) point.x;
