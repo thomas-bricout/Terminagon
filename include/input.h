@@ -22,6 +22,7 @@ typedef struct {
     bool L;
 
     bool ToggledF3;
+    bool ToggledF4;
 
     SDL_FPoint mouse;
 } InState;
