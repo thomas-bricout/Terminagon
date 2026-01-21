@@ -60,8 +60,6 @@ void POOL_Load(EntityPool *pool);
 EntityID POOL_NewEntity(EntityPool *pool);
 EntityID POOL_NewEntityClassic(EntityPool *pool, TextureLocation tex_location, SDL_Rect display_rect, SDL_FPoint position);
 void POOL_DestroyEntity(EntityPool *pool, EntityID id);
-void POOL_DisplayAll(Game *game);
-void POOL_ApplyVelocity(EntityPool *pool, double deltaTime);
 void POOL_AddComponentFlags(EntityPool *pool, ComponentFlags component_flags, int location);
 bool POOL_LacksComponentFlags(EntityPool *pool, ComponentFlags component_flags, int location);
 
