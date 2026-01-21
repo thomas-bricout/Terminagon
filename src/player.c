@@ -35,7 +35,7 @@ EntityID POOL_SpawnArrow(EntityPool *pool, SDL_FPoint position, double angle) {
     return id;
 }
 
-void PLAYER_System(EntityPool *pool, InState *inputSituation, double current_time) {
+void PLAYER_System(EntityPool *pool, InState *inState, double current_time) {
     int playerLocation = pool->player.location;
 
     SDL_FPoint *playerVelocity = &pool->velocity[playerLocation];
@@ -46,13 +46,13 @@ void PLAYER_System(EntityPool *pool, InState *inputSituation, double current_tim
     // Whether player is ready to start a new action
     bool available = pc->action == 0 && elapsed_time >= RECOVERY_TIME;
     if (available) { // Treat new actions
-        if (inputSituation->X) {
+        if (inState->X) {
             pc->action = ACTION_DASHING;
             pc->actionTimeStamp = current_time;
-        } else if (inputSituation->W) {
+        } else if (inState->W) {
             pc->action = ACTION_SHIELDING;
             pc->actionTimeStamp = current_time;
-        } else if (inputSituation->C) {
+        } else if (inState->C) {
             pc->action = ACTION_BOW_AIMING;
             pc->actionTimeStamp = current_time;
         }
@@ -65,7 +65,7 @@ void PLAYER_System(EntityPool *pool, InState *inputSituation, double current_tim
                 }
                 break;
             case ACTION_BOW_AIMING:
-                if (!inputSituation->C) {
+                if (!inState->C) {
                     if (elapsed_time >= BOW_AIMING_TIME) {
                         POOL_SpawnArrow(pool, *playerPosition, pc->angle);
                     }
@@ -74,7 +74,7 @@ void PLAYER_System(EntityPool *pool, InState *inputSituation, double current_tim
                 }
                 break;
             case ACTION_SHIELDING:
-                if (!inputSituation->W) {
+                if (!inState->W) {
                     pc->action = ACTION_NONE;
                     pc->actionTimeStamp = current_time;
                 }
@@ -100,8 +100,8 @@ void PLAYER_System(EntityPool *pool, InState *inputSituation, double current_tim
     }
 
     // Determine the angle
-    if ((int) inputSituation->RIGHT - (int) inputSituation->LEFT != 0 || (int) inputSituation->DOWN - (int) inputSituation->UP != 0) {
-        pc->angle = atan2((double) inputSituation->DOWN - (double) inputSituation->UP, (double) inputSituation->RIGHT - (double) inputSituation->LEFT);
+    if ((int) inState->RIGHT - (int) inState->LEFT != 0 || (int) inState->DOWN - (int) inState->UP != 0) {
+        pc->angle = atan2((double) inState->DOWN - (double) inState->UP, (double) inState->RIGHT - (double) inState->LEFT);
         pc->walking = true;
     } else {
         // Keep current angle

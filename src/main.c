@@ -46,8 +46,8 @@ int main(int argc, char *argv[])
     ASSETS_Load(&asset_manager, renderer);
 
     // Création de InState
-    InState inputSituation;
-    InState_Init(&inputSituation);
+    InState inState;
+    InState_Init(&inState);
 
     // Dit au renderer de dessiner directement sur la fenêtre
     SDL_SetRenderTarget(renderer, NULL);
@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 
     // Création du jeu
     Game game;
-    GAME_Init(&game, renderer, window, &asset_manager, &pool, &inputSituation);
+    GAME_Init(&game, renderer, window, &asset_manager, &pool, &inState);
 
     // Appelle de la boucle principale de jeu
     GAME_Run(&game);

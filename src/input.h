@@ -19,7 +19,7 @@ typedef struct {
     bool ToggledF3;
 } InState;
 
-void InState_Init(InState *inputSituation);
-void InState_Update(InState *inputSituation, SDL_EventType type, SDL_Scancode scancode);
+void InState_Init(InState *inState);
+void InState_Update(InState *inState, SDL_EventType type, SDL_Scancode scancode);
 
 #endif
