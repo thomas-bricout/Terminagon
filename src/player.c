@@ -6,11 +6,11 @@
 #include <math.h>
 
 const double DEFAULT_PLAYER_SPEED = 0.2;
-const double DASHING_PLAYER_SPEED = 0.4;
+const double DASHING_PLAYER_SPEED = 0.6;
 const double AIMING_PLAYER_SPEED = 0.1;
 
 const double BOW_AIMING_TIME = 1000;
-const double DASHING_TIME = 500;
+const double DASHING_TIME = 200;
 const double RECOVERY_TIME = 100;
 
 const double ARROW_SPEED = 0.5;
@@ -100,7 +100,10 @@ void PLAYER_System(EntityPool *pool, InState *inState, double current_time) {
     }
 
     // Determine the angle
-    if ((int) inState->RIGHT - (int) inState->LEFT != 0 || (int) inState->DOWN - (int) inState->UP != 0) {
+    if ( pc->action == ACTION_DASHING ){
+        // Prevent change in direction of the player
+        pc->walking = true; // Even if player lets go of buttons
+    } else if ((int) inState->RIGHT - (int) inState->LEFT != 0 || (int) inState->DOWN - (int) inState->UP != 0) {
         pc->angle = atan2((double) inState->DOWN - (double) inState->UP, (double) inState->RIGHT - (double) inState->LEFT);
         pc->walking = true;
     } else {
