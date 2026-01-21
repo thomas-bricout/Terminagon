@@ -13,6 +13,8 @@ const double BOW_AIMING_TIME = 1000;
 const double DASHING_TIME = 500;
 const double RECOVERY_TIME = 100;
 
+const double ARROW_SPEED = 0.5;
+
 PlayerComponent PLAYER_NewComponent() {
     PlayerComponent p_c;
     p_c.action = ACTION_NONE;
@@ -23,11 +25,11 @@ PlayerComponent PLAYER_NewComponent() {
     return p_c;
 }
 
-EntityID POOL_SpawnArrow(EntityPool *pool, SDL_FPoint position) {
+EntityID POOL_SpawnArrow(EntityPool *pool, SDL_FPoint position, double angle) {
     SDL_Rect display_rect = {-20, -20, 40, 40};
     EntityID id = POOL_NewEntityClassic(pool, TEX_ARROW, display_rect, position);
 
-    pool->velocity[id.location] = (SDL_FPoint) {2., 0.};
+    pool->velocity[id.location] = (SDL_FPoint) { ARROW_SPEED * cos(angle) , ARROW_SPEED * sin(angle) };
     pool->velocity_map[id.location] = true;
 
     return id;
@@ -65,7 +67,7 @@ void PlayerSystem(EntityPool *pool, InputSituation *inputSituation, double curre
             case ACTION_BOW_AIMING:
                 if (!inputSituation->C) {
                     if (elapsed_time >= BOW_AIMING_TIME) {
-                        POOL_SpawnArrow(pool, *playerPosition);
+                        POOL_SpawnArrow(pool, *playerPosition, pc->angle);
                     }
                     pc->action = ACTION_NONE;
                     pc->actionTimeStamp = current_time;
@@ -97,13 +99,21 @@ void PlayerSystem(EntityPool *pool, InputSituation *inputSituation, double curre
             break;
     }
 
-    if ( pool->id[playerLocation].unique_id == pool->player.unique_id ) {
-        playerVelocity->x = player_speed * ( (int) inputSituation->RIGHT - (int) inputSituation->LEFT );
-        playerVelocity->y = player_speed * ( (int) inputSituation->DOWN - (int) inputSituation->UP );
-    }
-
     // Determine the angle
     if ((int) inputSituation->RIGHT - (int) inputSituation->LEFT != 0 || (int) inputSituation->DOWN - (int) inputSituation->UP != 0) {
-        pc->angle = atan2((double) inputSituation->RIGHT - (double) inputSituation->LEFT, (double) inputSituation->DOWN - (double) inputSituation->UP);
+        pc->angle = atan2((double) inputSituation->DOWN - (double) inputSituation->UP, (double) inputSituation->RIGHT - (double) inputSituation->LEFT);
+        pc->walking = true;
+    } else {
+        // Keep current angle
+        pc->walking = false;
+    }
+
+    // Move player according to walking and angle
+    if ( pc->walking ) {
+        playerVelocity->x = player_speed * cos(pc->angle);
+        playerVelocity->y = player_speed * sin(pc->angle);
+    } else {
+        playerVelocity->x = 0;
+        playerVelocity->y = 0;
     }
 }

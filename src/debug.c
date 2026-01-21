@@ -29,7 +29,8 @@ void DEBUG_DisplayDebugInfo(Game *game, double deltaTime, double FPS, double ela
         "LEFT %d RIGHT %d UP %d DOWN %d\n"
         "W %d X %d C %d \n"
         "PLAYER POSITION (%4.2f, %4.2f)\n"
-        "CURRENT ACTION %d SINCE %5.0f"
+        "CURRENT ACTION %d SINCE %5.0f\n"
+        "CURRENT ANGLE %f\n"
         , 
         game->pool->currentCount, 
         deltaTime, FPS,
@@ -39,7 +40,8 @@ void DEBUG_DisplayDebugInfo(Game *game, double deltaTime, double FPS, double ela
         game->pool->position[game->pool->player.location].x,
         game->pool->position[game->pool->player.location].y,
         game->pool->player_c.action,
-        current_time - game->pool->player_c.actionTimeStamp
+        current_time - game->pool->player_c.actionTimeStamp,
+        game->pool->player_c.angle * 360. / 3.1415
     );
 
     // Display the string on the screen
