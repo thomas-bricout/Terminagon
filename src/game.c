@@ -83,15 +83,14 @@ void GAME_Run(Game *game) {
         // Création du rendu
         RENDER_RenderAll(game);
         
+        // Logging
+        DEBUG_DisplayDebug(game, deltaTime, FPS, elapsed, current_time);
+        EDITOR_DisplayInfo(game);
 
         // Affichage à l'écran
         SDL_RenderPresent(game->renderer);
         SDL_SetRenderDrawColor(game->renderer, 0, 0, 0, 255);
         SDL_RenderClear(game->renderer);
-
-        // Logging
-        DEBUG_DisplayDebug(game, deltaTime, FPS, elapsed, current_time);
-        EDITOR_DisplayInfo(game);
 
         // Limitation des FPS
         Uint64 frame_end = SDL_GetPerformanceCounter();

@@ -18,6 +18,8 @@ void InState_Init(InState *inState) {
     inState->ToggledF4 = false;
     inState->ToggledGrid = false;
 
+    inState->selected_archetype = ARCHETYPE_DEBUG;
+
     inState->mouse = (SDL_FPoint) {0., 0.};
 }
 

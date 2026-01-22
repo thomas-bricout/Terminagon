@@ -93,7 +93,7 @@ void DEBUG_DisplayDebugInfo(Game *game, double deltaTime, double FPS, double ela
 
     // Display the string on the screen
     SDL_Color white = {255, 255, 255};
-    SDL_Surface *messageSurface = TTF_RenderUTF8_Solid_Wrapped(game->asset_manager->debug_font, str, white, 5000);
+    SDL_Surface *messageSurface = TTF_RenderUTF8_Solid_Wrapped(game->asset_manager->debug_font, str, white, 0);
     if (messageSurface == NULL) {
         fprintf(stderr, "Erreur TTF_RenderUTF8_Solid_Wrapped: %s\n", SDL_GetError());
      }

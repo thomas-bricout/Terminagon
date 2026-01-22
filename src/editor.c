@@ -53,11 +53,16 @@ void EDITOR_DisplayInfo(Game *game) {
     // Compiling things to print
     if (!game->inState->ToggledF4) { return; }
 
+    // Draw the grid ( if applicable )
+    if (game->inState->ToggledGrid) {
+        EDITOR_DrawGrid(game);
+    }
+
     char str[500];
     sprintf(
         str,
         "SELECTED ARCHETYPE: %s\n"
-        "MOUSE POSITION: (%f, %f)"
+        "MOUSE POSITION: (%4.f, %4.f)\n"
         ,
         EDITOR_ArchetypeToString(game->inState->selected_archetype),
         EDITOR_MouseToWorld(game->inState->mouse, game->camera_pos).x,
@@ -66,7 +71,7 @@ void EDITOR_DisplayInfo(Game *game) {
 
     // Display the string on the screen
     SDL_Color white = {255, 255, 255};
-    SDL_Surface *messageSurface = TTF_RenderUTF8_Solid_Wrapped(game->asset_manager->debug_font, str, white, 5000);
+    SDL_Surface *messageSurface = TTF_RenderUTF8_Solid_Wrapped(game->asset_manager->debug_font, str, white, 0);
     if (messageSurface == NULL) {
         fprintf(stderr, "Erreur TTF_RenderUTF8_Solid_Wrapped: %s\n", SDL_GetError());
      }
@@ -88,7 +93,9 @@ void EDITOR_DisplayInfo(Game *game) {
     dst.x = window_w - dst.w;
     dst.y = window_h - dst.h;
 
-    SDL_RenderCopy(game->renderer, messageTexture, NULL, &dst);
+    if (SDL_RenderCopy(game->renderer, messageTexture, NULL, &dst) != 0) {
+        fprintf(stderr, "STD_RenderCopy Error: %s", SDL_GetError());
+    }
 
     SDL_FreeSurface(messageSurface);
     SDL_DestroyTexture(messageTexture);
@@ -97,4 +104,31 @@ void EDITOR_DisplayInfo(Game *game) {
 char* EDITOR_ArchetypeToString(EntityArchetype archetype) {
     char *strs[] = {"DEBUG", "PLAYER"};
     return strs[archetype];
+}
+
+void EDITOR_DrawGrid(Game *game) {
+    // Compute grid offset and number of vertical/horizontal lines
+    SDL_Renderer *renderer = game->renderer;
+    SDL_Point camera = FPOINT_ToPoint(game->camera_pos);
+    SDL_Point offset = { - camera.x % 100, - camera.y % 100 };
+
+    // Get number of lines
+    int window_h = 1000;
+    int window_w = 1000;
+    SDL_GetWindowSize(game->window, &window_w, &window_h);
+    int vertical_count = window_w / 100 + 1;
+    int horizontal_count = window_h / 100 + 1;
+
+    SDL_SetRenderDrawColor(renderer, 0, 255, 255, 100);
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
+    // Draw horizontal lines
+    for (int i = -1; i < horizontal_count; i++) {
+        SDL_RenderDrawLine(renderer, 0, i * GRID_SIZE + offset.y, window_w, i * GRID_SIZE + offset.y);
+    }
+    
+    // Draw vertical lines
+    for (int i = -1; i < vertical_count; i++) {
+        SDL_RenderDrawLine(renderer, i * GRID_SIZE + offset.x, 0, i * GRID_SIZE + offset.x, window_h);
+    }
 }
