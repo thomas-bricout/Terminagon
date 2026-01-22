@@ -16,6 +16,7 @@ void InState_Init(InState *inState) {
 
     inState->ToggledF3 = false;
     inState->ToggledF4 = false;
+    inState->ToggledGrid = false;
 
     inState->mouse = (SDL_FPoint) {0., 0.};
 }
@@ -73,6 +74,9 @@ void InState_Update(InState *inState, SDL_Event event) {
                     break;
                 case SDL_SCANCODE_F4:
                     inState->ToggledF4 = !inState->ToggledF4;
+                    break;
+                case SDL_SCANCODE_G:
+                    inState->ToggledGrid = !inState->ToggledGrid;
                     break;
                 default:
                     break;

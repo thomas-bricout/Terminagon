@@ -27,6 +27,7 @@ struct InState {
 
     bool ToggledF3;
     bool ToggledF4;
+    bool ToggledGrid;
 
     SDL_FPoint mouse;
     EntityArchetype selected_archetype;   
