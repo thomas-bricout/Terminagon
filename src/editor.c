@@ -56,8 +56,10 @@ void EDITOR_DisplayInfo(Game *game) {
     char str[500];
     sprintf(
         str,
+        "SELECTED ARCHETYPE: %s\n"
         "MOUSE POSITION: (%f, %f)"
         ,
+        EDITOR_ArchetypeToString(game->inState->selected_archetype),
         EDITOR_MouseToWorld(game->inState->mouse, game->camera_pos).x,
         EDITOR_MouseToWorld(game->inState->mouse, game->camera_pos).y
     );

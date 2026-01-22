@@ -120,4 +120,19 @@ void InState_Update(InState *inState, SDL_Event event) {
         default:
             break;
     }
+
+    // Editor keybindings
+    if ((type == SDL_MOUSEWHEEL && event.wheel.y > 0) || (type == SDL_KEYDOWN && scancode == SDL_SCANCODE_P)) {
+        inState->selected_archetype ++;
+        if (inState->selected_archetype == ARCHETYPE_NUMBER) {
+            inState->selected_archetype = 0;
+        }
+    }
+
+    if ((type == SDL_MOUSEWHEEL && event.wheel.y < 0) || (type == SDL_KEYDOWN && scancode == SDL_SCANCODE_M)) {
+        inState->selected_archetype --;
+        if (inState->selected_archetype == -1) {
+            inState->selected_archetype = ARCHETYPE_NUMBER - 1;
+        }
+    }
 }

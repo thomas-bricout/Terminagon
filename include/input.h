@@ -1,10 +1,14 @@
 #ifndef INPUT_H
 #define INPUT_H
 
+typedef struct InState InState;
+
 #include <SDL2/SDL.h>
 #include <stdbool.h>
 
-typedef struct {
+#include "editor.h"
+
+struct InState {
     bool QUIT;
 
     bool UP;
@@ -25,7 +29,8 @@ typedef struct {
     bool ToggledF4;
 
     SDL_FPoint mouse;
-} InState;
+    EntityArchetype selected_archetype;   
+};
 
 void InState_Init(InState *inState);
 void InState_Update(InState *inState, SDL_Event event);
