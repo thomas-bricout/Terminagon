@@ -12,4 +12,7 @@ typedef enum {
 void EDITOR_PlaceEntity(Game *game);
 void EDITOR_EntityFromArchetype(Game *game, EntityArchetype archetype, SDL_FPoint pos);
 
+void EDITOR_DisplayInfo(Game *game);
+char* EDITOR_ArchetypeToString(EntityArchetype archetype);
+
 #endif

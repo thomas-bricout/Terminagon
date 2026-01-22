@@ -48,3 +48,51 @@ void EDITOR_EntityFromArchetype(Game *game, EntityArchetype archetype, SDL_FPoin
             break;
     }
 } 
+
+void EDITOR_DisplayInfo(Game *game) {
+    // Compiling things to print
+    if (!game->inState->ToggledF4) { return; }
+
+    char str[500];
+    sprintf(
+        str,
+        "MOUSE POSITION: (%f, %f)"
+        ,
+        EDITOR_MouseToWorld(game->inState->mouse, game->camera_pos).x,
+        EDITOR_MouseToWorld(game->inState->mouse, game->camera_pos).y
+    );
+
+    // Display the string on the screen
+    SDL_Color white = {255, 255, 255};
+    SDL_Surface *messageSurface = TTF_RenderUTF8_Solid_Wrapped(game->asset_manager->debug_font, str, white, 5000);
+    if (messageSurface == NULL) {
+        fprintf(stderr, "Erreur TTF_RenderUTF8_Solid_Wrapped: %s\n", SDL_GetError());
+     }
+
+    SDL_Texture *messageTexture = SDL_CreateTextureFromSurface(game->renderer, messageSurface);
+    if (messageSurface == NULL) {
+        fprintf(stderr, "Erreur SDL_CreateTextureFromSurface: %s\n", SDL_GetError());
+    }
+
+    SDL_Rect dst = {0, 0, 0, 0};
+    if (0 != SDL_QueryTexture(messageTexture, NULL, NULL, &dst.w, &dst.h)) {
+        fprintf(stderr, "Erreur SDL_QueryTexture : %s\n", SDL_GetError());
+    }
+
+    // Place the text in the bottom right corner of the window
+    int window_h = 100;
+    int window_w = 100;
+    SDL_GetWindowSize(game->window, &window_w, &window_h);
+    dst.x = window_w - dst.w;
+    dst.y = window_h - dst.h;
+
+    SDL_RenderCopy(game->renderer, messageTexture, NULL, &dst);
+
+    SDL_FreeSurface(messageSurface);
+    SDL_DestroyTexture(messageTexture);
+}
+
+char* EDITOR_ArchetypeToString(EntityArchetype archetype) {
+    char *strs[] = {"DEBUG", "PLAYER"};
+    return strs[archetype];
+}
