@@ -17,24 +17,34 @@ void EDITOR_PlaceEntity(Game *game) {
     SDL_FPoint position = EDITOR_MouseToWorld(game->inState->mouse, game->camera_pos);
 
     // TODO: get entity bundle from player selection
-    EntityBundle bundle;
-    bundle.texture = TEX_DEBUG;
-    bundle.texture_box = (SDL_Rect) {0, 0, 100, 100};
-    bundle.collision_box = (SDL_FRect) {0., 0., 100., 100.};
-
-    EDITOR_EntityFromBundle(game, bundle, position);
+    EDITOR_EntityFromArchetype(game, ARCHETYPE_DEBUG, position);
 }
 
 
-void EDITOR_EntityFromBundle(Game *game, EntityBundle bundle, SDL_FPoint pos) {
+void EDITOR_EntityFromArchetype(Game *game, EntityArchetype archetype, SDL_FPoint pos) {
     EntityPool *pool = game->pool;
     EntityID id = POOL_NewEntity(game->pool);
     int i = id.location;
 
-    pool->tex_location[i] = bundle.texture;
-    pool->display_rect[i] = bundle.texture_box;
-    pool->collision_box[i] = bundle.collision_box;
     pool->position[i] = pos;
+    POOL_AddComponentFlags(pool, COMPONENT_POSITION, i);
 
-    POOL_AddComponentFlags(pool, COMPONENT_TEXTURE | COMPONENT_DISPLAYRECT | COMPONENT_COLLISIONBOX | COMPONENT_POSITION, i);
+    switch (archetype) {
+        case ARCHETYPE_PLAYER:
+            pool->tex_location[i] = TEX_DEBUG;
+            pool->display_rect[i] = (SDL_Rect) {-50, -50, 100, 100};
+            pool->collision_box[i] = (SDL_FRect) {-50., -50., 100., 100.};
+            pool->velocity[i] = (SDL_FPoint) {0., 0.};
+
+            POOL_AddComponentFlags(pool, COMPONENT_TEXTURE | COMPONENT_DISPLAYRECT | COMPONENT_COLLISIONBOX | COMPONENT_VELOCITY, i);
+            break;   
+        default:
+        case ARCHETYPE_DEBUG:
+            pool->tex_location[i] = TEX_DEBUG;
+            pool->display_rect[i] = (SDL_Rect) {-50, -50, 100, 100};
+            pool->collision_box[i] = (SDL_FRect) {-50., -50., 100., 100.};
+
+            POOL_AddComponentFlags(pool, COMPONENT_TEXTURE | COMPONENT_DISPLAYRECT | COMPONENT_COLLISIONBOX, i);
+            break;
+    }
 } 

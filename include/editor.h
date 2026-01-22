@@ -4,13 +4,12 @@
 #include "game.h"
 #include "assets.h"
 
-void EDITOR_PlaceEntity(Game *game);
-void EDITOR_EntityFromBundle(Game *game, EntityBundle bundle, SDL_FPoint pos);
+typedef enum {
+    ARCHETYPE_DEBUG,
+    ARCHETYPE_PLAYER,
+} EntityArchetype;
 
-typedef struct {
-    TextureLocation texture;
-    SDL_Rect texture_box;
-    SDL_FRect collision_box;
-} EntityBundle;
+void EDITOR_PlaceEntity(Game *game);
+void EDITOR_EntityFromArchetype(Game *game, EntityArchetype archetype, SDL_FPoint pos);
 
 #endif
