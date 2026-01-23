@@ -1,4 +1,4 @@
-# PROJETC
+# Terminagon
 ## Gameplay et idées
 
 ## Compilation
