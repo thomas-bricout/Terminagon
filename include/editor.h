@@ -12,6 +12,10 @@ enum EntityArchetype {
 
 #define ARCHETYPE_NUMBER 2
 #define GRID_SIZE 100
+#define HALF_GRIDSIZE 50
+
+#define GRID_RECT (SDL_Rect) {-HALF_GRIDSIZE, -HALF_GRIDSIZE, GRID_SIZE, GRID_SIZE}
+#define GRID_FRECT (SDL_FRect) {-HALF_GRIDSIZE, -HALF_GRIDSIZE, GRID_SIZE, GRID_SIZE}
 
 void EDITOR_PlaceEntity(Game *game);
 void EDITOR_EntityFromArchetype(Game *game, EntityArchetype archetype, SDL_FPoint pos);

@@ -33,8 +33,8 @@ void EDITOR_EntityFromArchetype(Game *game, EntityArchetype archetype, SDL_FPoin
     switch (archetype) {
         case ARCHETYPE_PLAYER:
             pool->tex_location[i] = TEX_DEBUG;
-            pool->display_rect[i] = (SDL_Rect) {-50, -50, 100, 100};
-            pool->collision_box[i] = (SDL_FRect) {-50., -50., 100., 100.};
+            pool->display_rect[i] = GRID_RECT;
+            pool->collision_box[i] = GRID_FRECT;
             pool->velocity[i] = (SDL_FPoint) {0., 0.};
 
             POOL_AddComponentFlags(pool, COMPONENT_TEXTURE | COMPONENT_DISPLAYRECT | COMPONENT_COLLISIONBOX | COMPONENT_VELOCITY, i);
@@ -42,8 +42,8 @@ void EDITOR_EntityFromArchetype(Game *game, EntityArchetype archetype, SDL_FPoin
         default:
         case ARCHETYPE_DEBUG:
             pool->tex_location[i] = TEX_DEBUG;
-            pool->display_rect[i] = (SDL_Rect) {-50, -50, 100, 100};
-            pool->collision_box[i] = (SDL_FRect) {-50., -50., 100., 100.};
+            pool->display_rect[i] = (SDL_Rect) GRID_RECT;
+            pool->collision_box[i] = (SDL_FRect) GRID_FRECT;
 
             POOL_AddComponentFlags(pool, COMPONENT_TEXTURE | COMPONENT_DISPLAYRECT | COMPONENT_COLLISIONBOX, i);
             break;
@@ -115,14 +115,14 @@ void EDITOR_DrawGrid(Game *game) {
     // Compute grid offset and number of vertical/horizontal lines
     SDL_Renderer *renderer = game->renderer;
     SDL_Point camera = FPOINT_ToPoint(game->camera_pos);
-    SDL_Point offset = { - camera.x % 100, - camera.y % 100 };
+    SDL_Point offset = { - camera.x % GRID_SIZE, - camera.y % GRID_SIZE };
 
     // Get number of lines
     int window_h = 1000;
     int window_w = 1000;
     SDL_GetWindowSize(game->window, &window_w, &window_h);
-    int vertical_count = window_w / 100 + 1;
-    int horizontal_count = window_h / 100 + 1;
+    int vertical_count = window_w / GRID_SIZE + 1;
+    int horizontal_count = window_h / GRID_SIZE + 1;
 
     SDL_SetRenderDrawColor(renderer, 0, 255, 255, 100);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
