@@ -14,4 +14,6 @@ SDL_FPoint FPOINT_VelocityFromAngle(double angle, float speed);
 SDL_FPoint FPOINT_RelativePoint(SDL_FPoint point, SDL_FPoint camera);
 SDL_Point FPOINT_ToPoint(SDL_FPoint point);
 
+SDL_FPoint FPOINT_NearestSquare(SDL_FPoint point);
+
 #endif

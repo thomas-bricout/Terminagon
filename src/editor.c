@@ -14,7 +14,8 @@ SDL_FPoint EDITOR_MouseToWorld(SDL_FPoint mouse, SDL_FPoint camera) {
 }
 
 void EDITOR_PlaceEntity(Game *game) {
-    SDL_FPoint position = EDITOR_MouseToWorld(game->inState->mouse, game->camera_pos);
+    SDL_FPoint mouse_position = EDITOR_MouseToWorld(game->inState->mouse, game->camera_pos);
+    SDL_FPoint position = game->inState->ToggledGrid ? FPOINT_NearestSquare(mouse_position) : mouse_position;
 
     // TODO: get entity bundle from player selection
     EDITOR_EntityFromArchetype(game, ARCHETYPE_DEBUG, position);
@@ -58,15 +59,19 @@ void EDITOR_DisplayInfo(Game *game) {
         EDITOR_DrawGrid(game);
     }
 
+    SDL_FPoint inGameMouseCoordinates = EDITOR_MouseToWorld(game->inState->mouse, game->camera_pos);
+    SDL_FPoint nearestSquare = FPOINT_NearestSquare(inGameMouseCoordinates);
+
     char str[500];
     sprintf(
         str,
         "SELECTED ARCHETYPE: %s\n"
         "MOUSE POSITION: (%4.f, %4.f)\n"
+        "NEAREST SQUARE: (%4.f, %4.f)\n"
         ,
         EDITOR_ArchetypeToString(game->inState->selected_archetype),
-        EDITOR_MouseToWorld(game->inState->mouse, game->camera_pos).x,
-        EDITOR_MouseToWorld(game->inState->mouse, game->camera_pos).y
+        inGameMouseCoordinates.x, inGameMouseCoordinates.y,
+        nearestSquare.x, nearestSquare.y
     );
 
     // Display the string on the screen

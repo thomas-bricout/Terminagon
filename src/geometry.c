@@ -1,6 +1,8 @@
 #include <SDL2/SDL.h>
 #include <math.h>
 
+#include "editor.h"
+
 SDL_FRect FRECT_Offset(SDL_FRect rect, SDL_FPoint position) {
     SDL_FRect res;
     res.x = rect.x + position.x;
@@ -60,5 +62,12 @@ SDL_Point FPOINT_ToPoint(SDL_FPoint point) {
     SDL_Point res;
     res.x = (int) point.x;
     res.y = (int) point.y;
+    return res;
+}
+
+SDL_FPoint FPOINT_NearestSquare(SDL_FPoint point) {
+    SDL_FPoint res;
+    res.x = ((int) point.x / GRID_SIZE) * GRID_SIZE + GRID_SIZE / 2;
+    res.y = ((int) point.y / GRID_SIZE) * GRID_SIZE + GRID_SIZE / 2;
     return res;
 }
