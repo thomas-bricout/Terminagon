@@ -188,11 +188,11 @@ if(SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_UP)){
         inState->C = false;
     }
     int alx = SDL_GameControllerGetAxis(controller,SDL_CONTROLLER_AXIS_LEFTX);
-    if(alx<2000 && alx>-2000){
+    if(alx<3200 && alx>-3200){
         alx=0;
     }
     int aly = SDL_GameControllerGetAxis(controller,SDL_CONTROLLER_AXIS_LEFTY);
-    if(aly<2000 && aly>-2000){
+    if(aly<3200 && aly>-3200){
         aly=0;
     }
     
