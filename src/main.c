@@ -9,6 +9,8 @@
 #include "entity_pool.h"
 #include "input.h"
 
+//#include <switch.h> //switch
+
 #define GAMENAME "Mon jeu"
 #define VERSION "0.0.0"
 
@@ -17,6 +19,10 @@
 
 int main(int argc, char *argv[])
 {
+    // Initialisation Switch romfs
+    //romfsInit();//switch
+    //chdir("romfs:/");//switch
+
     // Initialise SDL et quitte immédiatement si l'initialisation foire
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         fprintf(stderr, "Erreur SDL_Init : %s", SDL_GetError());
@@ -87,5 +93,7 @@ Quit:
         SDL_DestroyWindow(window);
     }
     SDL_Quit();
+    
+    //romfsExit();//switch
     return EXIT_FAILURE;
 }

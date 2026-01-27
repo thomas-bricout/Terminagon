@@ -1,2 +1,6 @@
 app
 /saves/*
+/build/*
+Terminagon.elf
+Terminagon.nro
+Terminagon.nacp
