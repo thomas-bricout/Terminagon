@@ -43,7 +43,7 @@ void POOL_Load(EntityPool *pool, InState *inState) {
     pool->player_amount = 1;
 
     SDL_Rect player_display_rect = {-50, -50, 100, 100};
-    pool->player_id[0] = POOL_NewEntityClassic(pool, TEX_DEBUG, player_display_rect, (SDL_FPoint) {0, 0});
+    pool->player_id[0] = POOL_NewEntityClassic(pool, TEX_PLAYER_RIGHT, player_display_rect, (SDL_FPoint) {0, 0});
 
     int player_loc = pool->player_id[0].location;
     pool->velocity[player_loc] = (SDL_FPoint) {0., 0.};
@@ -59,7 +59,7 @@ void POOL_Load(EntityPool *pool, InState *inState) {
     pool->player_amount = 2;
 
     player_display_rect = (SDL_Rect) {-50, -50, 100, 100};
-    pool->player_id[1] = POOL_NewEntityClassic(pool, TEX_DEBUG, player_display_rect, (SDL_FPoint) {500, 500});
+    pool->player_id[1] = POOL_NewEntityClassic(pool, TEX_PLAYER_RIGHT, player_display_rect, (SDL_FPoint) {500, 500});
 
     player_loc = pool->player_id[1].location;
     pool->velocity[player_loc] = (SDL_FPoint) {0., 0.};
