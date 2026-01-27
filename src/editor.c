@@ -137,3 +137,26 @@ void EDITOR_DrawGrid(Game *game) {
         SDL_RenderDrawLine(renderer, i * GRID_SIZE + offset.x, 0, i * GRID_SIZE + offset.x, window_h);
     }
 }
+
+// Renvoie la première entité dans le point et dans le display_box dans *id
+// Renvoie true sur succés, false si il n'y a pas d'entité en ce point
+bool EDITOR_EntityAtPoint(EntityPool *pool, SDL_Point point, EntityID *id) {
+    for (int i = 0; i < pool->lastEntitylocation; i++) {
+        if (POOL_LacksComponentFlags(pool, COMPONENT_DISPLAYRECT | COMPONENT_POSITION, i)) { continue; }
+        // printf("point: %d, %d\n", point.x, point.y);
+        // printf("rect: %d, %d, %d, %d\n",pool->display_rect[i].x, pool->display_rect[i].y, pool->display_rect[i].h, pool->display_rect[i].w);
+        SDL_Rect offset_display_rect = RECT_Offset(pool->display_rect[i], FPOINT_ToPoint(pool->position[i]));
+        if (SDL_PointInRect(&point, &offset_display_rect)) {
+            *id = pool->id[i];
+            return true;
+        }
+    }
+    return false;
+}
+
+void EDITOR_DeleteUnderMouse(Game *game) {
+    SDL_Point point = FPOINT_ToPoint(EDITOR_MouseToWorld(game->inState->mouse, game->camera_pos));
+    EntityID id = {0, 0};
+    EDITOR_EntityAtPoint(game->pool, point, &id);
+    POOL_DestroyEntity(game->pool, id);
+}
