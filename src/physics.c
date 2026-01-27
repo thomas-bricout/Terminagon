@@ -46,3 +46,21 @@ void PHYSICS_MoveAll(EntityPool *pool, double deltaTime) {
         pool->position[i] = FPOINT_ApplyVelocity(pool->position[i], pool->velocity[i], deltaTime); 
     }
 }
+
+void PHYSICS_UpdateHitPoints(EntityPool *pool) {
+    for (int i = 0; i < pool->lastEntitylocation; i++) {
+        if (POOL_LacksComponentFlags(pool, COMPONENT_HITBOX | COMPONENT_POSITION, i)) { continue; }
+        SDL_FRect hitbox = pool->hit_box[i];
+        hitbox = FRECT_Offset(hitbox, pool->position[i]);
+
+        for (int j = 0; j < pool->lastEntitylocation; j++) {
+            if (POOL_LacksComponentFlags(pool, COMPONENT_DAMAGEBOX | COMPONENT_POSITION, i)) { continue; }
+            SDL_FRect damagebox = pool->hit_box[i];
+            damagebox = FRECT_Offset(hitbox, pool->position[i]);
+            
+            printf("Here!\n");
+            if (!SDL_HasIntersectionF(&hitbox, &damagebox)) { continue; }
+            printf("Hit\n");
+        }
+    }
+}

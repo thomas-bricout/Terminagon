@@ -86,6 +86,7 @@ void GAME_Run(Game *game) {
         // Physiques et Mécaniques
         PLAYER_System(game, current_time);
         PHYSICS_MoveAll(game->pool, deltaTime);
+        PHYSICS_UpdateHitPoints(game->pool);
         MoveCameraIJKL(game, deltaTime);
 
         // Création du rendu

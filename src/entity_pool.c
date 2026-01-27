@@ -50,7 +50,8 @@ void POOL_Load(EntityPool *pool, InState *inState) {
     POOL_AddComponentFlags(pool, COMPONENT_VELOCITY, player_loc);
 
     pool->collision_box[player_loc] = (SDL_FRect) {-50., -50., 100., 100.};
-    POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX, player_loc);
+    pool->hit_box[player_loc] = (SDL_FRect) {-50., -50., 100., 100.};
+    POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX | COMPONENT_HITBOX, player_loc);
 
     // Adds the second player
     pool->player_component[1] = PLAYER_NewComponent(inState + 1);
@@ -61,12 +62,16 @@ void POOL_Load(EntityPool *pool, InState *inState) {
 
     player_loc = pool->player_id[1].location;
     pool->velocity[player_loc] = (SDL_FPoint) {0., 0.};
+    pool->hit_box[player_loc] = (SDL_FRect) {-50., -50., 100., 100.};
     POOL_AddComponentFlags(pool, COMPONENT_VELOCITY, player_loc);
 
     pool->collision_box[player_loc] = (SDL_FRect) {-50., -50., 100., 100.};
-    POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX, player_loc);
-    
+    pool->hit_box[player_loc] = (SDL_FRect) {-50., -50., 100., 100.};
+    POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX | COMPONENT_HITBOX, player_loc);
+
+    // Adds a tree
     EntityID tree = POOL_NewEntityClassic(pool, TEX_DEBUG, player_display_rect, (SDL_FPoint) {300., 300.});
+
     pool->collision_box[tree.location] = (SDL_FRect) {-50., -50., 100., 100.};
     POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX, tree.location);
 }

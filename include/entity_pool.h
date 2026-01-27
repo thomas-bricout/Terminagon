@@ -49,7 +49,9 @@ struct EntityPool {
     SDL_Rect display_rect[MAX_ENTITY_COUNT]; // Where to display the entity relative to its position
     SDL_FRect collision_box[MAX_ENTITY_COUNT];
     SDL_FRect damage_box[MAX_ENTITY_COUNT];
+
     SDL_FRect hit_box[MAX_ENTITY_COUNT];
+    int health_point[MAX_ENTITY_COUNT];
 
     SDL_FPoint position[MAX_ENTITY_COUNT];
     SDL_FPoint velocity[MAX_ENTITY_COUNT];
