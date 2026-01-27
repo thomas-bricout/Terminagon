@@ -154,5 +154,72 @@ void PLAYER_System(Game *game, double current_time) {
         } else {
             *playerVelocity = (SDL_FPoint) {0., 0.};
         }
+
+        // Animate the player
+        PLAYER_Animate(pool, i, current_time);
+    }
+}
+
+void PLAYER_Animate(EntityPool *pool, int playerIndex, double current_time) {
+    int playerLocation = pool->player_id[playerIndex].location;
+    TextureLocation *tex = &pool->tex_location[playerLocation];
+    PlayerComponent *pc = &pool->player_component[playerIndex];
+    SDL_Rect *rect = &pool->display_rect[playerLocation];
+    double delay = current_time - pc->actionTimeStamp;
+    
+    double angle = pc->angle * 180. / 3.1415;
+    int orientation = 0;
+    if (angle <= 45 && angle >= -45) { // Right
+        orientation = 0;
+    } else if (angle >= 135 || angle <= -135) { // Left
+        orientation = 2;
+    } else if (angle >= -135 && angle <= 45) { // Up
+        orientation = 1;
+    } else if (angle >= 45 && angle <= 135) { // Down
+        orientation = 3;
+    }
+
+    switch (pc->action) {
+        case ACTION_NONE:
+            *tex = orientation * 2 + TEX_PLAYER_RIGHT;
+            if (pc->walking && (int) (delay / 500.) % 2) {
+                *tex += 1;
+            }
+            break;
+        case ACTION_BOW_AIMING:
+            break;
+        case ACTION_DASHING:
+            break;
+        case ACTION_SHIELDING:
+            break;
+        case ACTION_SWORD:
+            *tex = orientation + TEX_PLAYER_SWORD_RIGHT;
+            break;
+    }
+    
+    // Adapt Display_Rect to the size of the image
+    switch (*tex) {
+        case TEX_PLAYER_RIGHT   :
+        case TEX_PLAYER_RIGHT_W :
+        case TEX_PLAYER_UP      :
+        case TEX_PLAYER_UP_W    :
+        case TEX_PLAYER_LEFT    :
+        case TEX_PLAYER_LEFT_W  :
+        case TEX_PLAYER_DOWN    :
+        case TEX_PLAYER_DOWN_W  :
+            *rect = (SDL_Rect) {-50, -50, 100, 100};
+            break;
+        case TEX_PLAYER_SWORD_RIGHT :
+            *rect = (SDL_Rect) {-50, -50, 200, 100};
+            break;
+        case TEX_PLAYER_SWORD_UP    :
+            *rect = (SDL_Rect) {-50, -150, 100, 200};
+            break;
+        case TEX_PLAYER_SWORD_LEFT  :
+            *rect = (SDL_Rect) {-150, -50, 200, 100};
+            break;
+        case TEX_PLAYER_SWORD_DOWN  :
+            *rect = (SDL_Rect) {-50, -50, 100, 200};
+            break;
     }
 }
