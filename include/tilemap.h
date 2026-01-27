@@ -12,9 +12,11 @@
 typedef struct tile Tile;
 
 struct tile{
-    Uint8 type:7;
-    Uint8 blocking:1;
+    Uint8 type_c;
+    Uint8 type_l;
+    Uint8 blocking;
 };
 
+SDL_Texture** load_MAP_Textures(const char* tilefilename, SDL_Renderer *ren);
 void loadMap(Tile tilemap[HAUTEUR][LARGEUR]);
 #endif

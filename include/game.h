@@ -6,6 +6,7 @@ typedef struct Game Game;
 #include "assets.h"
 #include "entity_pool.h"
 #include "input.h"
+#include "tilemap.h"
 
 struct Game {
     SDL_Renderer *renderer;
@@ -18,6 +19,7 @@ struct Game {
 
     SDL_GameController *controller0;
     SDL_GameController *controller1;
+    Tile map[HAUTEUR][LARGEUR];
 };
 
 void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetManager *asset_manager, EntityPool *pool, InState *inState,SDL_GameController *controller0,SDL_GameController *controller1);

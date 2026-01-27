@@ -8,7 +8,6 @@
 #include "assets.h"
 #include "entity_pool.h"
 #include "input.h"
-#include "tilemap.h"
 
 #define GAMENAME "Mon jeu"
 #define VERSION "0.0.0"
@@ -67,9 +66,6 @@ int main(int argc, char *argv[])
     // Création du jeu
     Game game;
     GAME_Init(&game, renderer, window, &asset_manager, &pool, inState, controller0,controller1);
-
-    Tile map[HAUTEUR][LARGEUR];
-    loadMap(map);
 
     // Appelle de la boucle principale de jeu
     GAME_Run(&game);

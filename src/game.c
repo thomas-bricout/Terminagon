@@ -22,6 +22,7 @@ void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetMana
     game->camera_pos = (SDL_FPoint) {0., 0.};
     game->controller0 = controller0;
     game->controller1 = controller1;
+    loadMap(game->map);
 }
 
 void Game_ReadEvents(Game *game) {
@@ -49,7 +50,7 @@ void Game_ReadEvents(Game *game) {
             JSON_Save(game, "saves/save.json");
         }
         if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_D) {
-            JSON_Load(game, "saves/save.json", &game->inState);
+            JSON_Load(game, "saves/save.json", game->inState);
         }
         if (event.type == SDL_MOUSEBUTTONDOWN && inState1->ToggledF4) {
             if (event.button.button == SDL_BUTTON_LEFT) {
