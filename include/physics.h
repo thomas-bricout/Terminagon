@@ -4,6 +4,7 @@
 #include "entity_pool.h"
 
 void PHYSICS_MoveAll(EntityPool *pool, double deltaTime);
+void PHYSICS_DamageAll(EntityPool *pool, double deltaTime);
 void PHYSICS_UpdateHitPoints(EntityPool *pool);
 
 #endif
