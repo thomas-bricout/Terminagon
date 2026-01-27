@@ -19,6 +19,7 @@ struct InState {
     bool W;
     bool X;
     bool C;
+    bool V;
 
     bool I;
     bool J;

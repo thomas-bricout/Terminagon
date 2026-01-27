@@ -58,6 +58,9 @@ void InState_Update(InState *inState, SDL_Event event) {
                 case SDL_SCANCODE_C:
                     inState->C = true;
                     break;
+                case SDL_SCANCODE_V:
+                    inState->V = true;
+                    break;
                 case SDL_SCANCODE_I:
                     inState->I = true;
                     break;
@@ -106,6 +109,9 @@ void InState_Update(InState *inState, SDL_Event event) {
                     break;
                 case SDL_SCANCODE_C:
                     inState->C = false;
+                    break;
+                case SDL_SCANCODE_V:
+                    inState->V = false;
                     break;
                 case SDL_SCANCODE_I:
                     inState->I = false;
@@ -292,4 +298,10 @@ void InState_Update_gamecontroller(InState *inState, SDL_Event event,SDL_GameCon
             inState->selected_archetype = ARCHETYPE_NUMBER - 1;
         }
     }
+}
+
+void PlayerAddSwordCollision(EntityPool *pool, EntityID id) {
+    // TODO make it be in front of the player ( where they are currently facing )
+    pool->damage_box[id.location] = (SDL_FRect) {100., 100., 100., 100.};
+    POOL_AddComponentFlags(pool, COMPONENT_DAMAGEBOX, id.location);
 }

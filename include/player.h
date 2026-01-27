@@ -10,6 +10,7 @@ typedef enum {
     ACTION_DASHING,
     ACTION_BOW_AIMING,
     ACTION_SHIELDING,
+    ACTION_SWORD
 } PlayerAction;
 
 typedef struct {
