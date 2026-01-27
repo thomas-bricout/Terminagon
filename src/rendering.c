@@ -2,18 +2,24 @@
 #include "rendering.h"
 #include "geometry.h"
 #define size 100
-void RENDER_RenderMap(Game *game,SDL_FPoint camera_pos) {
+
+void RENDER_RenderMap(Game *game, SDL_FPoint camera_pos) {
     //game->map;
     SDL_Texture **assets = load_MAP_Textures("assets/overworldtiles.bmp",game->renderer);
 
-    SDL_Rect dst;
-    for(int i=0;i<HAUTEUR;i++){
-        for(int j=0;j<LARGEUR;j++){
+    // Get number of horizontal and vertical squares to display
+    int window_h = 1000;
+    int window_w = 1000;
+    SDL_GetWindowSize(game->window, &window_w, &window_h);
+    int j_end = ((int) camera_pos.x + window_w) / size + 1;
+    int i_end = ((int) camera_pos.y + window_h) / size + 1;
+
+    SDL_Rect dst = {0, 0, size, size};
+    for(int i = ((int) (camera_pos.y) / size);i<i_end; i++){
+        for(int j = ((int) (camera_pos.x) / size);j<j_end; j++){
             dst.x = size*j - camera_pos.x;
             dst.y = size*i - camera_pos.y;
-            dst.w = size;
-            dst.h = size;
-            
+
             SDL_RenderCopy(game->renderer, assets[game->map[i][j].id], NULL, &dst);
         }
     }
