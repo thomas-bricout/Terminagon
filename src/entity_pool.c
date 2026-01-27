@@ -42,15 +42,15 @@ void POOL_Load(EntityPool *pool, InState *inState) {
     pool->player_component[0] = PLAYER_NewComponent(inState);
     pool->player_amount = 1;
 
-    SDL_Rect player_display_rect = {-50, -50, 100, 100};
+    SDL_Rect player_display_rect = {-45., -45., 95., 95.};//{-50, -50, 100, 100};
     pool->player_id[0] = POOL_NewEntityClassic(pool, TEX_PLAYER_RIGHT, player_display_rect, (SDL_FPoint) {0, 0});
 
     int player_loc = pool->player_id[0].location;
     pool->velocity[player_loc] = (SDL_FPoint) {0., 0.};
     POOL_AddComponentFlags(pool, COMPONENT_VELOCITY, player_loc);
 
-    pool->collision_box[player_loc] = (SDL_FRect) {-50., -50., 100., 100.};
-    pool->hit_box[player_loc] = (SDL_FRect) {-50., -50., 100., 100.};
+    pool->collision_box[player_loc] = (SDL_FRect) {-45., -45., 95., 95.};//{-50., -50., 100., 100.};
+    pool->hit_box[player_loc] = (SDL_FRect) {-45., -45., 95., 95.};//{-50., -50., 100., 100.};
     pool->health_point[player_loc] = 2;
     POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX | COMPONENT_HITBOX, player_loc);
 
@@ -58,12 +58,12 @@ void POOL_Load(EntityPool *pool, InState *inState) {
     pool->player_component[1] = PLAYER_NewComponent(inState + 1);
     pool->player_amount = 2;
 
-    player_display_rect = (SDL_Rect) {-50, -50, 100, 100};
+    player_display_rect = (SDL_Rect) {-45., -45., 95., 95.};//{-50, -50, 100, 100};
     pool->player_id[1] = POOL_NewEntityClassic(pool, TEX_PLAYER_RIGHT, player_display_rect, (SDL_FPoint) {500, 500});
 
     player_loc = pool->player_id[1].location;
     pool->velocity[player_loc] = (SDL_FPoint) {0., 0.};
-    pool->hit_box[player_loc] = (SDL_FRect) {-50., -50., 100., 100.};
+    pool->hit_box[player_loc] = (SDL_FRect) {-45., -45., 95., 95.};//{-50., -50., 100., 100.};
     pool->health_point[player_loc] = 2;
     POOL_AddComponentFlags(pool, COMPONENT_VELOCITY, player_loc);
 
