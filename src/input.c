@@ -151,42 +151,15 @@ void InState_Update(InState *inState, SDL_Event event) {
 
 
 void InState_Update_gamecontroller(InState *inState, SDL_Event event,SDL_GameController *controller) {
-if(SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_UP)){
-        inState->UP = true;
-    }else{
-        inState->UP = false;
-    }
-    if(SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_DOWN)){
-        inState->DOWN = true;
-    }else{
-        inState->DOWN = false;
-    }
-    if(SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_LEFT)){
-        inState->LEFT = true;
-    }else{
-        inState->LEFT = false;
-    }
-    if(SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_RIGHT)){
-        inState->RIGHT = true;
-    }else{
-        inState->RIGHT = false;
-    }
+    inState->UP     = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_UP);
+    inState->DOWN   = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_DOWN);
+    inState->LEFT   = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_LEFT);
+    inState->RIGHT  = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_RIGHT);
+    inState->W = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_LEFTSHOULDER);
+    inState->X = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_B);
+    inState->C = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
+    inState->V = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A);
 
-    if(SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_LEFTSHOULDER)){
-        inState->W = true;
-    }else{
-        inState->W = false;
-    }
-    if(SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_B)){
-        inState->X = true;
-    }else{
-        inState->X = false;
-    }
-    if(SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER)){
-        inState->C = true;
-    }else{
-        inState->C = false;
-    }
     int alx = SDL_GameControllerGetAxis(controller,SDL_CONTROLLER_AXIS_LEFTX);
     if(alx<2000 && alx>-2000){
         alx=0;
