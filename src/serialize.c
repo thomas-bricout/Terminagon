@@ -157,6 +157,7 @@ void JSON_ToEntityAll(EntityPool *pool, json_t *json) {
 }
 
 void JSON_Save(Game *game, const char *filepath) {
+    return;
     FILE *fp = fopen(filepath, "w");
     json_t *json = json_object();
     json_t *entities = json_array();
@@ -180,6 +181,7 @@ void JSON_Save(Game *game, const char *filepath) {
 }
 
 void JSON_Load(Game *game, const char *filepath, InState *inState) {
+    return;
     // Empty current entity list
     POOL_Init(game->pool);
 
