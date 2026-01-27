@@ -65,6 +65,10 @@ void PLAYER_System(Game *game, double current_time) {
             } else if (inState->V) {
                 pc->action = ACTION_SWORD;
                 pc->actionTimeStamp = current_time;
+
+                // TODO: Placre la damage box devant le joueur
+                POOL_AddComponentFlags(pool, COMPONENT_DAMAGEBOX, playerLocation);
+                pool->damage_box[playerLocation] = (SDL_FRect) {0., 0., 100., 100.};
             }
         } else {        // Treat current action
             switch(pc->action) {
@@ -93,6 +97,8 @@ void PLAYER_System(Game *game, double current_time) {
                     if (elapsed_time >= ATTACK_TIME) {
                         pc->action = ACTION_NONE;
                         pc->actionTimeStamp = current_time;
+
+                        POOL_RemoveComponentFlags(pool, COMPONENT_DAMAGEBOX, playerLocation);
                     }
                     break;
                 case ACTION_NONE:

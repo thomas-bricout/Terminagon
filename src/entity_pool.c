@@ -19,6 +19,10 @@ bool POOL_LacksComponentFlags(EntityPool *pool, ComponentFlags component_flags, 
     return (pool->component_flags[location] & component_flags) != component_flags;
 }
 
+void POOL_RemoveComponentFlags(EntityPool *pool, ComponentFlags component_flags, int location) {
+    pool->component_flags[location] = (pool->component_flags[location] & ~(component_flags));
+}
+
 void POOL_Init(EntityPool *pool) {
     pool->currentCount = 0;
     pool->lastEntitylocation = 0;
