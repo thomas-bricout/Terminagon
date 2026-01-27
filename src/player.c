@@ -68,7 +68,15 @@ void PLAYER_System(Game *game, double current_time) {
 
                 // TODO: Placre la damage box devant le joueur
                 POOL_AddComponentFlags(pool, COMPONENT_DAMAGEBOX, playerLocation);
-                pool->damage_box[playerLocation] = (SDL_FRect) {0., 0., 100., 100.};
+                if (pc->inState->RIGHT) {
+                    pool->damage_box[playerLocation] = (SDL_FRect) {100, -50, 100, 100};
+                } else if (pc->inState->LEFT) {
+                    pool->damage_box[playerLocation] = (SDL_FRect) {-200, -50, 100, 100};
+                } else if (pc->inState->UP) {
+                    pool->damage_box[playerLocation] = (SDL_FRect) {-50, -200, 100, 100};
+                } else if (pc->inState->DOWN) {
+                    pool->damage_box[playerLocation] = (SDL_FRect) {-50, 100, 100, 100};
+                }
             }
         } else {        // Treat current action
             switch(pc->action) {
