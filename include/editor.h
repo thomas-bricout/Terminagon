@@ -9,6 +9,7 @@ enum EntityArchetype {
 
 #include "game.h"
 #include "assets.h"
+#include "entity_pool.h"
 
 #define ARCHETYPE_NUMBER 2
 #define GRID_SIZE 100
@@ -23,5 +24,8 @@ void EDITOR_EntityFromArchetype(Game *game, EntityArchetype archetype, SDL_FPoin
 void EDITOR_DisplayInfo(Game *game);
 void EDITOR_DrawGrid(Game *game);
 char* EDITOR_ArchetypeToString(EntityArchetype archetype);
+
+bool EDITOR_EntityAtPoint(EntityPool *pool, SDL_Point point, EntityID *id);
+void EDITOR_DeleteUnderMouse(Game *game);
 
 #endif

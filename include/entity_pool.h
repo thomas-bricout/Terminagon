@@ -3,6 +3,11 @@
 
 typedef struct EntityPool EntityPool;
 
+typedef struct {
+    int location;
+    int unique_id;
+} EntityID;
+
 #include <SDL2/SDL.h>
 #include <stdbool.h>
 
@@ -11,11 +16,6 @@ typedef struct EntityPool EntityPool;
 #include "game.h"
 
 #define MAX_ENTITY_COUNT 500
-
-typedef struct {
-    int location;
-    int unique_id;
-} EntityID;
 
 typedef enum ComponentFlags {
     COMPONENT_NONE          = 0b00000000,

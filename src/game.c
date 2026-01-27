@@ -47,8 +47,11 @@ void Game_ReadEvents(Game *game) {
             JSON_Load(game, "saves/save.json");
         }
         if (event.type == SDL_MOUSEBUTTONDOWN && inState->ToggledF4) {
-            printf("here");
-            EDITOR_PlaceEntity(game);
+            if (event.button.button == SDL_BUTTON_LEFT) {
+                EDITOR_PlaceEntity(game);
+            } else if (event.button.button == SDL_BUTTON_RIGHT) {
+                EDITOR_DeleteUnderMouse(game);
+            }
         }
     }
 }
