@@ -29,10 +29,13 @@ PlayerComponent PLAYER_NewComponent(InState *inState) {
 
 EntityID POOL_SpawnArrow(EntityPool *pool, SDL_FPoint position, double angle) {
     SDL_Rect display_rect = {-20, -20, 40, 40};
+    position = FPOINT_Offset(position,(SDL_FPoint) {cos(angle)*100,sin(angle)*100});
     EntityID id = POOL_NewEntityClassic(pool, TEX_ARROW, display_rect, position);
 
+    SDL_FRect damage_rect = {-20, -20, 40, 40};
     pool->velocity[id.location] = (SDL_FPoint) { ARROW_SPEED * cos(angle) , ARROW_SPEED * sin(angle) };
-    POOL_AddComponentFlags(pool, COMPONENT_VELOCITY, id.location);
+    POOL_AddComponentFlags(pool, COMPONENT_VELOCITY | COMPONENT_DAMAGEBOX | COMPONENT_PROJECTILE, id.location);
+    pool->damage_box[id.location]=damage_rect;
 
     return id;
 }
