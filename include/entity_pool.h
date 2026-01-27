@@ -27,7 +27,7 @@ typedef enum ComponentFlags {
     COMPONENT_HITBOX        = 0b00010000,
     COMPONENT_POSITION      = 0b00100000,
     COMPONENT_VELOCITY      = 0b01000000,
-    COMPONENT_PROJECTILE         = 0b10000000,
+    COMPONENT_PROJECTILE    = 0b10000000,
 } ComponentFlags;
 
 struct EntityPool {

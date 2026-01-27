@@ -161,11 +161,11 @@ void InState_Update_gamecontroller(InState *inState, SDL_Event event,SDL_GameCon
     inState->V = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A);
 
     int alx = SDL_GameControllerGetAxis(controller,SDL_CONTROLLER_AXIS_LEFTX);
-    if(alx<3000 && alx>-3000){
+    if(alx<3200 && alx>-3200){
         alx=0;
     }
     int aly = SDL_GameControllerGetAxis(controller,SDL_CONTROLLER_AXIS_LEFTY);
-    if(aly<3000 && aly>-3000){
+    if(aly<3200 && aly>-3200){
         aly=0;
     }
     
