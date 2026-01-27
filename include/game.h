@@ -8,6 +8,10 @@ typedef struct Game Game;
 #include "input.h"
 #include "tilemap.h"
 
+#define SCREEN_W 1280
+#define SCREEN_H 720
+
+
 struct Game {
     SDL_Renderer *renderer;
     SDL_Window *window;

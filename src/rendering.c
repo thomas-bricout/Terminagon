@@ -8,7 +8,7 @@ void RENDER_RenderMap(Game *game, SDL_FPoint camera_pos) {
     SDL_Texture **assets = game->asset_manager->map_assets;
 
     // Get number of horizontal and vertical squares to display
-    int window_h = 1000;
+    /*int window_h = 1000;
     int window_w = 1000;
     SDL_GetWindowSize(game->window, &window_w, &window_h);
     int j_end = ((int) camera_pos.x + window_w) / size + 1;
@@ -20,6 +20,23 @@ void RENDER_RenderMap(Game *game, SDL_FPoint camera_pos) {
             dst.x = size*j - camera_pos.x;
             dst.y = size*i - camera_pos.y;
 
+            SDL_RenderCopy(game->renderer, assets[game->map[i][j].id], NULL, &dst);
+        }
+    }*/
+
+    // Get number of horizontal and vertical squares to display
+    int window_h = SCREEN_H;
+    int window_w = SCREEN_W;
+    SDL_GetWindowSize(game->window, &window_w, &window_h);
+
+    SDL_Rect dst = {0, 0, size, size};
+    for(int i=0;i<HAUTEUR;i++){
+        for(int j=0;j<LARGEUR;j++){
+            dst.x = size*j - camera_pos.x;
+            dst.y = size*i - camera_pos.y;
+            if(dst.x>window_w || dst.y>window_h) continue;
+            if(dst.x+size<0 || dst.y+size<0) continue;
+            
             SDL_RenderCopy(game->renderer, assets[game->map[i][j].id], NULL, &dst);
         }
     }

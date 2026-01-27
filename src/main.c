@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 
     // Création de la fenêtre
     SDL_Window *window = NULL;
-    window = SDL_CreateWindow(GAMENAME, 0, 0, 1280, 720, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow(GAMENAME, 0, 0, SCREEN_W, SCREEN_H, SDL_WINDOW_SHOWN);
     if (NULL == window){
         fprintf(stderr, "Erreur SDL_CreateWindow : %s", SDL_GetError());
         goto Quit;
