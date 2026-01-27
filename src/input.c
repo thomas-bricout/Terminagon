@@ -145,11 +145,7 @@ void InState_Update(InState *inState, SDL_Event event) {
 
 
 void InState_Update_gamecontroller(InState *inState, SDL_Event event,SDL_GameController *controller) {
-    SDL_EventType type = event.type;
-    SDL_Scancode scancode = event.key.keysym.scancode;
-
-
-    if(SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_UP)){
+if(SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_UP)){
         inState->UP = true;
     }else{
         inState->UP = false;
@@ -206,5 +202,5 @@ void InState_Update_gamecontroller(InState *inState, SDL_Event event,SDL_GameCon
         ary=0;
     }
     
-    inState->joystick_left = (SDL_FPoint){arx,ary};
+    inState->joystick_right = (SDL_FPoint){arx,ary};
 }
