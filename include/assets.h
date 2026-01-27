@@ -25,8 +25,6 @@ typedef enum {
 
 typedef struct {
     TTF_Font *debug_font;
-
-    SDL_Texture *asset_table;
     SDL_Texture *asset_array[ASSET_ARRAY_LENGTH];
 } AssetManager;
 

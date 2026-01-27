@@ -11,12 +11,10 @@ void ASSETS_Init(AssetManager *assetManager, SDL_Renderer *renderer) {
     for ( int i = 0; i < ASSET_ARRAY_LENGTH; i++ ) {
         assetManager->asset_array[i] = debugTexture;
     }
-    assetManager->asset_table = debugTexture;
     assetManager->debug_font = NULL;
 }
 
 void ASSETS_Load(AssetManager *assetManager, SDL_Renderer *renderer) {
-    assetManager->asset_table = IMG_LoadTexture(renderer, "assets/assets.png");
     assetManager->debug_font = TTF_OpenFont("assets/WebPlusIBMMDA/web_ibm_mda.ttf", 16);
 
     char *filenames[] = {
@@ -51,7 +49,6 @@ void ASSETS_Destroy(AssetManager *assetManager) {
     for ( int i = 0; i < ASSET_ARRAY_LENGTH; i++) {
         SDL_DestroyTexture(assetManager->asset_array[i]);
     }
-    SDL_DestroyTexture(assetManager->asset_table);
     TTF_CloseFont(assetManager->debug_font);
 }
 
