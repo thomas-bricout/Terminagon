@@ -104,7 +104,10 @@ void PHYSICS_UpdateHitPoints(EntityPool *pool) {
             damagebox = FRECT_Offset(damagebox, pool->position[j]);
             
             if (!SDL_HasIntersectionF(&hitbox, &damagebox)) { continue; }
-            printf("Hit\n");
+            pool->health_point[i] --;
+            if (pool->health_point[i] <= 0) {
+                printf("death\n");
+            }
         }
     }
 }

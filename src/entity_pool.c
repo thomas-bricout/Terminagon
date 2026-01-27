@@ -51,6 +51,7 @@ void POOL_Load(EntityPool *pool, InState *inState) {
 
     pool->collision_box[player_loc] = (SDL_FRect) {-50., -50., 100., 100.};
     pool->hit_box[player_loc] = (SDL_FRect) {-50., -50., 100., 100.};
+    pool->health_point[player_loc] = 2;
     POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX | COMPONENT_HITBOX, player_loc);
 
     // Adds the second player
@@ -63,6 +64,7 @@ void POOL_Load(EntityPool *pool, InState *inState) {
     player_loc = pool->player_id[1].location;
     pool->velocity[player_loc] = (SDL_FPoint) {0., 0.};
     pool->hit_box[player_loc] = (SDL_FRect) {-50., -50., 100., 100.};
+    pool->health_point[player_loc] = 2;
     POOL_AddComponentFlags(pool, COMPONENT_VELOCITY, player_loc);
 
     pool->collision_box[player_loc] = (SDL_FRect) {-50., -50., 100., 100.};
