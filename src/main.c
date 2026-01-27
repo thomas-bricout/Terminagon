@@ -52,6 +52,11 @@ int main(int argc, char *argv[])
     // Dit au renderer de dessiner directement sur la fenêtre
     SDL_SetRenderTarget(renderer, NULL);
 
+    // Init les manettes
+    SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER);
+    SDL_GameController *controller0 = SDL_GameControllerOpen(0);
+    SDL_GameController *controller1 = SDL_GameControllerOpen(1);
+
     // Création de l'entity pool
     EntityPool pool;
     POOL_Init(&pool);
@@ -59,7 +64,7 @@ int main(int argc, char *argv[])
 
     // Création du jeu
     Game game;
-    GAME_Init(&game, renderer, window, &asset_manager, &pool, &inState);
+    GAME_Init(&game, renderer, window, &asset_manager, &pool, &inState, controller0,controller1);
 
     // Appelle de la boucle principale de jeu
     GAME_Run(&game);

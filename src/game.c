@@ -13,13 +13,15 @@
 const double TARGET_FPS = 60.0;
 const double TARGET_FRAME_TIME =  1000.0 / TARGET_FPS; // in ms
 
-void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetManager *asset_manager, EntityPool *pool, InState *inState) {
+void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetManager *asset_manager, EntityPool *pool, InState *inState,SDL_GameController *controller0,SDL_GameController *controller1) {
     game->renderer = renderer;
     game->window = window;
     game->asset_manager = asset_manager;
     game->pool = pool;
     game->inState = inState;
     game->camera_pos = (SDL_FPoint) {0., 0.};
+    game->controller0 = controller0;
+    game->controller1 = controller1;
 }
 
 void Game_ReadEvents(Game *game) {
@@ -28,6 +30,7 @@ void Game_ReadEvents(Game *game) {
 
     while (SDL_PollEvent(&event)) {
         InState_Update(inState, event);
+        InState_Update_gamecontroller(inState,event,game->controller0); 
 
         if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_F11) {
             Uint32 windowFlags = SDL_GetWindowFlags(game->window);
