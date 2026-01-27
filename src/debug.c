@@ -65,6 +65,8 @@ void DEBUG_DisplayDebug(Game *game, double deltaTime, double FPS, double elapsed
 
 void DEBUG_DisplayDebugInfo(Game *game, double deltaTime, double FPS, double elapsed, double current_time) {
     InState *in = game->inState;
+    int player_loc = game->pool->player_id[0].location;
+    PlayerComponent *pc = &game->pool->player_component[0];
 
     // Compiling things to print
     char str[500];
@@ -84,11 +86,11 @@ void DEBUG_DisplayDebugInfo(Game *game, double deltaTime, double FPS, double ela
         elapsed,
         in->LEFT, in->RIGHT, in->UP, in->DOWN,
         in->W, in->X, in->C,
-        game->pool->position[game->pool->player.location].x,
-        game->pool->position[game->pool->player.location].y,
-        game->pool->player_c.action,
-        current_time - game->pool->player_c.actionTimeStamp,
-        game->pool->player_c.angle * 180. / 3.1415
+        game->pool->position[player_loc].x,
+        game->pool->position[player_loc].y,
+        pc->action,
+        current_time - pc->actionTimeStamp,
+        pc->angle * 180. / 3.1415
     );
 
     // Display the string on the screen

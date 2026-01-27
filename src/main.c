@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     // Création de l'entity pool
     EntityPool pool;
     POOL_Init(&pool);
-    POOL_Load(&pool);
+    POOL_Load(&pool, &inState);
 
     // Création du jeu
     Game game;

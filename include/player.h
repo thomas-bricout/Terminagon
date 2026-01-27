@@ -13,13 +13,14 @@ typedef enum {
 } PlayerAction;
 
 typedef struct {
+    InState *inState;
     float angle;
     bool walking;
     PlayerAction action;
     double actionTimeStamp;
 } PlayerComponent;
 
-void PLAYER_System(EntityPool *pool, InState *inState, double current_time);
-PlayerComponent PLAYER_NewComponent();
+void PLAYER_System(Game *game, double current_time);
+PlayerComponent PLAYER_NewComponent(InState *inState);
 
 #endif

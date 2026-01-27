@@ -37,8 +37,9 @@ struct EntityPool {
     int emptyLocationsAmount;
 
     // Keep track of specific entities or entity lists ( for example, all entities which might damage the player )
-    EntityID player;
-    PlayerComponent player_c;
+    EntityID player_id[4];
+    PlayerComponent player_component[4];
+    int player_amount;
 
     // Each list contains a specific component for all entities in the game
     EntityID id[MAX_ENTITY_COUNT];
@@ -56,7 +57,7 @@ struct EntityPool {
 };
 
 void POOL_Init(EntityPool *pool);
-void POOL_Load(EntityPool *pool);
+void POOL_Load(EntityPool *pool, InState *inState);
 EntityID POOL_NewEntity(EntityPool *pool);
 EntityID POOL_NewEntityClassic(EntityPool *pool, TextureLocation tex_location, SDL_Rect display_rect, SDL_FPoint position);
 void POOL_DestroyEntity(EntityPool *pool, EntityID id);

@@ -179,7 +179,7 @@ void JSON_Save(Game *game, const char *filepath) {
     fclose(fp);
 }
 
-void JSON_Load(Game *game, const char *filepath) {
+void JSON_Load(Game *game, const char *filepath, InState *inState) {
     // Empty current entity list
     POOL_Init(game->pool);
 
@@ -201,8 +201,8 @@ void JSON_Load(Game *game, const char *filepath) {
 
     // Load other fiels
     // TODO: Replace hard coded values
-    game->pool->player_c = PLAYER_NewComponent();
-    game->pool->player = (EntityID) {0, 0};
+    game->pool->player_component[0] = PLAYER_NewComponent(inState);
+    game->pool->player_id[0] = (EntityID) {0, 0};
 
     json_decref(json);
 }

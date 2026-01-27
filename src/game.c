@@ -44,7 +44,7 @@ void Game_ReadEvents(Game *game) {
             JSON_Save(game, "saves/save.json");
         }
         if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_D) {
-            JSON_Load(game, "saves/save.json");
+            JSON_Load(game, "saves/save.json", &game->inState);
         }
         if (event.type == SDL_MOUSEBUTTONDOWN && inState->ToggledF4) {
             if (event.button.button == SDL_BUTTON_LEFT) {
@@ -79,7 +79,7 @@ void GAME_Run(Game *game) {
         Game_ReadEvents(game);
         
         // Physiques et Mécaniques
-        PLAYER_System(game->pool, game->inState, current_time);
+        PLAYER_System(game, current_time);
         PHYSICS_MoveAll(game->pool, deltaTime);
         MoveCameraIJKL(game, deltaTime);
 
