@@ -49,7 +49,7 @@ void POOL_Load(EntityPool *pool, InState *inState) {
     POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX, player_loc);
 
     // Adds the second player
-    pool->player_component[1] = PLAYER_NewComponent(inState);
+    pool->player_component[1] = PLAYER_NewComponent(inState + 1);
     pool->player_amount = 2;
 
     player_display_rect = (SDL_Rect) {-50, -50, 100, 100};

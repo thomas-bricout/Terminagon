@@ -46,8 +46,9 @@ int main(int argc, char *argv[])
     ASSETS_Load(&asset_manager, renderer);
 
     // Création de InState
-    InState inState;
-    InState_Init(&inState);
+    InState inState[2];
+    InState_Init(&inState[0]);
+    InState_Init(&inState[1]);
 
     // Dit au renderer de dessiner directement sur la fenêtre
     SDL_SetRenderTarget(renderer, NULL);
@@ -60,11 +61,11 @@ int main(int argc, char *argv[])
     // Création de l'entity pool
     EntityPool pool;
     POOL_Init(&pool);
-    POOL_Load(&pool, &inState);
+    POOL_Load(&pool, inState);
 
     // Création du jeu
     Game game;
-    GAME_Init(&game, renderer, window, &asset_manager, &pool, &inState, controller0,controller1);
+    GAME_Init(&game, renderer, window, &asset_manager, &pool, inState, controller0,controller1);
 
     // Appelle de la boucle principale de jeu
     GAME_Run(&game);
