@@ -65,5 +65,6 @@ EntityID POOL_NewEntityClassic(EntityPool *pool, TextureLocation tex_location, S
 void POOL_DestroyEntity(EntityPool *pool, EntityID id);
 void POOL_AddComponentFlags(EntityPool *pool, ComponentFlags component_flags, int location);
 bool POOL_LacksComponentFlags(EntityPool *pool, ComponentFlags component_flags, int location);
+void POOL_RemoveComponentFlags(EntityPool *pool, ComponentFlags component_flags, int location);
 
 #endif

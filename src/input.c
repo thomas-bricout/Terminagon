@@ -58,6 +58,9 @@ void InState_Update(InState *inState, SDL_Event event) {
                 case SDL_SCANCODE_C:
                     inState->C = true;
                     break;
+                case SDL_SCANCODE_V:
+                    inState->V = true;
+                    break;
                 case SDL_SCANCODE_I:
                     inState->I = true;
                     break;
@@ -106,6 +109,9 @@ void InState_Update(InState *inState, SDL_Event event) {
                     break;
                 case SDL_SCANCODE_C:
                     inState->C = false;
+                    break;
+                case SDL_SCANCODE_V:
+                    inState->V = false;
                     break;
                 case SDL_SCANCODE_I:
                     inState->I = false;
@@ -181,7 +187,6 @@ if(SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_UP)){
     }else{
         inState->C = false;
     }
-
     int alx = SDL_GameControllerGetAxis(controller,SDL_CONTROLLER_AXIS_LEFTX);
     if(alx<2000 && alx>-2000){
         alx=0;
@@ -192,15 +197,10 @@ if(SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_UP)){
     }
     
     inState->joystick_left = (SDL_FPoint){alx,aly};
+}
 
-    int arx = SDL_GameControllerGetAxis(controller,SDL_CONTROLLER_AXIS_RIGHTX);
-    if(arx<2000 && arx>-2000){
-        arx=0;
-    }
-    int ary = SDL_GameControllerGetAxis(controller,SDL_CONTROLLER_AXIS_RIGHTY);
-    if(ary<2000 && ary>-2000){
-        ary=0;
-    }
-    
-    inState->joystick_right = (SDL_FPoint){arx,ary};
+void PlayerAddSwordCollision(EntityPool *pool, EntityID id) {
+    // TODO make it be in front of the player ( where they are currently facing )
+    pool->damage_box[id.location] = (SDL_FRect) {100., 100., 100., 100.};
+    POOL_AddComponentFlags(pool, COMPONENT_DAMAGEBOX, id.location);
 }

@@ -13,6 +13,7 @@ const float AIMING_PLAYER_SPEED = 0.1;
 const double BOW_AIMING_TIME = 10;
 const double DASHING_TIME = 200;
 const double RECOVERY_TIME = 100;
+const double ATTACK_TIME = 100;
 
 const float ARROW_SPEED = 0.5;
 
@@ -64,6 +65,21 @@ void PLAYER_System(Game *game, double current_time) {
             } else if (inState->C) {
                 pc->action = ACTION_BOW_AIMING;
                 pc->actionTimeStamp = current_time;
+            } else if (inState->V) {
+                pc->action = ACTION_SWORD;
+                pc->actionTimeStamp = current_time;
+
+                // TODO: Placre la damage box devant le joueur
+                POOL_AddComponentFlags(pool, COMPONENT_DAMAGEBOX, playerLocation);
+                if (pc->inState->RIGHT) {
+                    pool->damage_box[playerLocation] = (SDL_FRect) {100, -50, 100, 100};
+                } else if (pc->inState->LEFT) {
+                    pool->damage_box[playerLocation] = (SDL_FRect) {-200, -50, 100, 100};
+                } else if (pc->inState->UP) {
+                    pool->damage_box[playerLocation] = (SDL_FRect) {-50, -200, 100, 100};
+                } else if (pc->inState->DOWN) {
+                    pool->damage_box[playerLocation] = (SDL_FRect) {-50, 100, 100, 100};
+                }
             }
         } else {        // Treat current action
             switch(pc->action) {
@@ -86,6 +102,14 @@ void PLAYER_System(Game *game, double current_time) {
                     if (!inState->W) {
                         pc->action = ACTION_NONE;
                         pc->actionTimeStamp = current_time;
+                    }
+                    break;
+                case ACTION_SWORD:
+                    if (elapsed_time >= ATTACK_TIME) {
+                        pc->action = ACTION_NONE;
+                        pc->actionTimeStamp = current_time;
+
+                        POOL_RemoveComponentFlags(pool, COMPONENT_DAMAGEBOX, playerLocation);
                     }
                     break;
                 case ACTION_NONE:
