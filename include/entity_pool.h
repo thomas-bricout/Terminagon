@@ -14,6 +14,7 @@ typedef struct {
 #include "assets.h"
 #include "player.h"
 #include "game.h"
+#include "input.h"
 
 #define MAX_ENTITY_COUNT 500
 

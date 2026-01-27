@@ -13,7 +13,7 @@
 const double TARGET_FPS = 60.0;
 const double TARGET_FRAME_TIME =  1000.0 / TARGET_FPS; // in ms
 
-void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetManager *asset_manager, EntityPool *pool, InState *inState,SDL_GameController *controller0,SDL_GameController *controller1) {
+void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetManager *asset_manager, EntityPool *pool, InState *inState ,SDL_GameController *controller0,SDL_GameController *controller1) {
     game->renderer = renderer;
     game->window = window;
     game->asset_manager = asset_manager;
@@ -26,11 +26,13 @@ void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetMana
 
 void Game_ReadEvents(Game *game) {
     SDL_Event event;
-    InState *inState = game->inState;
+
+    InState *inState1 = game->inState;
+    InState *inState2 = game->inState + 1;
 
     while (SDL_PollEvent(&event)) {
-        InState_Update(inState, event);
-        InState_Update_gamecontroller(inState,event,game->controller0); 
+        InState_Update(inState1, event);
+        InState_Update_gamecontroller(inState2, event,game->controller0); 
 
         if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_F11) {
             Uint32 windowFlags = SDL_GetWindowFlags(game->window);
@@ -49,7 +51,7 @@ void Game_ReadEvents(Game *game) {
         if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_D) {
             JSON_Load(game, "saves/save.json", &game->inState);
         }
-        if (event.type == SDL_MOUSEBUTTONDOWN && inState->ToggledF4) {
+        if (event.type == SDL_MOUSEBUTTONDOWN && inState1->ToggledF4) {
             if (event.button.button == SDL_BUTTON_LEFT) {
                 EDITOR_PlaceEntity(game);
             } else if (event.button.button == SDL_BUTTON_RIGHT) {
