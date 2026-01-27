@@ -53,6 +53,7 @@ struct EntityPool {
 
     SDL_FRect hit_box[MAX_ENTITY_COUNT];
     int health_point[MAX_ENTITY_COUNT];
+    double last_hit[MAX_ENTITY_COUNT];
 
     SDL_FPoint position[MAX_ENTITY_COUNT];
     SDL_FPoint velocity[MAX_ENTITY_COUNT];

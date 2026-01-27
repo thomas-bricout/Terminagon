@@ -71,13 +71,14 @@ void PLAYER_System(Game *game, double current_time) {
 
                 // TODO: Placre la damage box devant le joueur
                 POOL_AddComponentFlags(pool, COMPONENT_DAMAGEBOX, playerLocation);
-                if (pc->inState->RIGHT) {
+                double angle = pc->angle * 180. / 3.1415;
+                if (angle <= 45 && angle >= -45) { // Right
                     pool->damage_box[playerLocation] = (SDL_FRect) {100, -50, 100, 100};
-                } else if (pc->inState->LEFT) {
+                } else if (angle >= 135 || angle <= -135) { // Left
                     pool->damage_box[playerLocation] = (SDL_FRect) {-200, -50, 100, 100};
-                } else if (pc->inState->UP) {
+                } else if (angle >= -135 && angle <= 45) { // Up
                     pool->damage_box[playerLocation] = (SDL_FRect) {-50, -200, 100, 100};
-                } else if (pc->inState->DOWN) {
+                } else if (angle >= 45 && angle <= 135) { // Down
                     pool->damage_box[playerLocation] = (SDL_FRect) {-50, 100, 100, 100};
                 }
             }

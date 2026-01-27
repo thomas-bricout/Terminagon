@@ -91,9 +91,12 @@ void PHYSICS_DamageAll(EntityPool *pool, double deltaTime) {
     }
 }
 
-void PHYSICS_UpdateHitPoints(EntityPool *pool) {
+const double invincibility_ms = 1000. ;
+void PHYSICS_UpdateHitPoints(EntityPool *pool, double current_time) {
     for (int i = 0; i < pool->lastEntitylocation; i++) {
         if (POOL_LacksComponentFlags(pool, COMPONENT_HITBOX | COMPONENT_POSITION, i)) { continue; }
+        if (current_time - pool->last_hit[i] <= invincibility_ms) { continue; }
+
         SDL_FRect hitbox = pool->hit_box[i];
         hitbox = FRECT_Offset(hitbox, pool->position[i]);
 
@@ -105,6 +108,7 @@ void PHYSICS_UpdateHitPoints(EntityPool *pool) {
             
             if (!SDL_HasIntersectionF(&hitbox, &damagebox)) { continue; }
             pool->health_point[i] --;
+            pool->last_hit[i] = current_time;
             if (pool->health_point[i] <= 0) {
                 printf("death\n");
             }
