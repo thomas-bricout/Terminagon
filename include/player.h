@@ -23,5 +23,6 @@ typedef struct {
 
 void PLAYER_System(Game *game, double current_time);
 PlayerComponent PLAYER_NewComponent(InState *inState);
+void PLAYER_Animate(EntityPool *pool, int playerIndex, double current_time);
 
 #endif

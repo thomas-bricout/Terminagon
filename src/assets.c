@@ -30,10 +30,10 @@ void ASSETS_Load(AssetManager *assetManager, SDL_Renderer *renderer) {
         "assets/link5.bmp", 
         "assets/link6.bmp", 
         "assets/link7.bmp", 
-        "assets/linkSworldDown.bmp", 
-        "assets/linkSwordLeft.bmp", 
         "assets/linkSwordRight.bmp", 
-        "assets/linkSwordUp.bmp"
+        "assets/linkSwordUp.bmp", 
+        "assets/linkSwordLeft.bmp", 
+        "assets/linkSwordDown.bmp"
     };
     int filenames_length = 14;
 
