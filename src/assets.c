@@ -18,6 +18,30 @@ void ASSETS_Init(AssetManager *assetManager, SDL_Renderer *renderer) {
 void ASSETS_Load(AssetManager *assetManager, SDL_Renderer *renderer) {
     assetManager->asset_table = IMG_LoadTexture(renderer, "assets/assets.png");
     assetManager->debug_font = TTF_OpenFont("assets/WebPlusIBMMDA/web_ibm_mda.ttf", 16);
+
+    char *filenames[] = {
+        "assets/debug.png", 
+        "assets/debug.png", 
+        "assets/link0.bmp", 
+        "assets/link1.bmp", 
+        "assets/link2.bmp", 
+        "assets/link3.bmp", 
+        "assets/link4.bmp", 
+        "assets/link5.bmp", 
+        "assets/link6.bmp", 
+        "assets/link7.bmp", 
+        "assets/linkSworldDown.bmp", 
+        "assets/linkSwordLeft.bmp", 
+        "assets/linkSwordRight.bmp", 
+        "assets/linkSwordUp.bmp"
+    };
+    int filenames_length = 14;
+
+    for (int i = 0; i < filenames_length; i++) {
+        assetManager->asset_array[i] = IMG_LoadTexture(renderer, filenames[i]);
+        printf("Loading %s\n", filenames[i]);
+    }
+
     if ( assetManager->debug_font == NULL ) {
         fprintf(stderr, "Erreur TTF_OpenFont: %s\n", SDL_GetError());
     }
