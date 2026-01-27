@@ -30,6 +30,9 @@ struct InState {
     bool ToggledF4;
     bool ToggledGrid;
 
+    SDL_FPoint joystick_left;
+    SDL_FPoint joystick_right;
+
     SDL_FPoint mouse;
     EntityArchetype selected_archetype;   
 };
