@@ -12,8 +12,7 @@
 typedef struct tile Tile;
 
 struct tile{
-    Uint8 type_c;
-    Uint8 type_l;
+    Uint8 id;
     Uint8 blocking;
 };
 

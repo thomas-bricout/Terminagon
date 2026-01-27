@@ -2,7 +2,7 @@
 
 
 #define TILE_SIZE 16
-#define TILES_WIDTH 21
+#define TILES_WIDTH 20
 #define TILES_HEIGHT 8
 SDL_Texture** load_MAP_Textures(const char* tilefilename, SDL_Renderer *ren){
     SDL_Surface *loadedImage = SDL_LoadBMP(tilefilename);
@@ -70,7 +70,7 @@ int convert_num(char ch){
 
 
 void loadMap(Tile tilemap[HAUTEUR][LARGEUR]){
-    FILE *fp = fopen("./blocking_map", "r");
+    FILE *fp = fopen("./blocking_map.txt", "r");
 
     if (fp == NULL)
     {
@@ -93,12 +93,10 @@ void loadMap(Tile tilemap[HAUTEUR][LARGEUR]){
         }
         switch (ch){
             case 'X':
-                tilemap[h][w].type_c=1;
                 tilemap[h][w].blocking=1;
                 break;
             
             default:
-                tilemap[h][w].type_c=0;
                 tilemap[h][w].blocking=0;
                 break;
         }
@@ -111,7 +109,7 @@ void loadMap(Tile tilemap[HAUTEUR][LARGEUR]){
         return;        
     }
 
-    fp = fopen("./blocking_map", "r");
+    fp = fopen("./tile_map.txt", "r");
 
     if (fp == NULL)
     {
@@ -141,10 +139,13 @@ void loadMap(Tile tilemap[HAUTEUR][LARGEUR]){
 
         compteur++;
         if (compteur==1){
-            tilemap[h][w].type_c=convert_num(ch);
+            tilemap[h][w].id=convert_num(ch);
         }
         if (compteur==2){
-            tilemap[h][w].type_l=convert_num(ch);
+            tilemap[h][w].id=convert_num(ch)+(tilemap[h][w].id*16);
+            /*if(tilemap[h][w].id>70){
+                tilemap[h][w].id--;
+            }*/
         }
     }
     
