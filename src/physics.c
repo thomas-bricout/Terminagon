@@ -98,9 +98,10 @@ void PHYSICS_UpdateHitPoints(EntityPool *pool) {
         hitbox = FRECT_Offset(hitbox, pool->position[i]);
 
         for (int j = 0; j < pool->lastEntitylocation; j++) {
+            if (i == j) { continue; }
             if (POOL_LacksComponentFlags(pool, COMPONENT_DAMAGEBOX | COMPONENT_POSITION, i)) { continue; }
-            SDL_FRect damagebox = pool->hit_box[i];
-            damagebox = FRECT_Offset(hitbox, pool->position[i]);
+            SDL_FRect damagebox = pool->hit_box[j];
+            damagebox = FRECT_Offset(hitbox, pool->position[j]);
             
             printf("Here!\n");
             if (!SDL_HasIntersectionF(&hitbox, &damagebox)) { continue; }
