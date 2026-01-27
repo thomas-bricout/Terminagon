@@ -5,6 +5,7 @@
 #include <SDL2/SDL_ttf.h>
 
 #include <assert.h>
+#include "tilemap.h"
 
 void ASSETS_Init(AssetManager *assetManager, SDL_Renderer *renderer) {
     SDL_Texture *debugTexture = IMG_LoadTexture(renderer, "assets/debug.png");
@@ -43,6 +44,8 @@ void ASSETS_Load(AssetManager *assetManager, SDL_Renderer *renderer) {
     if ( assetManager->debug_font == NULL ) {
         fprintf(stderr, "Erreur TTF_OpenFont: %s\n", SDL_GetError());
     }
+
+    assetManager->map_assets = load_MAP_Textures("assets/overworldtiles.bmp", renderer);
 }
 
 void ASSETS_Destroy(AssetManager *assetManager) {

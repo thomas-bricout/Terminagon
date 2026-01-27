@@ -5,7 +5,7 @@
 
 void RENDER_RenderMap(Game *game, SDL_FPoint camera_pos) {
     //game->map;
-    SDL_Texture **assets = load_MAP_Textures("assets/overworldtiles.bmp",game->renderer);
+    SDL_Texture **assets = game->asset_manager->map_assets;
 
     // Get number of horizontal and vertical squares to display
     int window_h = 1000;
