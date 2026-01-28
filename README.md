@@ -27,6 +27,7 @@
 
 ### input.c
 - Enregistre les Inputs claviers dans InputSituation pour être utilisé par les autres systèmes
+- Enregistre aussi les inputs manettes
 
 ### entity_pool.c
 - Définit la structure de donnée stockant toutes les unités ( EntityPool )
@@ -34,9 +35,21 @@
 
 ### player.c
 - Définit les actions et déplacements possible par le joueur
+- Anime le joueur
 
 ### debug.c
 - Permet d'afficher des informations de débugage lors de l'appui de la touche F3
+- Affiche les hitbox, les collisionbox, et les damagebox
 
 ### geometry.c
 - Permet de manipuler plus rapidement les Rect, FRect et FPoint
+
+### tilemap.c
+- Lecture de la tilemap
+
+### physics.c
+- Gère les collisions entre les entités ( et la tilemap )
+
+### editor.c
+- Permet d'activer le mode éditeur sur F4, placer des entités et en supprimer avec la souris
+- Affiche une grille d'alignement et aligne les entités placé ( sur g )
