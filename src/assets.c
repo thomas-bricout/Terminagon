@@ -20,7 +20,10 @@ void ASSETS_Load(AssetManager *assetManager, SDL_Renderer *renderer) {
 
     char *filenames[] = {
         "assets/debug.png", 
-        "assets/debug.png", 
+        "assets/ArrowRight.png", 
+        "assets/ArrowUp.png", 
+        "assets/ArrowLeft.png", 
+        "assets/ArrowDown.png", 
         "assets/link0.bmp", 
         "assets/link1.bmp", 
         "assets/link2.bmp", 
@@ -32,9 +35,13 @@ void ASSETS_Load(AssetManager *assetManager, SDL_Renderer *renderer) {
         "assets/linkSwordRight.bmp", 
         "assets/linkSwordUp.bmp", 
         "assets/linkSwordLeft.bmp", 
-        "assets/linkSwordDown.bmp"
+        "assets/linkSwordDown.bmp",
+        "assets/BowAimingRight.png",
+        "assets/BowAimingUp.png",
+        "assets/BowAimingLeft.png",
+        "assets/BowAimingDown.png",
     };
-    int filenames_length = 14;
+    int filenames_length = 21;
 
     for (int i = 0; i < filenames_length; i++) {
         assetManager->asset_array[i] = IMG_LoadTexture(renderer, filenames[i]);
