@@ -31,7 +31,10 @@ PlayerComponent PLAYER_NewComponent(InState *inState) {
 EntityID POOL_SpawnArrow(EntityPool *pool, SDL_FPoint position, double angle) {
     SDL_Rect display_rect = {-20, -20, 40, 40};
     position = FPOINT_Offset(position,(SDL_FPoint) {cos(angle)*100,sin(angle)*100});
-    EntityID id = POOL_NewEntityClassic(pool, TEX_ARROW, display_rect, position);
+    int orientation = AngleToDirection(angle);
+    TextureLocation tex = TEX_ARROW_RIGHT + orientation;
+
+    EntityID id = POOL_NewEntityClassic(pool, tex, display_rect, position);
 
     SDL_FRect damage_rect = {-20, -20, 40, 40};
     pool->velocity[id.location] = (SDL_FPoint) { ARROW_SPEED * cos(angle) , ARROW_SPEED * sin(angle) };
@@ -167,17 +170,7 @@ void PLAYER_Animate(EntityPool *pool, int playerIndex, double current_time) {
     SDL_Rect *rect = &pool->display_rect[playerLocation];
     double delay = current_time - pc->actionTimeStamp;
     
-    double angle = pc->angle * 180. / 3.1415;
-    int orientation = 0;
-    if (angle <= 45 && angle >= -45) { // Right
-        orientation = 0;
-    } else if (angle >= 135 || angle <= -135) { // Left
-        orientation = 2;
-    } else if (angle >= -135 && angle <= 45) { // Up
-        orientation = 1;
-    } else if (angle >= 45 && angle <= 135) { // Down
-        orientation = 3;
-    }
+    int orientation = AngleToDirection(pc->angle);
 
     switch (pc->action) {
         case ACTION_NONE:
@@ -222,4 +215,19 @@ void PLAYER_Animate(EntityPool *pool, int playerIndex, double current_time) {
             *rect = (SDL_Rect) {-50, -50, 100, 200};
             break;
     }
+}
+
+int AngleToDirection(double angle) {
+    angle = angle * 180. / 3.1415;
+    int orientation = 0;
+    if (angle <= 45 && angle >= -45) { // Right
+        orientation = 0;
+    } else if (angle >= 135 || angle <= -135) { // Left
+        orientation = 2;
+    } else if (angle >= -135 && angle <= 45) { // Up
+        orientation = 1;
+    } else if (angle >= 45 && angle <= 135) { // Down
+        orientation = 3;
+    }
+    return orientation;
 }

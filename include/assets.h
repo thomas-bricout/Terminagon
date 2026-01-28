@@ -8,7 +8,10 @@
 
 typedef enum {
     TEX_DEBUG,
-    TEX_ARROW,
+    TEX_ARROW_RIGHT,
+    TEX_ARROW_UP,
+    TEX_ARROW_LEFT,
+    TEX_ARROW_DOWN,
     TEX_PLAYER_RIGHT,
     TEX_PLAYER_RIGHT_W,
     TEX_PLAYER_UP,
