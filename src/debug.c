@@ -54,7 +54,7 @@ void DEBUG_DisplayCollisionRects(Game *game) {
         if(j_map_max>LARGEUR) j_map_max=LARGEUR;
 
 
-        for(;i_map<i_map_max;i_map++){
+        /*for(;i_map<i_map_max;i_map++){
             for(int j_map=j_map_min;j_map<j_map_max;j_map++){
                 if(game->map[i_map][j_map].blocking || 1){
                     SDL_FRect obstacle_box = {j_map*size,i_map*size,size,size};
@@ -65,13 +65,13 @@ void DEBUG_DisplayCollisionRects(Game *game) {
                 }
                 
             }
-        }
+        }*/
 
         SDL_FRect rect = FRECT_Offset(pool->collision_box[i], FPOINT_RelativePoint(pool->position[i], game->camera_pos));
         SDL_RenderFillRectF(renderer, &rect);
     }
 
-    //DEBUG_DisplayCollisionRectsTileMap(game);
+    DEBUG_DisplayCollisionRectsTileMap(game);
 }
 
 void DEBUG_DisplayDamageRects(Game *game) {

@@ -160,6 +160,14 @@ void PLAYER_System(Game *game, double current_time) {
 
         // Animate the player
         PLAYER_Animate(pool, i, current_time);
+
+        if(i==0){
+            int window_h = SCREEN_H;
+            int window_w = SCREEN_W;
+            SDL_GetWindowSize(game->window, &window_w, &window_h);
+            game->camera_pos.x = playerPosition->x - window_w/2;
+            game->camera_pos.y = playerPosition->y - window_h/2;
+        }
     }
 }
 

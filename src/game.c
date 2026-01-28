@@ -115,7 +115,7 @@ void GAME_Run(Game *game) {
     // JSON_EntityToFileAll(game->pool, "saves/save.json");
 }
 
-const float cameraSpeed = 0.4;
+const float cameraSpeed = 0.8;
 void MoveCameraIJKL(Game *game, float deltaTime) {
     if (game->inState->I) { game->camera_pos.y -= cameraSpeed * deltaTime; }
     if (game->inState->K) { game->camera_pos.y += cameraSpeed * deltaTime; }

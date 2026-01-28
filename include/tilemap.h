@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <SDL2/SDL.h>
 
-#define HAUTEUR 100
+#define HAUTEUR 88
 #define LARGEUR 256
 
 
