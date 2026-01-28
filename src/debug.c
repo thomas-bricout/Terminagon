@@ -4,6 +4,29 @@
 #include "game.h"
 #include "geometry.h"
 
+#define size 100
+
+void DEBUG_DisplayCollisionRectsTileMap(Game *game){
+    int window_h = SCREEN_H;
+    int window_w = SCREEN_W;
+    SDL_GetWindowSize(game->window, &window_w, &window_h);
+
+    for(int i=0;i<HAUTEUR;i++){
+        for(int j=0;j<LARGEUR;j++){
+            SDL_FRect rect = {0, 0, size, size};
+            rect.x = size*j - game->camera_pos.x;
+            rect.y = size*i - game->camera_pos.y;
+
+            if(rect.x>window_w || rect.y>window_h) continue;
+            if(rect.x+size<0 || rect.y+size<0) continue;
+            if(game->map[i][j].blocking){
+                SDL_RenderFillRectF(game->renderer, &rect);
+            }
+        }
+    }
+}
+
+
 void DEBUG_DisplayCollisionRects(Game *game) {
     SDL_Renderer *renderer = game->renderer;
     EntityPool *pool = game->pool;
@@ -18,6 +41,8 @@ void DEBUG_DisplayCollisionRects(Game *game) {
         SDL_FRect rect = FRECT_Offset(pool->collision_box[i], FPOINT_RelativePoint(pool->position[i], game->camera_pos));
         SDL_RenderFillRectF(renderer, &rect);
     }
+
+    DEBUG_DisplayCollisionRectsTileMap(game);
 }
 
 void DEBUG_DisplayDamageRects(Game *game) {
