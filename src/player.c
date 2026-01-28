@@ -29,7 +29,7 @@ PlayerComponent PLAYER_NewComponent(InState *inState) {
 }
 
 EntityID POOL_SpawnArrow(EntityPool *pool, SDL_FPoint position, double angle) {
-    SDL_Rect display_rect = {-20, -20, 40, 40};
+    SDL_Rect display_rect = {-50, -50, 100, 100};
     position = FPOINT_Offset(position,(SDL_FPoint) {cos(angle)*100,sin(angle)*100});
     int orientation = AngleToDirection(angle);
     TextureLocation tex = TEX_ARROW_RIGHT + orientation;
