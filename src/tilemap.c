@@ -70,7 +70,7 @@ int convert_num(char ch){
 
 
 void loadMap(Tile tilemap[HAUTEUR][LARGEUR]){
-    FILE *fp = fopen("./blocking_map.txt", "r");
+    FILE *fp = fopen("./maps/blocking_map.txt", "r");
 
     if (fp == NULL)
     {
@@ -109,7 +109,7 @@ void loadMap(Tile tilemap[HAUTEUR][LARGEUR]){
         return;        
     }
 
-    fp = fopen("./tile_map.txt", "r");
+    fp = fopen("./maps/tile_map.txt", "r");
 
     if (fp == NULL)
     {

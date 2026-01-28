@@ -47,10 +47,10 @@ void Game_ReadEvents(Game *game) {
         }
 
         if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_S) {
-            JSON_Save(game, "saves/save.json");
+            //JSON_Save(game, "saves/save.json");
         }
         if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_D) {
-            JSON_Load(game, "saves/save.json", game->inState);
+            //JSON_Load(game, "saves/save.json", game->inState);
         }
         if (event.type == SDL_MOUSEBUTTONDOWN && inState1->ToggledF4) {
             if (event.button.button == SDL_BUTTON_LEFT) {

@@ -28,6 +28,21 @@ PlayerComponent PLAYER_NewComponent(InState *inState) {
     return p_c;
 }
 
+int AngleToDirection(double angle) {
+    angle = angle * 180. / 3.1415;
+    int orientation = 0;
+    if (angle <= 45 && angle >= -45) { // Right
+        orientation = 0;
+    } else if (angle >= 135 || angle <= -135) { // Left
+        orientation = 2;
+    } else if (angle >= -135 && angle <= 45) { // Up
+        orientation = 1;
+    } else if (angle >= 45 && angle <= 135) { // Down
+        orientation = 3;
+    }
+    return orientation;
+}
+
 EntityID POOL_SpawnArrow(EntityPool *pool, SDL_FPoint position, double angle) {
     SDL_Rect display_rect = {-50, -50, 100, 100};
     position = FPOINT_Offset(position,(SDL_FPoint) {cos(angle)*100,sin(angle)*100});
@@ -201,6 +216,7 @@ void PLAYER_Animate(EntityPool *pool, int playerIndex, double current_time) {
     
     // Adapt Display_Rect to the size of the image
     switch (*tex) {
+        default:
         case TEX_PLAYER_RIGHT   :
         case TEX_PLAYER_RIGHT_W :
         case TEX_PLAYER_UP      :
@@ -226,17 +242,3 @@ void PLAYER_Animate(EntityPool *pool, int playerIndex, double current_time) {
     }
 }
 
-int AngleToDirection(double angle) {
-    angle = angle * 180. / 3.1415;
-    int orientation = 0;
-    if (angle <= 45 && angle >= -45) { // Right
-        orientation = 0;
-    } else if (angle >= 135 || angle <= -135) { // Left
-        orientation = 2;
-    } else if (angle >= -135 && angle <= 45) { // Up
-        orientation = 1;
-    } else if (angle >= 45 && angle <= 135) { // Down
-        orientation = 3;
-    }
-    return orientation;
-}

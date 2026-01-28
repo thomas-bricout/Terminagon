@@ -1,4 +1,4 @@
-#ifndef SERIALIZE_H
+/*#ifndef SERIALIZE_H
 #define SERIALIZE_H
 
 #include <jansson.h>
@@ -13,4 +13,4 @@ EntityID JSON_ToEntityFromFile(EntityPool *pool, const char *filepath);
 void JSON_Save(Game *game, const char *filepath);
 void JSON_Load(Game *game, const char *filepath, InState *inState);
 
-#endif
+#endif*/
