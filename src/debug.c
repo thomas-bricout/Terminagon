@@ -31,7 +31,7 @@ void DEBUG_DisplayDamageRects(Game *game) {
         
         if (POOL_LacksComponentFlags(pool, COMPONENT_POSITION | COMPONENT_DAMAGEBOX, i)) { continue; }
 
-        SDL_FRect rect = FRECT_Offset(pool->damage_box[i], pool->position[i]);
+        SDL_FRect rect = FRECT_Offset(pool->damage_box[i], FPOINT_RelativePoint(pool->position[i], game->camera_pos));
         SDL_RenderFillRectF(renderer, &rect);
     }
 }
@@ -46,7 +46,7 @@ void DEBUG_DisplayHitboxRects(Game *game) {
     for (int i = 0; i < pool->lastEntitylocation; i++) {
         if (POOL_LacksComponentFlags(pool, COMPONENT_POSITION | COMPONENT_HITBOX, i)) { continue; }
 
-        SDL_FRect rect = FRECT_Offset(pool->hit_box[i], pool->position[i]);
+        SDL_FRect rect = FRECT_Offset(pool->hit_box[i], FPOINT_RelativePoint(pool->position[i], game->camera_pos));
         SDL_RenderFillRectF(renderer, &rect);
     }
 }
