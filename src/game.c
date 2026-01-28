@@ -19,7 +19,7 @@ void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetMana
     game->asset_manager = asset_manager;
     game->pool = pool;
     game->inState = inState;
-    game->camera_pos = (SDL_FPoint) {0., 0.};
+    game->camera_pos = (SDL_FPoint) {100*113., 100*77.};
     game->controller0 = controller0;
     game->controller1 = controller1;
     loadMap(game->map);
@@ -86,9 +86,9 @@ void GAME_Run(Game *game) {
         
         // Physiques et Mécaniques
         PLAYER_System(game, current_time);
-        PHYSICS_MoveAll(game->pool, deltaTime);
+        PHYSICS_MoveAll(game->map,game->pool, deltaTime);
         PHYSICS_UpdateHitPoints(game->pool, current_time);
-        PHYSICS_DamageAll(game->pool, deltaTime);
+        PHYSICS_DamageAll(game->map,game->pool, deltaTime);
         MoveCameraIJKL(game, deltaTime);
 
         // Création du rendu

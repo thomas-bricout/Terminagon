@@ -38,11 +38,40 @@ void DEBUG_DisplayCollisionRects(Game *game) {
         
         if (POOL_LacksComponentFlags(pool, COMPONENT_POSITION | COMPONENT_COLLISIONBOX, i)) { continue; }
 
+        //colison map
+        SDL_FPoint collider_pos = pool->position[i];
+        SDL_FRect collider_box = pool->collision_box[i];
+        collider_box = FRECT_Offset(collider_box, FPOINT_ApplyVelocity(collider_pos, pool->velocity[i], 16));
+
+        int i_map = (int) (collider_box.y/size);
+        int i_map_max = (int) ((collider_box.y+collider_box.h)/size)+1;
+        if(i_map<0) i_map=0;
+        if(i_map_max>HAUTEUR) i_map_max=HAUTEUR;
+
+        int j_map_min = (int) (collider_box.x/size);
+        int j_map_max = (int) ((collider_box.x+collider_box.w)/size)+1;
+        if(j_map_min<0) j_map_min=0;
+        if(j_map_max>LARGEUR) j_map_max=LARGEUR;
+
+
+        for(;i_map<i_map_max;i_map++){
+            for(int j_map=j_map_min;j_map<j_map_max;j_map++){
+                if(game->map[i_map][j_map].blocking || 1){
+                    SDL_FRect obstacle_box = {j_map*size,i_map*size,size,size};
+                    //if (!SDL_HasIntersectionF(&collider_box, &obstacle_box)) { continue; }
+                    obstacle_box.x-=game->camera_pos.x;
+                    obstacle_box.y-=game->camera_pos.y;
+                    SDL_RenderFillRectF(renderer, &obstacle_box);
+                }
+                
+            }
+        }
+
         SDL_FRect rect = FRECT_Offset(pool->collision_box[i], FPOINT_RelativePoint(pool->position[i], game->camera_pos));
         SDL_RenderFillRectF(renderer, &rect);
     }
 
-    DEBUG_DisplayCollisionRectsTileMap(game);
+    //DEBUG_DisplayCollisionRectsTileMap(game);
 }
 
 void DEBUG_DisplayDamageRects(Game *game) {

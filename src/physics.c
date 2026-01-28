@@ -4,7 +4,9 @@
 #include "geometry.h"
 #include "physics.h"
 
-void PHYSICS_MoveAll(EntityPool *pool, double deltaTime) {
+#define size 100
+
+void PHYSICS_MoveAll(Tile map[HAUTEUR][LARGEUR], EntityPool *pool, double deltaTime) {
     for (int i = 0; i < pool->lastEntitylocation; i++) {
         // if (!pool->position_map[i] || !pool->velocity_map[i]) { continue; }
         if (POOL_LacksComponentFlags(pool, COMPONENT_TEXTURE | COMPONENT_VELOCITY, i)) { continue; }
@@ -35,6 +37,29 @@ void PHYSICS_MoveAll(EntityPool *pool, double deltaTime) {
                 // TODO: Compute proper position
                 collided = true;
             }
+
+            int i_map = (int) (collider_box.y/size);
+            int i_map_max = (int) ((collider_box.y+collider_box.h)/size)+1;
+            if(i_map<0) i_map=0;
+            if(i_map_max>HAUTEUR) i_map_max=HAUTEUR;
+
+            int j_map_min = (int) (collider_box.x/size);
+            int j_map_max = (int) ((collider_box.x+collider_box.w)/size)+1;
+            if(j_map_min<0) j_map_min=0;
+            if(j_map_max>LARGEUR) j_map_max=LARGEUR;
+
+
+            for(;i_map<i_map_max;i_map++){
+                for(int j_map=j_map_min;j_map<j_map_max;j_map++){
+                    if(map[i_map][j_map].blocking){
+                        SDL_FRect obstacle_box = {j_map*size,i_map*size,size,size};
+                        if (!SDL_HasIntersectionF(&collider_box, &obstacle_box)) { continue; }
+                        collided = true;
+                    }
+                    
+                }
+            }
+
             // Proceed as normal if it does not result in a collision
             if (!collided) {
                 pool->position[i] = FPOINT_ApplyVelocity(pool->position[i], pool->velocity[i], deltaTime); 
@@ -48,7 +73,7 @@ void PHYSICS_MoveAll(EntityPool *pool, double deltaTime) {
     }
 }
 
-void PHYSICS_DamageAll(EntityPool *pool, double deltaTime) {
+void PHYSICS_DamageAll(Tile map[HAUTEUR][LARGEUR],EntityPool *pool, double deltaTime) {
     for (int i = 0; i < pool->lastEntitylocation; i++) {
         // if (!pool->position_map[i] || !pool->velocity_map[i]) { continue; }
         if (POOL_LacksComponentFlags(pool, COMPONENT_TEXTURE, i)) { continue; }
@@ -79,6 +104,29 @@ void PHYSICS_DamageAll(EntityPool *pool, double deltaTime) {
                 // TODO: Compute proper position
                 collided = true;
             }
+
+            int i_map = (int) (collider_box.y/size);
+            int i_map_max = (int) ((collider_box.y+collider_box.h)/size)+1;
+            if(i_map<0) i_map=0;
+            if(i_map_max>HAUTEUR) i_map_max=HAUTEUR;
+
+            int j_map_min = (int) (collider_box.x/size);
+            int j_map_max = (int) ((collider_box.x+collider_box.w)/size)+1;
+            if(j_map_min<0) j_map_min=0;
+            if(j_map_max>LARGEUR) j_map_max=LARGEUR;
+
+
+            for(;i_map<i_map_max;i_map++){
+                for(int j_map=j_map_min;j_map<j_map_max;j_map++){
+                    if(map[i_map][j_map].blocking){
+                        SDL_FRect obstacle_box = {j_map*size,i_map*size,size,size};
+                        if (!SDL_HasIntersectionF(&collider_box, &obstacle_box)) { continue; }
+                        collided = true;
+                    }
+                    
+                }
+            }
+
             // Proceed as normal if it does not result in a collision
             if (collided) {
                 if(!POOL_LacksComponentFlags(pool, COMPONENT_PROJECTILE, i)) POOL_DestroyEntity(pool,pool->id[i]);
