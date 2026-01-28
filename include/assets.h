@@ -24,6 +24,10 @@ typedef enum {
     TEX_PLAYER_SWORD_UP,
     TEX_PLAYER_SWORD_LEFT,
     TEX_PLAYER_SWORD_DOWN,
+    TEX_PLAYER_AIMING_RIGHT,
+    TEX_PLAYER_AIMING_UP,
+    TEX_PLAYER_AIMING_LEFT,
+    TEX_PLAYER_AIMING_DOWN,
 } TextureLocation ;
 
 typedef struct {

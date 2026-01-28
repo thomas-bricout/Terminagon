@@ -180,6 +180,7 @@ void PLAYER_Animate(EntityPool *pool, int playerIndex, double current_time) {
             }
             break;
         case ACTION_BOW_AIMING:
+            *tex = orientation + TEX_PLAYER_AIMING_RIGHT;
             break;
         case ACTION_DASHING:
             break;
