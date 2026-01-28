@@ -13,10 +13,14 @@ void PHYSICS_MoveAll(Tile map[HAUTEUR][LARGEUR], EntityPool *pool, double deltaT
 
         if (!POOL_LacksComponentFlags(pool, COMPONENT_COLLISIONBOX, i)) { // If entity has a collision map, check possible collisions with every other entities
             bool collided = false;
+            int axis = 0;
 
             SDL_FPoint collider_pos = pool->position[i];
-            SDL_FRect collider_box = pool->collision_box[i];
-            collider_box = FRECT_Offset(collider_box, FPOINT_ApplyVelocity(collider_pos, pool->velocity[i], deltaTime));
+            SDL_FRect collider_box = FRECT_Offset(pool->collision_box[i], FPOINT_ApplyVelocity(collider_pos, pool->velocity[i], deltaTime));
+            SDL_FPoint velocity_x = {pool->velocity[i].x,0.};
+            SDL_FPoint velocity_y = {0.,pool->velocity[i].y};
+            SDL_FRect collider_box_X = FRECT_Offset(pool->collision_box[i], FPOINT_ApplyVelocity(collider_pos, velocity_x, deltaTime));
+            SDL_FRect collider_box_Y = FRECT_Offset(pool->collision_box[i], FPOINT_ApplyVelocity(collider_pos, velocity_y, deltaTime));
 
             for (int j = 0; j < pool->lastEntitylocation; j++) { 
                 if ( i == j ) { continue; }
@@ -31,10 +35,24 @@ void PHYSICS_MoveAll(Tile map[HAUTEUR][LARGEUR], EntityPool *pool, double deltaT
                 // Continue there if there is no collision
                 if (!SDL_HasIntersectionF(&collider_box, &obstacle_box)) { continue; }
 
-                SDL_FRect intersect_box;
-                SDL_IntersectFRect(&collider_box, &obstacle_box, &intersect_box);
+                //SDL_FRect intersect_box;
+                //SDL_IntersectFRect(&collider_box, &obstacle_box, &intersect_box);
 
                 // TODO: Compute proper position
+                
+
+                if(axis == 0){//!POOL_LacksComponentFlags(pool, COMPONENT_VELOCITY_FLEXIBLE, i) &&
+                    if (!SDL_HasIntersectionF(&collider_box_X, &obstacle_box)) {
+                        axis = 1;
+                        collider_box=collider_box_X;
+                        continue;
+                    }
+                    if (!SDL_HasIntersectionF(&collider_box_Y, &obstacle_box)) {
+                        axis = 2;
+                        collider_box=collider_box_Y;
+                        continue;
+                    }
+                }
                 collided = true;
             }
 
@@ -53,7 +71,21 @@ void PHYSICS_MoveAll(Tile map[HAUTEUR][LARGEUR], EntityPool *pool, double deltaT
                 for(int j_map=j_map_min;j_map<j_map_max;j_map++){
                     if(map[i_map][j_map].blocking){
                         SDL_FRect obstacle_box = {j_map*size,i_map*size,size,size};
-                        if (!SDL_HasIntersectionF(&collider_box, &obstacle_box)) { continue; }
+                        if (!SDL_HasIntersectionF(&collider_box, &obstacle_box)) continue;
+
+                        if(axis == 0){//!POOL_LacksComponentFlags(pool, COMPONENT_VELOCITY_FLEXIBLE, i) &&
+                            if (!SDL_HasIntersectionF(&collider_box_X, &obstacle_box)) {
+                                axis = 1;
+                                collider_box=collider_box_X;
+                                continue;
+                            }
+                            if (!SDL_HasIntersectionF(&collider_box_Y, &obstacle_box)) {
+                                axis = 2;
+                                collider_box=collider_box_Y;
+                                continue;
+                            }
+                        }
+                        
                         collided = true;
                     }
                     
@@ -62,14 +94,24 @@ void PHYSICS_MoveAll(Tile map[HAUTEUR][LARGEUR], EntityPool *pool, double deltaT
 
             // Proceed as normal if it does not result in a collision
             if (!collided) {
-                pool->position[i] = FPOINT_ApplyVelocity(pool->position[i], pool->velocity[i], deltaTime); 
+                switch (axis){
+                    case 1:
+                        pool->position[i] = FPOINT_ApplyVelocity(pool->position[i], velocity_x, deltaTime); 
+                        break;
+                    
+                    case 2:
+                        pool->position[i] = FPOINT_ApplyVelocity(pool->position[i], velocity_y, deltaTime); 
+                        break;
+                
+                    default:
+                        pool->position[i] = FPOINT_ApplyVelocity(pool->position[i], pool->velocity[i], deltaTime); 
+                }
             }
             // Do not check other possibilities
-            continue;
+        }else{
+            // ELSE: proceed without dealing with collisions
+            pool->position[i] = FPOINT_ApplyVelocity(pool->position[i], pool->velocity[i], deltaTime); 
         }
-
-        // ELSE: proceed without dealing with collisions
-        pool->position[i] = FPOINT_ApplyVelocity(pool->position[i], pool->velocity[i], deltaTime); 
     }
 }
 
