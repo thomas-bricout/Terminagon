@@ -4,8 +4,6 @@
 #include "geometry.h"
 #include "physics.h"
 
-#define size 100
-
 void PHYSICS_MoveAll(Tile map[HAUTEUR][LARGEUR], EntityPool *pool, double deltaTime) {
     for (int i = 0; i < pool->lastEntitylocation; i++) {
         // if (!pool->position_map[i] || !pool->velocity_map[i]) { continue; }
@@ -57,13 +55,13 @@ void PHYSICS_MoveAll(Tile map[HAUTEUR][LARGEUR], EntityPool *pool, double deltaT
                 goto resultat;
             }
 
-            int i_map = (int) (collider_box.y/size);
-            int i_map_max = (int) ((collider_box.y+collider_box.h)/size)+1;
+            int i_map = (int) (collider_box.y/TILE_SIZE);
+            int i_map_max = (int) ((collider_box.y+collider_box.h)/TILE_SIZE)+1;
             if(i_map<0) i_map=0;
             if(i_map_max>HAUTEUR) i_map_max=HAUTEUR;
 
-            int j_map_min = (int) (collider_box.x/size);
-            int j_map_max = (int) ((collider_box.x+collider_box.w)/size)+1;
+            int j_map_min = (int) (collider_box.x/TILE_SIZE);
+            int j_map_max = (int) ((collider_box.x+collider_box.w)/TILE_SIZE)+1;
             if(j_map_min<0) j_map_min=0;
             if(j_map_max>LARGEUR) j_map_max=LARGEUR;
 
@@ -71,7 +69,7 @@ void PHYSICS_MoveAll(Tile map[HAUTEUR][LARGEUR], EntityPool *pool, double deltaT
             for(;i_map<i_map_max;i_map++){
                 for(int j_map=j_map_min;j_map<j_map_max;j_map++){
                     if(map[i_map][j_map].blocking){
-                        SDL_FRect obstacle_box = {j_map*size,i_map*size,size,size};
+                        SDL_FRect obstacle_box = {j_map*TILE_SIZE,i_map*TILE_SIZE,TILE_SIZE,TILE_SIZE};
                         if (!SDL_HasIntersectionF(&collider_box, &obstacle_box)) continue;
 
                         if(axis == 0 || axis == 3){//!POOL_LacksComponentFlags(pool, COMPONENT_VELOCITY_FLEXIBLE, i) &&
@@ -157,13 +155,13 @@ void PHYSICS_DamageAll(Tile map[HAUTEUR][LARGEUR],EntityPool *pool, double delta
                 collided = true;
             }
 
-            int i_map = (int) (collider_box.y/size);
-            int i_map_max = (int) ((collider_box.y+collider_box.h)/size)+1;
+            int i_map = (int) (collider_box.y/TILE_SIZE);
+            int i_map_max = (int) ((collider_box.y+collider_box.h)/TILE_SIZE)+1;
             if(i_map<0) i_map=0;
             if(i_map_max>HAUTEUR) i_map_max=HAUTEUR;
 
-            int j_map_min = (int) (collider_box.x/size);
-            int j_map_max = (int) ((collider_box.x+collider_box.w)/size)+1;
+            int j_map_min = (int) (collider_box.x/TILE_SIZE);
+            int j_map_max = (int) ((collider_box.x+collider_box.w)/TILE_SIZE)+1;
             if(j_map_min<0) j_map_min=0;
             if(j_map_max>LARGEUR) j_map_max=LARGEUR;
 
@@ -171,7 +169,7 @@ void PHYSICS_DamageAll(Tile map[HAUTEUR][LARGEUR],EntityPool *pool, double delta
             for(;i_map<i_map_max;i_map++){
                 for(int j_map=j_map_min;j_map<j_map_max;j_map++){
                     if(map[i_map][j_map].blocking){
-                        SDL_FRect obstacle_box = {j_map*size,i_map*size,size,size};
+                        SDL_FRect obstacle_box = {j_map*TILE_SIZE,i_map*TILE_SIZE,TILE_SIZE,TILE_SIZE};
                         if (!SDL_HasIntersectionF(&collider_box, &obstacle_box)) { continue; }
                         collided = true;
                     }

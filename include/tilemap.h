@@ -9,6 +9,12 @@
 #define LARGEUR 256
 
 
+#define TILE_SIZE_SRC 16
+#define TILES_WIDTH 20
+#define TILES_HEIGHT 8
+#define TILE_SIZE 100
+
+
 typedef struct tile Tile;
 
 struct tile{

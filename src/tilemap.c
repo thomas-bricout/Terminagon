@@ -1,21 +1,17 @@
 #include "tilemap.h"
 
-
-#define TILE_SIZE 16
-#define TILES_WIDTH 20
-#define TILES_HEIGHT 8
 SDL_Texture** load_MAP_Textures(const char* tilefilename, SDL_Renderer *ren){
     SDL_Surface *loadedImage = SDL_LoadBMP(tilefilename);
     SDL_Texture **tabMAPTextures = (SDL_Texture **)malloc((TILES_WIDTH*TILES_HEIGHT)*sizeof(SDL_Texture *)); 
     int i=0;
     for(int top=0;top<TILES_HEIGHT;top+=1){
         for(int left=0;left<TILES_WIDTH;left+=1){
-            SDL_Surface* tileSurf=SDL_CreateRGBSurface(0,TILE_SIZE,TILE_SIZE, 32, 0, 0, 0, 0);
+            SDL_Surface* tileSurf=SDL_CreateRGBSurface(0,TILE_SIZE_SRC,TILE_SIZE_SRC, 32, 0, 0, 0, 0);
             SDL_Rect tileRect;
-	        tileRect.x = (left*(TILE_SIZE+1)) + 1;
-	        tileRect.y = (top*(TILE_SIZE+1)) + 1;
-	        tileRect.w = TILE_SIZE;
-	        tileRect.h = TILE_SIZE;
+	        tileRect.x = (left*(TILE_SIZE_SRC+1)) + 1;
+	        tileRect.y = (top*(TILE_SIZE_SRC+1)) + 1;
+	        tileRect.w = TILE_SIZE_SRC;
+	        tileRect.h = TILE_SIZE_SRC;
             SDL_BlitSurface(loadedImage,&tileRect,tileSurf,NULL);
             SDL_Texture *tex = SDL_CreateTextureFromSurface(ren, tileSurf);
             tabMAPTextures[i] = tex;

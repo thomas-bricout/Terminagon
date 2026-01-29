@@ -4,8 +4,6 @@
 #include "game.h"
 #include "geometry.h"
 
-#define size 100
-
 void DEBUG_DisplayCollisionRectsTileMap(Game *game){
     int window_h = SCREEN_H;
     int window_w = SCREEN_W;
@@ -13,12 +11,12 @@ void DEBUG_DisplayCollisionRectsTileMap(Game *game){
 
     for(int i=0;i<HAUTEUR;i++){
         for(int j=0;j<LARGEUR;j++){
-            SDL_FRect rect = {0, 0, size, size};
-            rect.x = size*j - game->camera_pos.x;
-            rect.y = size*i - game->camera_pos.y;
+            SDL_FRect rect = {0, 0, TILE_SIZE, TILE_SIZE};
+            rect.x = TILE_SIZE*j - game->camera_pos.x;
+            rect.y = TILE_SIZE*i - game->camera_pos.y;
 
             if(rect.x>window_w || rect.y>window_h) continue;
-            if(rect.x+size<0 || rect.y+size<0) continue;
+            if(rect.x+TILE_SIZE<0 || rect.y+TILE_SIZE<0) continue;
             if(game->map[i][j].blocking){
                 SDL_RenderFillRectF(game->renderer, &rect);
             }
@@ -43,13 +41,13 @@ void DEBUG_DisplayCollisionRects(Game *game) {
         SDL_FRect collider_box = pool->collision_box[i];
         collider_box = FRECT_Offset(collider_box, FPOINT_ApplyVelocity(collider_pos, pool->velocity[i], 16));
 
-        int i_map = (int) (collider_box.y/size);
-        int i_map_max = (int) ((collider_box.y+collider_box.h)/size)+1;
+        int i_map = (int) (collider_box.y/TILE_SIZE);
+        int i_map_max = (int) ((collider_box.y+collider_box.h)/TILE_SIZE)+1;
         if(i_map<0) i_map=0;
         if(i_map_max>HAUTEUR) i_map_max=HAUTEUR;
 
-        int j_map_min = (int) (collider_box.x/size);
-        int j_map_max = (int) ((collider_box.x+collider_box.w)/size)+1;
+        int j_map_min = (int) (collider_box.x/TILE_SIZE);
+        int j_map_max = (int) ((collider_box.x+collider_box.w)/TILE_SIZE)+1;
         if(j_map_min<0) j_map_min=0;
         if(j_map_max>LARGEUR) j_map_max=LARGEUR;
 
@@ -57,7 +55,7 @@ void DEBUG_DisplayCollisionRects(Game *game) {
         /*for(;i_map<i_map_max;i_map++){
             for(int j_map=j_map_min;j_map<j_map_max;j_map++){
                 if(game->map[i_map][j_map].blocking || 1){
-                    SDL_FRect obstacle_box = {j_map*size,i_map*size,size,size};
+                    SDL_FRect obstacle_box = {j_map*TILE_SIZE,i_map*TILE_SIZE,TILE_SIZE,TILE_SIZE};
                     //if (!SDL_HasIntersectionF(&collider_box, &obstacle_box)) { continue; }
                     obstacle_box.x-=game->camera_pos.x;
                     obstacle_box.y-=game->camera_pos.y;
