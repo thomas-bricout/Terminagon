@@ -50,7 +50,7 @@ void ENEMY_System(EntityPool *pool, double current_time) {
                 break;
             case ENEMY_SHOOTING:
                 *enemy_velocity = (SDL_FPoint) {0, 0};
-                *tex ++;
+                *tex = *tex + 1;
                 if (current_time - enemy->timeStamp > OCTOROK_SHOOTING_TIME) {
                     enemy->timeStamp = current_time;
                     enemy->action = ENEMY_WALK;
