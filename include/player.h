@@ -7,6 +7,7 @@
 
 typedef enum {
     ACTION_NONE,
+    ACTION_SPRINT,
     ACTION_DASHING,
     ACTION_BOW_AIMING,
     ACTION_SHIELDING,
