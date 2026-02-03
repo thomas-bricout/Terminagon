@@ -46,14 +46,35 @@ int AngleToDirection(double angle) {
 
 EntityID POOL_SpawnArrow(EntityPool *pool, SDL_FPoint position, double angle) {
     SDL_Rect display_rect = {-50, -50, 100, 100};
-    position = FPOINT_Offset(position,(SDL_FPoint) {cos(angle)*100,sin(angle)*100});
+    SDL_FPoint vect;
+    switch (AngleToDirection(angle))
+    {
+    default:
+    case 0:
+        vect.x=100.;
+        vect.y=0;
+        break;
+    case 1:
+        vect.x=0.;
+        vect.y=-100.;
+        break;
+    case 2:
+        vect.x=-100.;
+        vect.y=0.;
+        break;
+    case 3:
+        vect.x=0.;
+        vect.y=100.;
+        break;
+    }
+    position = FPOINT_Offset(position,vect);  //(SDL_FPoint) {cos(angle)*100,sin(angle)*100}
     int orientation = AngleToDirection(angle);
     TextureLocation tex = TEX_ARROW_RIGHT + orientation;
 
     EntityID id = POOL_NewEntityClassic(pool, tex, display_rect, position);
 
     SDL_FRect damage_rect = {-20, -20, 40, 40};
-    pool->velocity[id.location] = (SDL_FPoint) { ARROW_SPEED * cos(angle) , ARROW_SPEED * sin(angle) };
+    pool->velocity[id.location] = (SDL_FPoint) { ARROW_SPEED * (vect.x/100) , ARROW_SPEED * (vect.y/100) }; //(SDL_FPoint) { ARROW_SPEED * cos(angle) , ARROW_SPEED * sin(angle) }
     POOL_AddComponentFlags(pool, COMPONENT_VELOCITY | COMPONENT_DAMAGEBOX | COMPONENT_PROJECTILE, id.location);
     pool->damage_box[id.location]=damage_rect;
 
