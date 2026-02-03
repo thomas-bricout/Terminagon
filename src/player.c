@@ -7,7 +7,8 @@
 #include <math.h>
 
 const float DEFAULT_PLAYER_SPEED = 0.2;
-const float DASHING_PLAYER_SPEED = 0.6;
+const float SPRINT_PLAYER_SPEED = 0.4;
+const float DASHING_PLAYER_SPEED = 2.0;
 const float AIMING_PLAYER_SPEED = 0.1;
 
 const double BOW_AIMING_TIME = 10;
@@ -74,10 +75,7 @@ void PLAYER_System(Game *game, double current_time) {
         // Whether player is ready to start a new action
         bool available = pc->action == 0 && elapsed_time >= RECOVERY_TIME;
         if (available) { // Treat new actions
-            if (inState->X) {
-                pc->action = ACTION_DASHING;
-                pc->actionTimeStamp = current_time;
-            } else if (inState->W) {
+            if (inState->W) {
                 pc->action = ACTION_SHIELDING;
                 pc->actionTimeStamp = current_time;
             } else if (inState->C) {
@@ -86,6 +84,9 @@ void PLAYER_System(Game *game, double current_time) {
             } else if (inState->V) {
                 pc->action = ACTION_SWORD;
                 pc->actionTimeStamp = current_time;
+
+                if (game->sound[0])
+                    Mix_PlayChannel(-1, game->sound[0], 0);
 
                 // TODO: Placre la damage box devant le joueur
                 POOL_AddComponentFlags(pool, COMPONENT_DAMAGEBOX, playerLocation);
@@ -99,9 +100,18 @@ void PLAYER_System(Game *game, double current_time) {
                 } else if (angle >= 45 && angle <= 135) { // Down
                     pool->damage_box[playerLocation] = (SDL_FRect) {-50, 100, 100, 100};
                 }
+            }else if(inState->X) {
+                pc->action = ACTION_SPRINT;
+                pc->actionTimeStamp = current_time;
             }
         } else {        // Treat current action
             switch(pc->action) {
+                case ACTION_SPRINT:
+                    if (!inState->X) {
+                        pc->action = ACTION_NONE;
+                        pc->actionTimeStamp = current_time;
+                    }
+                    break;
                 case ACTION_DASHING:
                     if (elapsed_time >= DASHING_TIME) {
                         pc->action = ACTION_NONE;
@@ -144,6 +154,9 @@ void PLAYER_System(Game *game, double current_time) {
                 break;
             case ACTION_DASHING:
                 player_speed = DASHING_PLAYER_SPEED;
+                break;
+            case ACTION_SPRINT:
+                player_speed = SPRINT_PLAYER_SPEED;
                 break;
             case ACTION_NONE:
             default:
@@ -198,7 +211,13 @@ void PLAYER_Animate(EntityPool *pool, int playerIndex, double current_time) {
     switch (pc->action) {
         case ACTION_NONE:
             *tex = orientation * 2 + TEX_PLAYER_RIGHT;
-            if (pc->walking && (int) (delay / 500.) % 2) {
+            if (pc->walking && (int) (delay / 400.) % 2) {
+                *tex += 1;
+            }
+            break;
+        case ACTION_SPRINT:
+            *tex = orientation * 2 + TEX_PLAYER_RIGHT;
+            if (pc->walking && (int) (delay / 200.) % 2) {
                 *tex += 1;
             }
             break;
