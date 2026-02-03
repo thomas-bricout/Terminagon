@@ -10,6 +10,7 @@ typedef struct InState InState;
 
 struct InState {
     bool QUIT;
+    bool keyboard;
 
     bool UP;
     bool DOWN;
@@ -30,6 +31,15 @@ struct InState {
     bool ToggledF3;
     bool ToggledF4;
     bool ToggledGrid;
+
+    bool ToggledF3_prec;
+    bool ToggledF4_prec;
+    bool ToggledGrid_prec;
+
+    bool Tplace;
+    bool Tdestroy;
+    bool Tplace_prec;
+    bool Tdestroy_prec;
 
     SDL_FPoint joystick_left;
     SDL_FPoint joystick_right;

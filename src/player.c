@@ -238,7 +238,6 @@ void PLAYER_System(Game *game, double current_time) {
         }
         game->camera_pos.x =(p1px+p2px)/2 - window_w/2;
         game->camera_pos.y =(p1py+p2py)/2 - window_h/2;
-        printf("%f %f\n",game->camera_pos.x,game->camera_pos.y);
     }
 }
 

@@ -5,6 +5,7 @@
 
 void InState_Init(InState *inState) {
     inState->QUIT    = false;
+    inState->keyboard= false;
 
     inState->UP      = false;
     inState->DOWN    = false;
@@ -20,20 +21,34 @@ void InState_Init(InState *inState) {
 
     inState->selected_archetype = ARCHETYPE_DEBUG;
 
-    inState->mouse = (SDL_FPoint) {0., 0.};
+    inState->mouse = (SDL_FPoint) {SCREEN_W/2, SCREEN_H/2};
 }
 
 void InState_Update(InState *inState, SDL_Event event) {
     SDL_EventType type = event.type;
     SDL_Scancode scancode = event.key.keysym.scancode;
 
+    if(SDL_SCANCODE_END==scancode && SDL_KEYDOWN==type){
+        inState->keyboard=!inState->keyboard;
+    }
+
+    switch (type) {
+        case SDL_QUIT:
+            inState->QUIT = true;
+            break;
+
+        default:
+            break;
+    }
+
+    if(!inState->keyboard){
+        return;
+    }
+
     switch (type) {
         case SDL_MOUSEMOTION:
             inState->mouse.x = event.motion.x;
             inState->mouse.y = event.motion.y;
-            break;
-        case SDL_QUIT:
-            inState->QUIT = true;
             break;
         case SDL_KEYDOWN:
             switch(scancode) {
@@ -156,16 +171,28 @@ void InState_Update_gamecontroller(InState *inState, SDL_Event event,SDL_GameCon
     inState->LEFT   = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_LEFT);
     inState->RIGHT  = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_RIGHT);
     inState->W = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_LEFTSHOULDER);
-    inState->X = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_B);
+    inState->X = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A);
     inState->C = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
-    int V_temp = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A);
-    inState->V=0;
-    if(V_temp && inState->V_prec){
-        inState->V= 0;
-    }else{
-        inState->V= V_temp;
-    }
-    inState->V_prec= V_temp;
+
+    int V_temp = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_B);
+    if(V_temp && inState->V_prec){inState->V = 0;}else{inState->V= V_temp;}inState->V_prec= V_temp;
+
+
+    int F3_temp = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_BACK);
+    int F4_temp = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_START);
+    int G_temp = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_RIGHTSTICK);
+    if(F3_temp!=inState->ToggledF3_prec && F3_temp){inState->ToggledF3 = !inState->ToggledF3;}inState->ToggledF3_prec= F3_temp;
+    if(F4_temp!=inState->ToggledF4_prec && F4_temp){inState->ToggledF4 = !inState->ToggledF4;}inState->ToggledF4_prec= F4_temp;
+    if(G_temp!=inState->ToggledGrid_prec && G_temp){inState->ToggledGrid = !inState->ToggledGrid;}inState->ToggledGrid_prec= G_temp;
+
+
+    int Tplace_temp = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_X);
+    if (Tplace_temp && inState->Tplace_prec){inState->Tplace = 0;}else{inState->Tplace = Tplace_temp;}inState->Tplace_prec = Tplace_temp;
+    int Tdestroy_temp = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_Y);
+    if (Tdestroy_temp && inState->Tdestroy_prec){inState->Tdestroy = 0;}else{inState->Tdestroy = Tdestroy_temp;}inState->Tdestroy_prec = Tdestroy_temp;
+
+
+
 
     int alx = SDL_GameControllerGetAxis(controller,SDL_CONTROLLER_AXIS_LEFTX);
     if(alx<3200 && alx>-3200){
@@ -177,6 +204,27 @@ void InState_Update_gamecontroller(InState *inState, SDL_Event event,SDL_GameCon
     }
     
     inState->joystick_left = (SDL_FPoint){alx,aly};
+
+
+    int arx = SDL_GameControllerGetAxis(controller,SDL_CONTROLLER_AXIS_RIGHTX);
+    if(arx<3200 && arx>-3200){
+        arx=0;
+    }
+    int ary = SDL_GameControllerGetAxis(controller,SDL_CONTROLLER_AXIS_RIGHTY);
+    if(ary<3200 && ary>-3200){
+        ary=0;
+    }
+
+    inState->mouse.x += arx/5000;
+    inState->mouse.y += ary/5000;
+
+
+    if (inState->V) {
+        inState->selected_archetype ++;
+        if (inState->selected_archetype == ARCHETYPE_NUMBER) {
+            inState->selected_archetype = 0;
+        }
+    }
 }
 
 void PlayerAddSwordCollision(EntityPool *pool, EntityID id) {

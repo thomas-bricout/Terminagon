@@ -44,10 +44,33 @@ void Game_ReadEvents(Game *game) {
     InState *inState1 = game->inState;
     InState *inState2 = game->inState + 1;
 
-    InState_Update_gamecontroller(inState2, event,game->controller0); 
+    if(!inState1->keyboard){
+        InState_Update_gamecontroller(inState1, event,game->controller0);
+        if (inState1->ToggledF4) {
+
+            int window_h = SCREEN_H;
+            int window_w = SCREEN_W;
+            SDL_GetWindowSize(game->window, &window_w, &window_h);
+            if(inState1->mouse.x<0){
+                inState1->mouse.x=0;
+            }else if(inState1->mouse.x>window_w){
+                inState1->mouse.x=window_w;
+            }
+            if(inState1->mouse.y<0){
+                inState1->mouse.y=0;
+            }else if(inState1->mouse.y>window_h){
+                inState1->mouse.y=window_h;
+            }
+            if (inState1->Tplace) {
+                EDITOR_PlaceEntity(game);
+            } else if (inState1->Tdestroy) {
+                EDITOR_DeleteUnderMouse(game);
+            }
+        }
+    }
+    InState_Update_gamecontroller(inState2, event,game->controller1);
     while (SDL_PollEvent(&event)) {
         InState_Update(inState1, event);
-        //InState_Update_gamecontroller(inState1, event,game->controller0); 
 
         if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_F11) {
             Uint32 windowFlags = SDL_GetWindowFlags(game->window);
@@ -60,13 +83,13 @@ void Game_ReadEvents(Game *game) {
             }
         }
 
-        if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_S) {
+        /*if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_S) {
             //JSON_Save(game, "saves/save.json");
         }
         if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_D) {
             //JSON_Load(game, "saves/save.json", game->inState);
-        }
-        if (event.type == SDL_MOUSEBUTTONDOWN && inState1->ToggledF4) {
+        }*/
+        if (event.type == SDL_MOUSEBUTTONDOWN && inState1->ToggledF4 && inState1->keyboard) {
             if (event.button.button == SDL_BUTTON_LEFT) {
                 EDITOR_PlaceEntity(game);
             } else if (event.button.button == SDL_BUTTON_RIGHT) {
