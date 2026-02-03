@@ -1,13 +1,15 @@
 #include "ui.h"
 
-void draw_hearts(AssetManager *assetManager, SDL_Renderer *renderer, int hp);
+void draw_hearts(AssetManager *assetManager, SDL_Renderer *renderer, int hp, int player);
 
 void draw_ui(Game *game) {
     int player_hp = game->pool->health_point[game->pool->player_id[0].location];
-    draw_hearts(game->asset_manager, game->renderer, player_hp);
+    draw_hearts(game->asset_manager, game->renderer, player_hp, 0);
+    player_hp = game->pool->health_point[game->pool->player_id[1].location];
+    draw_hearts(game->asset_manager, game->renderer, player_hp, 1);
 }
 
-void draw_hearts(AssetManager *assetManager, SDL_Renderer *renderer, int hp) {
+void draw_hearts(AssetManager *assetManager, SDL_Renderer *renderer, int hp, int player) {
     for ( int i = 0; i < 10; i++ ) {
         SDL_Texture *tex = NULL;
         TextureLocation tex_l = TEX_HEART_FULL;
@@ -20,7 +22,7 @@ void draw_hearts(AssetManager *assetManager, SDL_Renderer *renderer, int hp) {
 
         ASSETS_AccessTexture(&tex, assetManager, tex_l);
 
-        SDL_Rect dst = (SDL_Rect) {i * 55 + 5, 5, 50, 50};
+        SDL_Rect dst = (SDL_Rect) {i * 55 + 5, 5 + player * 55, 50, 50};
         SDL_RenderCopy(renderer, tex, NULL, &dst);
     }
 }
