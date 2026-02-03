@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,6 +44,21 @@ int main(int argc, char *argv[])
     if (NULL == renderer) {
         fprintf(stderr, "Erreur SDL_Renderer: %s", SDL_GetError());
         goto Quit;
+    }
+
+    //init music
+    Mix_Music *music = NULL;
+    Mix_Init(MIX_INIT_OGG);
+
+    SDL_InitSubSystem(SDL_INIT_AUDIO);
+    Mix_AllocateChannels(5);
+    Mix_OpenAudio(48000, AUDIO_S16, 2, 4096);
+
+    // load music and sounds from files
+    music = Mix_LoadMUS("assets/sounds/theme.ogg");
+    if (music){
+        Mix_PlayMusic(music, -1);
+        Mix_VolumeMusic(64);
     }
 
     // Chargement des assets

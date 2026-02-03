@@ -23,6 +23,18 @@ void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetMana
     game->controller0 = controller0;
     game->controller1 = controller1;
     loadMap(game->map);
+
+
+
+    for (int i = 0; i < 28; i++) {
+        char path[64];
+        snprintf(path, sizeof(path), "assets/sounds/Sound Effect (%d).wav", i+1);
+
+        game->sound[i] = Mix_LoadWAV(path);
+        if (!game->sound[i]) {
+            fprintf(stderr, "Failed to load %s: %s\n", path, Mix_GetError());
+        }
+    }
 }
 
 void Game_ReadEvents(Game *game) {

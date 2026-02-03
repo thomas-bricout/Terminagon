@@ -85,6 +85,9 @@ void PLAYER_System(Game *game, double current_time) {
                 pc->action = ACTION_SWORD;
                 pc->actionTimeStamp = current_time;
 
+                if (game->sound[0])
+                    Mix_PlayChannel(-1, game->sound[0], 0);
+
                 // TODO: Placre la damage box devant le joueur
                 POOL_AddComponentFlags(pool, COMPONENT_DAMAGEBOX, playerLocation);
                 double angle = pc->angle * 180. / 3.1415;
