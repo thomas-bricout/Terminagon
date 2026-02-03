@@ -75,5 +75,6 @@ void POOL_DestroyEntity(EntityPool *pool, EntityID id);
 void POOL_AddComponentFlags(EntityPool *pool, ComponentFlags component_flags, int location);
 bool POOL_LacksComponentFlags(EntityPool *pool, ComponentFlags component_flags, int location);
 void POOL_RemoveComponentFlags(EntityPool *pool, ComponentFlags component_flags, int location);
+void POOL_DestroyEntityFromIndex(EntityPool *pool, int i);
 
 #endif

@@ -209,6 +209,8 @@ void PHYSICS_UpdateHitPoints(EntityPool *pool, double current_time) {
             pool->last_hit[i] = current_time;
             if (pool->health_point[i] <= 0) {
                 printf("death\n");
+                if (POOL_LacksComponentFlags(pool, COMPONENT_AI, i)) { continue; }
+                POOL_DestroyEntityFromIndex(pool, i);
             }
         }
     }

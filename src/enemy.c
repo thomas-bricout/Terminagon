@@ -69,6 +69,7 @@ EntityID ENEMY_SpawnOctorok(EntityPool *pool, SDL_FPoint position) {
     pool->collision_box[id.location] = (SDL_FRect) {-40., -40., 80., 80.};
     pool->hit_box[id.location] = (SDL_FRect) {-40., -40., 80., 80.};
     pool->damage_box[id.location] = (SDL_FRect) {-45., -45., 90., 90.};
+    pool->health_point[id.location] = 2;
     pool->velocity[id.location] = (SDL_FPoint) {0., 0.};
 
     POOL_AddComponentFlags(pool, COMPONENT_AI | COMPONENT_COLLISIONBOX | COMPONENT_HITBOX | COMPONENT_VELOCITY | COMPONENT_VELOCITY_FLEXIBLE, id.location);
@@ -106,5 +107,5 @@ EntityID ENEMY_SpawnEnemyProjectile(EntityPool *pool, SDL_FPoint position, int d
     pool->collision_box[id.location] = (SDL_FRect) {-4., -4., 9., 9.};
     pool->velocity[id.location] = (SDL_FPoint) {vect.x / 100. * OCTOROK_PROJECTILE_SPEED, vect.y / 100. * OCTOROK_PROJECTILE_SPEED};
     
-    POOL_AddComponentFlags(pool, COMPONENT_DAMAGEBOX | COMPONENT_VELOCITY | COMPONENT_PROJECTILE | COMPONENT_COLLISIONBOX, id.location);
+    POOL_AddComponentFlags(pool, COMPONENT_DAMAGEBOX | COMPONENT_VELOCITY | COMPONENT_PROJECTILE, id.location);
 }
