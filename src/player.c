@@ -11,7 +11,7 @@ const float SPRINT_PLAYER_SPEED = 0.4;
 const float DASHING_PLAYER_SPEED = 2.0;
 const float AIMING_PLAYER_SPEED = 0.1;
 
-const double BOW_AIMING_TIME = 10;
+const double BOW_AIMING_TIME = 500;
 const double DASHING_TIME = 200;
 const double RECOVERY_TIME = 100;
 const double ATTACK_TIME = 100;

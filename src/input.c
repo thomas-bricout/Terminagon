@@ -158,7 +158,14 @@ void InState_Update_gamecontroller(InState *inState, SDL_Event event,SDL_GameCon
     inState->W = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_LEFTSHOULDER);
     inState->X = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_B);
     inState->C = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
-    inState->V = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A);
+    int V_temp = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A);
+    inState->V=0;
+    if(V_temp && inState->V_prec){
+        inState->V= 0;
+    }else{
+        inState->V= V_temp;
+    }
+    inState->V_prec= V_temp;
 
     int alx = SDL_GameControllerGetAxis(controller,SDL_CONTROLLER_AXIS_LEFTX);
     if(alx<3200 && alx>-3200){

@@ -20,6 +20,7 @@ struct InState {
     bool X;
     bool C;
     bool V;
+    bool V_prec;
 
     bool I;
     bool J;
