@@ -40,8 +40,16 @@ void ASSETS_Load(AssetManager *assetManager, SDL_Renderer *renderer) {
         "assets/BowAimingUp.png",
         "assets/BowAimingLeft.png",
         "assets/BowAimingDown.png",
+        "assets/enemy0.bmp",
+        "assets/enemy1.bmp",
+        "assets/enemy2.bmp",
+        "assets/enemy3.bmp",
+        "assets/enemy4.bmp",
+        "assets/enemy5.bmp",
+        "assets/enemy6.bmp",
+        "assets/enemy7.bmp",
     };
-    int filenames_length = 21;
+    int filenames_length = 29;
 
     for (int i = 0; i < filenames_length; i++) {
         assetManager->asset_array[i] = IMG_LoadTexture(renderer, filenames[i]);
