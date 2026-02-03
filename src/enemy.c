@@ -22,7 +22,6 @@ void ENEMY_System(EntityPool *pool) {
         // Calculate and gather information about target
         SDL_FPoint target_position = pool->position[j_closest];
         SDL_FPoint relative_position = FPOINT_RelativePoint(target_position, *enemy_position);
-        printf("%f, %f", relative_position.x, relative_position.y);
 
         switch (pool->enemy[index_enemy].action) {
             case ENEMY_STILL:
