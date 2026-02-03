@@ -36,6 +36,7 @@ typedef enum {
     TEX_OCTOROK_SHOOTING_LEFT,
     TEX_OCTOROK_DOWN,
     TEX_OCTOROK_SHOOTING_DOWN,
+    TEX_OCTOROK_PROJECTILE,
 } TextureLocation ;
 
 typedef struct {

@@ -29,21 +29,6 @@ PlayerComponent PLAYER_NewComponent(InState *inState) {
     return p_c;
 }
 
-int AngleToDirection(double angle) {
-    angle = angle * 180. / 3.1415;
-    int orientation = 0;
-    if (angle <= 45 && angle >= -45) { // Right
-        orientation = 0;
-    } else if (angle >= 135 || angle <= -135) { // Left
-        orientation = 2;
-    } else if (angle >= -135 && angle <= 45) { // Up
-        orientation = 1;
-    } else if (angle >= 45 && angle <= 135) { // Down
-        orientation = 3;
-    }
-    return orientation;
-}
-
 EntityID POOL_SpawnArrow(EntityPool *pool, SDL_FPoint position, double angle) {
     SDL_Rect display_rect = {-50, -50, 100, 100};
     SDL_FPoint vect;
