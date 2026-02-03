@@ -19,4 +19,6 @@ float FPOINT_DistanceSquared(SDL_FPoint point1, SDL_FPoint point2);
 SDL_FPoint FPOINT_Normalize(SDL_FPoint vec);
 SDL_FPoint FPOINT_Mul(SDL_FPoint vec, float mul);
 
+int AngleToDirection(double angle);
+
 #endif

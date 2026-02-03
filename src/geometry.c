@@ -87,3 +87,18 @@ SDL_FPoint FPOINT_Normalize(SDL_FPoint vec) {
 SDL_FPoint FPOINT_Mul(SDL_FPoint vec, float mul) {
     return (SDL_FPoint) {vec.x * mul, vec.y * mul};
 }
+
+int AngleToDirection(double angle) {
+    angle = angle * 180. / 3.1415;
+    int orientation = 0;
+    if (angle <= 45 && angle >= -45) { // Right
+        orientation = 0;
+    } else if (angle >= 135 || angle <= -135) { // Left
+        orientation = 2;
+    } else if (angle >= -135 && angle <= 45) { // Up
+        orientation = 1;
+    } else if (angle >= 45 && angle <= 135) { // Down
+        orientation = 3;
+    }
+    return orientation;
+}

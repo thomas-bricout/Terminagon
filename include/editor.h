@@ -5,13 +5,14 @@ typedef enum EntityArchetype EntityArchetype;
 enum EntityArchetype {
     ARCHETYPE_DEBUG,
     ARCHETYPE_PLAYER,
+    ARCHETYPE_OCTOROK,
 };
 
 #include "game.h"
 #include "assets.h"
 #include "entity_pool.h"
 
-#define ARCHETYPE_NUMBER 2
+#define ARCHETYPE_NUMBER 3
 #define GRID_SIZE 100
 #define HALF_GRIDSIZE 50
 

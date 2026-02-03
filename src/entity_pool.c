@@ -51,7 +51,7 @@ void POOL_Load(EntityPool *pool, InState *inState) {
 
     pool->collision_box[player_loc] = (SDL_FRect) {-40., -40., 90., 90.};//{-50., -50., 100., 100.};
     pool->hit_box[player_loc] = (SDL_FRect) {-40., -40., 90., 90.};//{-50., -50., 100., 100.};
-    pool->health_point[player_loc] = 2;
+    pool->health_point[player_loc] = 20;
     POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX | COMPONENT_HITBOX | COMPONENT_TARGET, player_loc);
 
     // Adds the second player
@@ -67,7 +67,7 @@ void POOL_Load(EntityPool *pool, InState *inState) {
 
     pool->collision_box[player_loc] = (SDL_FRect) {-40., -40., 90., 90.};
     pool->hit_box[player_loc] = (SDL_FRect) {-40., -40., 90., 90.};//{-50., -50., 100., 100.};
-    pool->health_point[player_loc] = 2;
+    pool->health_point[player_loc] = 20;
     POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX | COMPONENT_HITBOX | COMPONENT_TARGET, player_loc);
 
     // Adds a tree
@@ -122,17 +122,20 @@ void POOL_DestroyEntity(EntityPool *pool, EntityID id) {
     if (pool->id[id.location].unique_id != id.unique_id) {
         return;
     }
+    POOL_DestroyEntityFromIndex(pool, id.location);
+}
 
+void POOL_DestroyEntityFromIndex(EntityPool *pool, int i) {
     // Inform everywhere the entity is destroyed and a new spot is available
-    if (id.location == pool->lastEntitylocation) {
+    if (i == pool->lastEntitylocation) {
         pool->lastEntitylocation --;
     } else {
         pool->emptyLocationsAmount ++;
-        pool->emptyLocations[pool->emptyLocationsAmount - 1] = id.location;
+        pool->emptyLocations[pool->emptyLocationsAmount - 1] = i;
     }
     pool->currentCount --;
-    pool->id[id.location] = (EntityID) {0, 0};
+    pool->id[i] = (EntityID) {0, 0};
 
     // Reset all bitmaps
-    pool->component_flags[id.location] = COMPONENT_NONE;
+    pool->component_flags[i] = COMPONENT_NONE;
 }

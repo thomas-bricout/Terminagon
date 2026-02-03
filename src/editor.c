@@ -18,7 +18,7 @@ void EDITOR_PlaceEntity(Game *game) {
     SDL_FPoint position = game->inState->ToggledGrid ? FPOINT_NearestSquare(mouse_position) : mouse_position;
 
     // TODO: get entity bundle from player selection
-    EDITOR_EntityFromArchetype(game, ARCHETYPE_DEBUG, position);
+    EDITOR_EntityFromArchetype(game, game->inState->selected_archetype, position);
 }
 
 
@@ -47,6 +47,8 @@ void EDITOR_EntityFromArchetype(Game *game, EntityArchetype archetype, SDL_FPoin
 
             POOL_AddComponentFlags(pool, COMPONENT_TEXTURE | COMPONENT_DISPLAYRECT | COMPONENT_COLLISIONBOX, i);
             break;
+        case ARCHETYPE_OCTOROK:
+            ENEMY_SpawnOctorok(pool, pos);
     }
 } 
 
@@ -107,7 +109,7 @@ void EDITOR_DisplayInfo(Game *game) {
 }
 
 char* EDITOR_ArchetypeToString(EntityArchetype archetype) {
-    char *strs[] = {"DEBUG", "PLAYER"};
+    char *strs[] = {"DEBUG", "PLAYER", "OCTOROK"};
     return strs[archetype];
 }
 

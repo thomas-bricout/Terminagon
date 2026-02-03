@@ -8,6 +8,7 @@ typedef enum {
 typedef enum {
     ENEMY_STILL,
     ENEMY_WALK,
+    ENEMY_SHOOTING,
 } EnemyAction;
 
 typedef struct EnemyComponent EnemyComponent;
@@ -19,7 +20,7 @@ struct EnemyComponent {
 
 #include "entity_pool.h"
 
-void ENEMY_System(EntityPool *pool);
+void ENEMY_System(EntityPool *pool, double current_time);
 EntityID ENEMY_SpawnOctorok(EntityPool *pool, SDL_FPoint position);
 
 #endif
