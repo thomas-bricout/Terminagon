@@ -9,6 +9,7 @@
 #include "physics.h"
 #include "serialize.h"
 #include "editor.h"
+#include "ui.h"
 
 const double TARGET_FPS = 60.0;
 const double TARGET_FRAME_TIME =  1000.0 / TARGET_FPS; // in ms
@@ -108,6 +109,7 @@ void GAME_Run(Game *game) {
 
         // Création du rendu
         RENDER_RenderAll(game);
+        draw_ui(game);
         
         // Logging
         DEBUG_DisplayDebug(game, deltaTime, FPS, elapsed, current_time);

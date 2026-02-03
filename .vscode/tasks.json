@@ -19,6 +19,7 @@
                 "src/editor.c",
                 "src/tilemap.c",
                 "src/enemy.c",
+                "src/ui.c",
                 "-o",
                 "app",
                 "-ljansson",

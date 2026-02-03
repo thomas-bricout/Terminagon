@@ -49,8 +49,11 @@ void ASSETS_Load(AssetManager *assetManager, SDL_Renderer *renderer) {
         "assets/enemy6.bmp",
         "assets/enemy7.bmp",
         "assets/octorokProjectile.png",
+        "assets/emptyHeart.png",
+        "assets/halfHeart.png",
+        "assets/fullHeart.png",
     };
-    int filenames_length = 30;
+    int filenames_length = 33;
 
     for (int i = 0; i < filenames_length; i++) {
         assetManager->asset_array[i] = IMG_LoadTexture(renderer, filenames[i]);
