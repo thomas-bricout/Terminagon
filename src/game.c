@@ -43,9 +43,9 @@ void Game_ReadEvents(Game *game) {
     InState *inState1 = game->inState;
     InState *inState2 = game->inState + 1;
 
+    InState_Update_gamecontroller(inState2, event,game->controller0); 
     while (SDL_PollEvent(&event)) {
         InState_Update(inState1, event);
-        InState_Update_gamecontroller(inState2, event,game->controller0); 
         //InState_Update_gamecontroller(inState1, event,game->controller0); 
 
         if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_F11) {

@@ -10,6 +10,7 @@
 #include "entity_pool.h"
 #include "input.h"
 
+#include <unistd.h>
 //#include <switch.h> //switch
 
 #define GAMENAME "Mon jeu"
