@@ -18,6 +18,7 @@
                 "src/serialize.c",
                 "src/editor.c",
                 "src/tilemap.c",
+                "src/enemy.c",
                 "-o",
                 "app",
                 "-ljansson",
