@@ -15,6 +15,7 @@ typedef struct {
 #include "player.h"
 #include "game.h"
 #include "input.h"
+#include "enemy.h"
 
 #define MAX_ENTITY_COUNT 500
 
@@ -29,6 +30,8 @@ typedef enum ComponentFlags {
     COMPONENT_VELOCITY      = 0b0000000001000000,
     COMPONENT_PROJECTILE    = 0b0000000010000000,
     COMPONENT_VELOCITY_FLEXIBLE    = 0b0000000100000000,
+    COMPONENT_AI            = 0b0000001000000000,
+    COMPONENT_TARGET        = 0b0000010000000000,
 } ComponentFlags;
 
 struct EntityPool {
@@ -58,6 +61,8 @@ struct EntityPool {
 
     SDL_FPoint position[MAX_ENTITY_COUNT];
     SDL_FPoint velocity[MAX_ENTITY_COUNT];
+
+    EnemyComponent enemy[MAX_ENTITY_COUNT];
 
     ComponentFlags component_flags[MAX_ENTITY_COUNT]; 
 };

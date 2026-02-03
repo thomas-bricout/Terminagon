@@ -52,7 +52,7 @@ void POOL_Load(EntityPool *pool, InState *inState) {
     pool->collision_box[player_loc] = (SDL_FRect) {-40., -40., 90., 90.};//{-50., -50., 100., 100.};
     pool->hit_box[player_loc] = (SDL_FRect) {-40., -40., 90., 90.};//{-50., -50., 100., 100.};
     pool->health_point[player_loc] = 2;
-    POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX | COMPONENT_HITBOX, player_loc);
+    POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX | COMPONENT_HITBOX | COMPONENT_TARGET, player_loc);
 
     // Adds the second player
     pool->player_component[1] = PLAYER_NewComponent(inState + 1);
@@ -69,13 +69,16 @@ void POOL_Load(EntityPool *pool, InState *inState) {
 
     pool->collision_box[player_loc] = (SDL_FRect) {-50., -50., 100., 100.};
     pool->hit_box[player_loc] = (SDL_FRect) {-50., -50., 100., 100.};
-    POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX | COMPONENT_HITBOX, player_loc);
+    POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX | COMPONENT_HITBOX | COMPONENT_TARGET, player_loc);
 
     // Adds a tree
     EntityID tree = POOL_NewEntityClassic(pool, TEX_DEBUG, player_display_rect, (SDL_FPoint) {300., 300.});
 
     pool->collision_box[tree.location] = (SDL_FRect) {-50., -50., 100., 100.};
     POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX, tree.location);
+
+    // Adds an Octorok
+    ENEMY_SpawnOctorok(pool, (SDL_FPoint) {100*117., 100*84.});
 }
 
 EntityID POOL_NewEntity(EntityPool *pool) {

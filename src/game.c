@@ -99,6 +99,8 @@ void GAME_Run(Game *game) {
         
         // Physiques et Mécaniques
         PLAYER_System(game, current_time);
+        ENEMY_System(game->pool);
+
         PHYSICS_MoveAll(game->map,game->pool, deltaTime);
         PHYSICS_UpdateHitPoints(game->pool, current_time);
         PHYSICS_DamageAll(game->map,game->pool, deltaTime);

@@ -71,3 +71,19 @@ SDL_FPoint FPOINT_NearestSquare(SDL_FPoint point) {
     res.y = ((int) point.y / GRID_SIZE) * GRID_SIZE + GRID_SIZE / 2;
     return res;
 }
+
+float FPOINT_DistanceSquared(SDL_FPoint point1, SDL_FPoint point2) {
+    float dx = point1.x - point2.x;
+    float dy = point1.y - point2.y;
+
+    return dx * dx + dy * dy;
+}
+
+SDL_FPoint FPOINT_Normalize(SDL_FPoint vec) {
+    float norm = sqrtf(vec.x * vec.x + vec.y * vec.y);
+    return (SDL_FPoint) {vec.x / norm , vec.y / norm};
+}
+
+SDL_FPoint FPOINT_Mul(SDL_FPoint vec, float mul) {
+    return (SDL_FPoint) {vec.x * mul, vec.y * mul};
+}
