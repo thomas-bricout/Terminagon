@@ -210,6 +210,7 @@ void PLAYER_System(Game *game, double current_time) {
         // Animate the player
         PLAYER_Animate(pool, i, current_time);
 
+
         if(i==0){
             int window_h = SCREEN_H;
             int window_w = SCREEN_W;
@@ -217,6 +218,42 @@ void PLAYER_System(Game *game, double current_time) {
             game->camera_pos.x = playerPosition->x - window_w/2;
             game->camera_pos.y = playerPosition->y - window_h/2;
         }
+    }
+
+    if(pool->player_amount==2){
+        int player1Location = pool->player_id[0].location;
+        SDL_FPoint *player1Position = &pool->position[player1Location];
+        int player2Location = pool->player_id[1].location;
+        SDL_FPoint *player2Position = &pool->position[player2Location];
+        int window_h = SCREEN_H;
+        int window_w = SCREEN_W;
+        SDL_GetWindowSize(game->window, &window_w, &window_h);
+        double window_w_lim=(window_w*3)/5;
+        double window_h_lim=(window_h*3)/5;
+
+        int p1px=player1Position->x;
+        int p2px=player2Position->x;
+        int p1py=player1Position->y;
+        int p2py=player2Position->y;
+        int dist_x= SDL_abs(player1Position->x-player2Position->x);
+        int dist_y= SDL_abs(player1Position->y-player2Position->y);
+        int signe_x=1;
+        int signe_y=1;
+        if(player1Position->x-player2Position->x>0){
+            signe_x=-1;
+        }
+        if(player1Position->y-player2Position->y>0){
+            signe_y=-1;
+        }
+        if(dist_x>window_w_lim){
+            p2px=p1px+window_w_lim*signe_x;
+        }
+        if(dist_y>window_h_lim){
+            p2py=p1py+window_h_lim*signe_y;
+        }
+        game->camera_pos.x =(p1px+p2px)/2 - window_w/2;
+        game->camera_pos.y =(p1py+p2py)/2 - window_h/2;
+        printf("%f %f\n",game->camera_pos.x,game->camera_pos.y);
     }
 }
 
