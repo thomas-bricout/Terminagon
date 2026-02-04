@@ -28,7 +28,7 @@ void InState_Update(InState *inState, SDL_Event event) {
     SDL_EventType type = event.type;
     SDL_Scancode scancode = event.key.keysym.scancode;
 
-    if(SDL_SCANCODE_END==scancode && SDL_KEYDOWN==type){
+    if((SDL_SCANCODE_END==scancode || SDL_SCANCODE_INSERT==scancode) && SDL_KEYDOWN==type){
         inState->keyboard=!inState->keyboard;
     }
 
