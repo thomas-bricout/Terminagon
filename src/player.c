@@ -98,13 +98,13 @@ void PLAYER_System(Game *game, double current_time) {
                 POOL_AddComponentFlags(pool, COMPONENT_DAMAGEBOX, playerLocation);
                 double angle = pc->angle * 180. / 3.1415;
                 if (angle <= 45 && angle >= -45) { // Right
-                    pool->damage_box[playerLocation] = (SDL_FRect) {100, -50, 100, 100};
+                    pool->damage_box[playerLocation] = (SDL_FRect) {60, 0, 90, 20};
                 } else if (angle >= 135 || angle <= -135) { // Left
-                    pool->damage_box[playerLocation] = (SDL_FRect) {-200, -50, 100, 100};
+                    pool->damage_box[playerLocation] = (SDL_FRect) {-150, 0, 90, 20};
                 } else if (angle >= -135 && angle <= 45) { // Up
-                    pool->damage_box[playerLocation] = (SDL_FRect) {-50, -200, 100, 100};
+                    pool->damage_box[playerLocation] = (SDL_FRect) {-15, -150, 20, 90};
                 } else if (angle >= 45 && angle <= 135) { // Down
-                    pool->damage_box[playerLocation] = (SDL_FRect) {-50, 100, 100, 100};
+                    pool->damage_box[playerLocation] = (SDL_FRect) {-10, 60, 20, 90};
                 }
             }else if(inState->X) {
                 pc->action = ACTION_SPRINT;
