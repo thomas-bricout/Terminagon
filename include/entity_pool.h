@@ -32,6 +32,7 @@ typedef enum ComponentFlags {
     COMPONENT_VELOCITY_FLEXIBLE    = 0b0000000100000000,
     COMPONENT_AI            = 0b0000001000000000,
     COMPONENT_TARGET        = 0b0000010000000000,
+    COMPONENT_DEATHANIM     = 0b0000100000000000,
 } ComponentFlags;
 
 struct EntityPool {
@@ -63,6 +64,8 @@ struct EntityPool {
     SDL_FPoint velocity[MAX_ENTITY_COUNT];
 
     EnemyComponent enemy[MAX_ENTITY_COUNT];
+
+    double deathAnim_timeStamp[MAX_ENTITY_COUNT];
 
     ComponentFlags component_flags[MAX_ENTITY_COUNT]; 
 };

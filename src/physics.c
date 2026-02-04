@@ -211,6 +211,7 @@ void PHYSICS_UpdateHitPoints(EntityPool *pool, double current_time) {
                 printf("death\n");
                 if (POOL_LacksComponentFlags(pool, COMPONENT_AI, i)) { continue; }
                 POOL_DestroyEntityFromIndex(pool, i);
+                ENEMY_SpawnDeathAnim(pool, pool->position[i], current_time);
             }
         }
     }

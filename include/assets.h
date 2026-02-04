@@ -40,6 +40,10 @@ typedef enum {
     TEX_HEART_EMPTY,
     TEX_HEART_HALF,
     TEX_HEART_FULL,
+    TEX_DEATH_ANIM1,
+    TEX_DEATH_ANIM2,
+    TEX_DEATH_ANIM3,
+    TEX_DEATH_ANIM4,
 } TextureLocation ;
 
 typedef struct {

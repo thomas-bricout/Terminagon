@@ -111,3 +111,28 @@ EntityID ENEMY_SpawnEnemyProjectile(EntityPool *pool, SDL_FPoint position, int d
 
     return id;
 }
+
+EntityID ENEMY_SpawnDeathAnim(EntityPool *pool, SDL_FPoint position, double current_time) {
+    EntityID id = POOL_NewEntityClassic(pool, TEX_DEATH_ANIM1, (SDL_Rect) {-50, -50, 100, 100}, position);
+    POOL_AddComponentFlags(pool, COMPONENT_DEATHANIM, id.location);
+    pool->deathAnim_timeStamp[id.location] = current_time;
+    return id;
+} 
+
+const double DEATH_ANIM_DISAPPEAR_TIME = 1000.;
+void ENEMY_DeathAnimSystem(EntityPool *pool, double current_time) {
+    for (int i = 0; i < pool->lastEntitylocation; i++) {
+        if (POOL_LacksComponentFlags(pool, COMPONENT_TEXTURE | COMPONENT_DEATHANIM, i)) {continue;}
+        double delay = current_time - pool->deathAnim_timeStamp[i];
+
+        if ((int) (delay / 100.) % 2) {
+            pool->tex_location[i] = TEX_DEATH_ANIM3;
+        } else {
+            pool->tex_location[i] = TEX_DEATH_ANIM1;
+        }
+
+        if (delay >= DEATH_ANIM_DISAPPEAR_TIME ) {
+            POOL_DestroyEntityFromIndex(pool, i);
+        }
+    }
+}

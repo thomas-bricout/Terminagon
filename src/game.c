@@ -131,6 +131,7 @@ void GAME_Run(Game *game) {
         MoveCameraIJKL(game, deltaTime);
 
         // Création du rendu
+        ENEMY_DeathAnimSystem(game->pool, current_time);
         RENDER_RenderAll(game);
         draw_ui(game);
         
