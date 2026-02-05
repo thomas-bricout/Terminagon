@@ -103,12 +103,17 @@ Quit:
     // Clean up sortie en échec
     // On doit rajouter des check parce qu'on est pas sûr que tout à bien été initialisé
     ASSETS_Destroy(&asset_manager);
+
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
     if (NULL != renderer) {
         SDL_DestroyRenderer(renderer);
     }
     if (NULL != window) {
         SDL_DestroyWindow(window);
     }
+    #pragma GCC diagnostic pop
+
     SDL_Quit();
     
     //romfsExit();//switch
