@@ -23,6 +23,5 @@ struct EnemyComponent {
 void ENEMY_System(EntityPool *pool, double current_time);
 EntityID ENEMY_SpawnOctorok(EntityPool *pool, SDL_FPoint position);
 EntityID ENEMY_SpawnDeathAnim(EntityPool *pool, SDL_FPoint position, double current_time);
-void ENEMY_DeathAnimSystem(EntityPool *pool, double current_time);
 
 #endif

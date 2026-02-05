@@ -10,6 +10,7 @@
 #include "serialize.h"
 #include "editor.h"
 #include "ui.h"
+#include "anim.h"
 
 const double TARGET_FPS = 60.0;
 const double TARGET_FRAME_TIME =  1000.0 / TARGET_FPS; // in ms
@@ -131,7 +132,7 @@ void GAME_Run(Game *game) {
         MoveCameraIJKL(game, deltaTime);
 
         // Création du rendu
-        ENEMY_DeathAnimSystem(game->pool, current_time);
+        ANIM_System(game->pool, current_time);
         RENDER_RenderAll(game);
         draw_ui(game);
         
