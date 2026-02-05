@@ -16,15 +16,7 @@ void ENEMY_System(EntityPool *pool, double current_time) {
         EnemyComponent *enemy = &pool->enemy[index_enemy];
 
         // Search for target
-        float ds_min = 10000000.;
-        int j_closest = 0;
-        for (int index_target = 0; index_target < pool->lastEntitylocation; index_target++) {
-            if (index_enemy == index_target) { continue; }
-            if (POOL_LacksComponentFlags(pool, COMPONENT_POSITION | COMPONENT_TARGET, index_target)) { continue; }
-            // Calculate euclidian distance squared
-            float ds = FPOINT_DistanceSquared(pool->position[index_target], pool->position[index_enemy]);
-            if (ds < ds_min) { ds_min = ds; j_closest = index_target; }
-        }
+        int j_closest = ENEMY_LocateNearestTarget(pool, *enemy_position, index_enemy);
 
         // Calculate and gather information about target
         SDL_FPoint target_position = pool->position[j_closest];
@@ -119,3 +111,17 @@ EntityID ENEMY_SpawnDeathAnim(EntityPool *pool, SDL_FPoint position, double curr
     pool->anim[id.location].anim = ANIM_DEATH;
     return id;
 } 
+
+int ENEMY_LocateNearestTarget(EntityPool *pool, SDL_FPoint position, int index_enemy) {
+    float ds_min = 10000000.;
+    int target_closest = 0;
+    for (int index_target = 0; index_target < pool->lastEntitylocation; index_target++) {
+        if (index_enemy == index_target) { continue; }
+        if (POOL_LacksComponentFlags(pool, COMPONENT_POSITION | COMPONENT_TARGET, index_target)) { continue; }
+        // Calculate euclidian distance squared
+        float ds = FPOINT_DistanceSquared(pool->position[index_target], pool->position[index_enemy]);
+        if (ds < ds_min) { ds_min = ds; target_closest = index_target; }
+    }
+
+    return target_closest;
+}
