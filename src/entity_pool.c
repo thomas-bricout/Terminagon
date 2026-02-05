@@ -78,6 +78,7 @@ void POOL_Load(EntityPool *pool, InState *inState) {
 
     // Adds an Octorok
     ENEMY_SpawnOctorok(pool, (SDL_FPoint) {100*117., 100*84.});
+    ENEMY_SpawnMoblin(pool, (SDL_FPoint) {100*117., 100*86.});
 }
 
 EntityID POOL_NewEntity(EntityPool *pool) {

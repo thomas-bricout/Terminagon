@@ -49,6 +49,8 @@ void EDITOR_EntityFromArchetype(Game *game, EntityArchetype archetype, SDL_FPoin
             break;
         case ARCHETYPE_OCTOROK:
             ENEMY_SpawnOctorok(pool, pos);
+        case ARCHETYPE_MOBLIN:
+            ENEMY_SpawnMoblin(pool, pos);
     }
 } 
 
@@ -116,7 +118,7 @@ void EDITOR_DisplayInfo(Game *game) {
 }
 
 char* EDITOR_ArchetypeToString(EntityArchetype archetype) {
-    char *strs[] = {"DEBUG", "PLAYER", "OCTOROK"};
+    char *strs[] = {"DEBUG", "PLAYER", "OCTOROK", "MOBLIN"};
     return strs[archetype];
 }
 

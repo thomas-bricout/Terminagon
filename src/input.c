@@ -151,7 +151,7 @@ void InState_Update(InState *inState, SDL_Event event) {
     // Editor keybindings
     if ((type == SDL_MOUSEWHEEL && event.wheel.y > 0) || (type == SDL_KEYDOWN && scancode == SDL_SCANCODE_P)) {
         inState->selected_archetype ++;
-        if (inState->selected_archetype == ARCHETYPE_NUMBER) {
+        if (inState->selected_archetype == ARCHETYPE_COUNT) {
             inState->selected_archetype = 0;
         }
     }
@@ -159,7 +159,7 @@ void InState_Update(InState *inState, SDL_Event event) {
     if ((type == SDL_MOUSEWHEEL && event.wheel.y < 0) || (type == SDL_KEYDOWN && scancode == SDL_SCANCODE_M)) {
         inState->selected_archetype --;
         if (inState->selected_archetype == -1) {
-            inState->selected_archetype = ARCHETYPE_NUMBER - 1;
+            inState->selected_archetype = ARCHETYPE_COUNT - 1;
         }
     }
 }
@@ -221,7 +221,7 @@ void InState_Update_gamecontroller(InState *inState, SDL_Event event,SDL_GameCon
 
     if (inState->V) {
         inState->selected_archetype ++;
-        if (inState->selected_archetype == ARCHETYPE_NUMBER) {
+        if (inState->selected_archetype == ARCHETYPE_COUNT) {
             inState->selected_archetype = 0;
         }
     }

@@ -3,6 +3,7 @@
 
 typedef enum {
     OCTOROK,
+    MOBLIN,
 } EnemyType;
 
 typedef enum {
@@ -22,6 +23,7 @@ struct EnemyComponent {
 
 void ENEMY_System(EntityPool *pool, double current_time);
 EntityID ENEMY_SpawnOctorok(EntityPool *pool, SDL_FPoint position);
+EntityID ENEMY_SpawnMoblin(EntityPool *pool, SDL_FPoint position);
 EntityID ENEMY_SpawnDeathAnim(EntityPool *pool, SDL_FPoint position, double current_time);
 int ENEMY_LocateNearestTarget(EntityPool *pool, SDL_FPoint position, int index_enemy);
 EntityID ENEMY_SpawnEnemyProjectile(EntityPool *pool, SDL_FPoint position, int direction);
