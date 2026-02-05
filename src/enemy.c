@@ -1,8 +1,6 @@
 #include "enemy.h"
 #include "geometry.h"
 
-EntityID ENEMY_SpawnEnemyProjectile(EntityPool *pool, SDL_FPoint position, int direction);
-
 const double OCTOROK_WALK_TIME = 500.;
 const double OCTOROK_SHOOTING_TIME = 1000.;
 const double OCTOROK_PROJECTILE_SPEED = 0.3;
