@@ -53,9 +53,6 @@ void RENDER_RenderAll(Game *game) {
 
 
     RENDER_RenderMap(game,camera_pos);
-
-    SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Starting displaying entities");
-
     for (int i = 0; i < pool->lastEntitylocation; i++) {
         if (POOL_LacksComponentFlags(pool, COMPONENT_POSITION | COMPONENT_DISPLAYRECT | COMPONENT_TEXTURE, i)) { continue; }
 

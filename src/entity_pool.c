@@ -138,4 +138,6 @@ void POOL_DestroyEntityFromIndex(EntityPool *pool, int i) {
 
     // Reset all bitmaps
     pool->component_flags[i] = COMPONENT_NONE;
+
+    SDL_Log("Deleting entity at index %d\n", i);
 }
