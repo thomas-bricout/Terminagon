@@ -56,8 +56,12 @@ void ASSETS_Load(AssetManager *assetManager, SDL_Renderer *renderer) {
         "assets/Death2.png",
         "assets/Death3.png",
         "assets/Death4.png",
+        "assets/MoblinRight.png",
+        "assets/MoblinUp.png",
+        "assets/MoblinLeft.png",
+        "assets/MoblinDown.png",
     };
-    int filenames_length = 37;
+    int filenames_length = 41;
 
     for (int i = 0; i < filenames_length; i++) {
         assetManager->asset_array[i] = IMG_LoadTexture(renderer, filenames[i]);

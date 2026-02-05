@@ -44,6 +44,10 @@ typedef enum {
     TEX_DEATH_ANIM2,
     TEX_DEATH_ANIM3,
     TEX_DEATH_ANIM4,
+    TEX_MOBLIN_RIGHT,
+    TEX_MOBLIN_UP,
+    TEX_MOBLIN_LEFT,
+    TEX_MOBLIN_DOWN,
 } TextureLocation ;
 
 typedef struct {
