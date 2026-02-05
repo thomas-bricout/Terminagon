@@ -27,6 +27,7 @@ void POOL_Init(EntityPool *pool) {
     pool->currentCount = 0;
     pool->lastEntitylocation = 0;
     pool->emptyLocationsAmount = 0;
+    pool->player_amount = 0;
 
     EntityID default_id = {0, 0};
 
@@ -38,47 +39,12 @@ void POOL_Init(EntityPool *pool) {
 }
 
 void POOL_Load(EntityPool *pool, InState *inState) {
-    // Adds the main player
-    pool->player_component[0] = PLAYER_NewComponent(inState);
-    pool->player_amount = 1;
+    PLAYER_Spawn(pool, inState, (SDL_FPoint) {100*116., 100*82.});
+    PLAYER_Spawn(pool, inState + 1, (SDL_FPoint) {100*120., 100*82.});
 
-    SDL_Rect player_display_rect = {-40., -40., 90., 90.};//{-50, -50, 100, 100};
-    pool->player_id[0] = POOL_NewEntityClassic(pool, TEX_PLAYER_RIGHT, player_display_rect, (SDL_FPoint) {100*116., 100*82.});
-
-    int player_loc = pool->player_id[0].location;
-    pool->velocity[player_loc] = (SDL_FPoint) {0., 0.};
-    POOL_AddComponentFlags(pool, COMPONENT_VELOCITY, player_loc);
-
-    pool->collision_box[player_loc] = (SDL_FRect) {-40., -40., 90., 90.};//{-50., -50., 100., 100.};
-    pool->hit_box[player_loc] = (SDL_FRect) {-40., -40., 90., 90.};//{-50., -50., 100., 100.};
-    pool->health_point[player_loc] = 20;
-    POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX | COMPONENT_HITBOX | COMPONENT_TARGET, player_loc);
-
-    // Adds the second player
-    pool->player_component[1] = PLAYER_NewComponent(inState + 1);
-    pool->player_amount = 2;
-
-    player_display_rect = (SDL_Rect) {-40., -40., 90., 90.};//{-50, -50, 100, 100};
-    pool->player_id[1] = POOL_NewEntityClassic(pool, TEX_PLAYER_RIGHT, player_display_rect, (SDL_FPoint) {100*120., 100*82.});
-
-    player_loc = pool->player_id[1].location;
-    pool->velocity[player_loc] = (SDL_FPoint) {0., 0.};
-    POOL_AddComponentFlags(pool, COMPONENT_VELOCITY, player_loc);
-
-    pool->collision_box[player_loc] = (SDL_FRect) {-40., -40., 90., 90.};
-    pool->hit_box[player_loc] = (SDL_FRect) {-40., -40., 90., 90.};//{-50., -50., 100., 100.};
-    pool->health_point[player_loc] = 20;
-    POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX | COMPONENT_HITBOX | COMPONENT_TARGET, player_loc);
-
-    // Adds a tree
-    EntityID tree = POOL_NewEntityClassic(pool, TEX_DEBUG, player_display_rect, (SDL_FPoint) {300., 300.});
-
-    pool->collision_box[tree.location] = (SDL_FRect) {-50., -50., 100., 100.};
-    POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX, tree.location);
-
-    // Adds an Octorok
+    // Adds a few enemies for trying them out
     ENEMY_SpawnOctorok(pool, (SDL_FPoint) {100*117., 100*84.});
-    ENEMY_SpawnMoblin(pool, (SDL_FPoint) {100*117., 100*86.});
+    ENEMY_SpawnMoblin(pool, (SDL_FPoint) {100*118., 100*85.});
 }
 
 EntityID POOL_NewEntity(EntityPool *pool) {

@@ -29,6 +29,23 @@ PlayerComponent PLAYER_NewComponent(InState *inState) {
     return p_c;
 }
 
+EntityID PLAYER_Spawn(EntityPool *pool, InState *inState, SDL_FPoint position) {
+    pool->player_component[pool->player_amount] = PLAYER_NewComponent(inState);
+
+    SDL_Rect player_display_rect = {-40., -40., 90., 90.};//{-50, -50, 100, 100};
+    pool->player_id[pool->player_amount] = POOL_NewEntityClassic(pool, TEX_PLAYER_RIGHT, player_display_rect, position);
+
+    int player_loc = pool->player_id[pool->player_amount].location;
+    pool->velocity[player_loc] = (SDL_FPoint) {0., 0.};
+    pool->collision_box[player_loc] = (SDL_FRect) {-40., -40., 90., 90.};//{-50., -50., 100., 100.};
+    pool->hit_box[player_loc] = (SDL_FRect) {-40., -40., 90., 90.};//{-50., -50., 100., 100.};
+    pool->health_point[player_loc] = 20;
+
+    POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX | COMPONENT_HITBOX | COMPONENT_TARGET | COMPONENT_VELOCITY, player_loc);
+    
+    pool->player_amount ++;
+}
+
 EntityID POOL_SpawnArrow(EntityPool *pool, SDL_FPoint position, double angle) {
     SDL_Rect display_rect = {-50, -50, 100, 100};
     SDL_FPoint vect;
