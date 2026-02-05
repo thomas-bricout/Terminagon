@@ -57,8 +57,6 @@ void RENDER_RenderAll(Game *game) {
     SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Starting displaying entities");
 
     for (int i = 0; i < pool->lastEntitylocation; i++) {
-        // Skip entities that don't have texture / display rect / position
-        // if (!pool->position_map[i] || !pool->display_rect_map[i] || !pool->tex_location_map[i]) { continue; }
         if (POOL_LacksComponentFlags(pool, COMPONENT_POSITION | COMPONENT_DISPLAYRECT | COMPONENT_TEXTURE, i)) { continue; }
 
         SDL_Texture *tex;

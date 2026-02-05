@@ -13,7 +13,6 @@ void ENEMY_System(EntityPool *pool, double current_time) {
         TextureLocation *tex = &pool->tex_location[index_enemy];
         EnemyComponent *enemy = &pool->enemy[index_enemy];
 
-        // Search for target
         int j_closest = ENEMY_LocateNearestTarget(pool, *enemy_position, index_enemy);
 
         // Calculate and gather information about target

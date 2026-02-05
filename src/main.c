@@ -94,10 +94,10 @@ int main(int argc, char *argv[])
     GAME_Run(&game);
 
     // Clean up sortie normal 
-    ASSETS_Destroy(&asset_manager); // Détruit l'asset_manager
-    SDL_DestroyRenderer(renderer);  // Détruit le renderer
-    SDL_DestroyWindow(window);      // Détruit la fenêtre
-    SDL_Quit();                     // Désalloue la mémoire lié à SDL
+    ASSETS_Destroy(&asset_manager); 
+    SDL_DestroyRenderer(renderer);  
+    SDL_DestroyWindow(window);      
+    SDL_Quit();                     
     return EXIT_SUCCESS;
 Quit:
     // Clean up sortie en échec

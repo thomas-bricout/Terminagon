@@ -152,8 +152,6 @@ void EDITOR_DrawGrid(Game *game) {
 bool EDITOR_EntityAtPoint(EntityPool *pool, SDL_Point point, EntityID *id) {
     for (int i = 0; i < pool->lastEntitylocation; i++) {
         if (POOL_LacksComponentFlags(pool, COMPONENT_DISPLAYRECT | COMPONENT_POSITION, i)) { continue; }
-        // printf("point: %d, %d\n", point.x, point.y);
-        // printf("rect: %d, %d, %d, %d\n",pool->display_rect[i].x, pool->display_rect[i].y, pool->display_rect[i].h, pool->display_rect[i].w);
         SDL_Rect offset_display_rect = RECT_Offset(pool->display_rect[i], FPOINT_ToPoint(pool->position[i]));
         if (SDL_PointInRect(&point, &offset_display_rect)) {
             *id = pool->id[i];
