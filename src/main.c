@@ -93,10 +93,13 @@ int main(int argc, char *argv[])
     // Appelle de la boucle principale de jeu
     GAME_Run(&game);
 
+    // Clean up du son
+    Mix_FreeMusic(music);
+
     // Clean up sortie normal 
     ASSETS_Destroy(&asset_manager); 
     SDL_DestroyRenderer(renderer);  
-    SDL_DestroyWindow(window);      
+    SDL_DestroyWindow(window);
     SDL_Quit();                     
     return EXIT_SUCCESS;
 Quit:

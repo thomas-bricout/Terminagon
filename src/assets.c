@@ -80,6 +80,7 @@ void ASSETS_Destroy(AssetManager *assetManager) {
         SDL_DestroyTexture(assetManager->asset_array[i]);
     }
     TTF_CloseFont(assetManager->debug_font);
+    free_MAP_Textures(assetManager->map_assets);
 }
 
 void ASSETS_AccessTexture(SDL_Texture **texture, AssetManager *assetManager, TextureLocation textureLocation) {

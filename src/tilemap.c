@@ -23,6 +23,12 @@ SDL_Texture** load_MAP_Textures(const char* tilefilename, SDL_Renderer *ren){
     return tabMAPTextures;
 }
 
+void free_MAP_Textures(SDL_Texture** tabMAPTextures) {
+    for (int i = 0; i < TILES_HEIGHT*TILES_WIDTH; i++) {
+        SDL_DestroyTexture(tabMAPTextures[i]);
+    }
+    free(tabMAPTextures);
+}
 
 int convert_num(char ch){
     switch (ch)

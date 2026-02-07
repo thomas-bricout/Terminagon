@@ -24,4 +24,5 @@ struct tile{
 
 SDL_Texture** load_MAP_Textures(const char* tilefilename, SDL_Renderer *ren);
 void loadMap(Tile tilemap[HAUTEUR][LARGEUR]);
+void free_MAP_Textures(SDL_Texture** tabMAPTextures);
 #endif
