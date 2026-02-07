@@ -97,6 +97,7 @@ int main(int argc, char *argv[])
     Mix_FreeMusic(music);
 
     // Clean up sortie normal 
+    Game_Free(&game);
     ASSETS_Destroy(&asset_manager); 
     SDL_DestroyRenderer(renderer);  
     SDL_DestroyWindow(window);

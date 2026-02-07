@@ -15,6 +15,8 @@
 const double TARGET_FPS = 60.0;
 const double TARGET_FRAME_TIME =  1000.0 / TARGET_FPS; // in ms
 
+#define SOUND_EFFECT_COUNT 28
+
 void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetManager *asset_manager, EntityPool *pool, InState *inState ,SDL_GameController *controller0,SDL_GameController *controller1) {
     game->renderer = renderer;
     game->window = window;
@@ -28,7 +30,7 @@ void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetMana
 
 
 
-    for (int i = 0; i < 28; i++) {
+    for (int i = 0; i < SOUND_EFFECT_COUNT; i++) {
         char path[64];
         snprintf(path, sizeof(path), "assets/sounds/Sound Effect (%d).wav", i+1);
 
@@ -36,6 +38,12 @@ void GAME_Init(Game *game, SDL_Renderer *renderer, SDL_Window *window, AssetMana
         if (!game->sound[i]) {
             fprintf(stderr, "Failed to load %s: %s\n", path, Mix_GetError());
         }
+    }
+}
+
+void Game_Free(Game *game) {
+    for (int i = 0; i < SOUND_EFFECT_COUNT; i++) {
+        Mix_FreeChunk(game->sound[i]);
     }
 }
 
