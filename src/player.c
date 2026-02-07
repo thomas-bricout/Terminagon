@@ -44,6 +44,8 @@ EntityID PLAYER_Spawn(EntityPool *pool, InState *inState, SDL_FPoint position) {
     POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX | COMPONENT_HITBOX | COMPONENT_TARGET | COMPONENT_VELOCITY, player_loc);
     
     pool->player_amount ++;
+
+    return pool->player_id[pool->player_amount];
 }
 
 EntityID POOL_SpawnArrow(EntityPool *pool, SDL_FPoint position, double angle) {
