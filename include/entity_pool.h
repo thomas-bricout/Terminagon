@@ -34,6 +34,7 @@ typedef enum ComponentFlags {
     COMPONENT_AI            = 0b0000001000000000,
     COMPONENT_TARGET        = 0b0000010000000000,
     COMPONENT_ANIM          = 0b0000100000000000,
+    COMPONENT_PLAYER        = 0b0001000000000000,
 } ComponentFlags;
 
 struct EntityPool {

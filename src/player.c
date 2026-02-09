@@ -41,7 +41,7 @@ EntityID PLAYER_Spawn(EntityPool *pool, InState *inState, SDL_FPoint position) {
     pool->hit_box[player_loc] = (SDL_FRect) {-40., -40., 90., 90.};//{-50., -50., 100., 100.};
     pool->health_point[player_loc] = 20;
 
-    POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX | COMPONENT_HITBOX | COMPONENT_TARGET | COMPONENT_VELOCITY, player_loc);
+    POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX | COMPONENT_HITBOX | COMPONENT_TARGET | COMPONENT_VELOCITY | COMPONENT_PLAYER, player_loc);
     
     pool->player_amount ++;
 
@@ -89,6 +89,8 @@ void PLAYER_System(Game *game, double current_time) {
     EntityPool *pool = game->pool;
 
     for (int i = 0; i < pool->player_amount; i++) {
+        if (POOL_LacksComponentFlags(pool, COMPONENT_POSITION, pool->player_id[i].location)) continue;
+
         int playerLocation = pool->player_id[i].location;
 
         SDL_FPoint *playerVelocity = &pool->velocity[playerLocation];

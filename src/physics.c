@@ -208,10 +208,12 @@ void PHYSICS_UpdateHitPoints(EntityPool *pool, double current_time) {
             pool->health_point[i] --;
             pool->last_hit[i] = current_time;
             if (pool->health_point[i] <= 0) {
-                printf("death\n");
-                // if (POOL_LacksComponentFlags(pool, COMPONENT_AI, i)) { continue; }
-                POOL_DestroyEntityFromIndex(pool, i);
-                ENEMY_SpawnDeathAnim(pool, pool->position[i], current_time);
+                if (POOL_LacksComponentFlags(pool, COMPONENT_PLAYER, i)) {
+                    POOL_DestroyEntityFromIndex(pool, i);
+                    ENEMY_SpawnDeathAnim(pool, pool->position[i], current_time);
+                } else {
+                    POOL_RemoveComponentFlags(pool, COMPONENT_POSITION, i);
+                }
             }
         }
     }
