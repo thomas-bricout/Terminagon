@@ -57,7 +57,7 @@ void RENDER_RenderAll(Game *game) {
         if (POOL_LacksComponentFlags(pool, COMPONENT_POSITION | COMPONENT_DISPLAYRECT | COMPONENT_TEXTURE, i)) { continue; }
 
         SDL_Texture *tex;
-        ASSETS_AccessTexture(&tex, asset_manager, pool->tex_location[i]);
+        ASSETS_AccessTexture(&tex, asset_manager, pool->tex[i]);
         
         SDL_Rect dst = RECT_Offset(pool->display_rect[i], FPOINT_ToPoint(FPOINT_RelativePoint(pool->position[i], camera_pos)));
 

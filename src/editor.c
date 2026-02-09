@@ -32,7 +32,7 @@ void EDITOR_EntityFromArchetype(Game *game, EntityArchetype archetype, SDL_FPoin
 
     switch (archetype) {
         case ARCHETYPE_PLAYER:
-            pool->tex_location[i] = TEX_DEBUG;
+            pool->tex[i] = TEX_DEBUG;
             pool->display_rect[i] = GRID_RECT;
             pool->collision_box[i] = GRID_FRECT;
             pool->velocity[i] = (SDL_FPoint) {0., 0.};
@@ -41,7 +41,7 @@ void EDITOR_EntityFromArchetype(Game *game, EntityArchetype archetype, SDL_FPoin
             break;   
         default:
         case ARCHETYPE_DEBUG:
-            pool->tex_location[i] = TEX_DEBUG;
+            pool->tex[i] = TEX_DEBUG;
             pool->display_rect[i] = (SDL_Rect) GRID_RECT;
             pool->collision_box[i] = (SDL_FRect) GRID_FRECT;
 

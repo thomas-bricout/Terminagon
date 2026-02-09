@@ -9,9 +9,9 @@ void ANIM_System(EntityPool *pool, double current_time) {
         switch (pool->anim[i].anim) {
             case ANIM_DEATH:
             if ((int) (delay / 100.) % 2) {
-                pool->tex_location[i] = TEX_DEATH_ANIM3;
+                pool->tex[i] = TEX_DEATH_ANIM3;
             } else {
-                pool->tex_location[i] = TEX_DEATH_ANIM1;
+                pool->tex[i] = TEX_DEATH_ANIM1;
             }
 
             if (delay >= DEATH_ANIM_DISAPPEAR_TIME ) {

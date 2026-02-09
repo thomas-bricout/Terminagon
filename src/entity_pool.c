@@ -33,7 +33,7 @@ void POOL_Init(EntityPool *pool) {
 
     for (int i = 0; i < MAX_ENTITY_COUNT; i++) {
         pool->id[i] = default_id;
-        pool->tex_location[i] = TEX_DEBUG;
+        pool->tex[i] = TEX_DEBUG;
         pool->component_flags[i] = COMPONENT_NONE;
     }
 }
@@ -71,11 +71,11 @@ EntityID POOL_NewEntity(EntityPool *pool) {
     return new_id;
 }
 
-EntityID POOL_NewEntityClassic(EntityPool *pool, TextureLocation tex_location, SDL_Rect display_rect, SDL_FPoint position) {
+EntityID POOL_NewEntityClassic(EntityPool *pool, TextureIndex tex, SDL_Rect display_rect, SDL_FPoint position) {
     // Create new entity with new a new unique id and a designated position in the pool
     EntityID new_id = POOL_NewEntity(pool);
 
-    pool->tex_location[new_id.location] = tex_location;
+    pool->tex[new_id.location] = tex;
     pool->display_rect[new_id.location] = display_rect;
     pool->position[new_id.location] = position;
 

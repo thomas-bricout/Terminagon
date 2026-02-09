@@ -12,7 +12,7 @@ void draw_ui(Game *game) {
 void draw_hearts(AssetManager *assetManager, SDL_Renderer *renderer, int hp, int player) {
     for ( int i = 0; i < 10; i++ ) {
         SDL_Texture *tex = NULL;
-        TextureLocation tex_l = TEX_HEART_FULL;
+        TextureIndex tex_l = TEX_HEART_FULL;
 
         if (hp - i*2 == 1) {
             tex_l = TEX_HEART_HALF;

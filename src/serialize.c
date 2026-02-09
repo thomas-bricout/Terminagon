@@ -98,7 +98,7 @@ json_t *JSON_FromEntity(EntityPool *pool, int loc) {
 
     json_object_set_new(entity, "components", json_integer(pool->component_flags[loc]));
     
-    json_object_set_new(entity, "texture", json_integer(pool->tex_location[loc]));
+    json_object_set_new(entity, "texture", json_integer(pool->tex[loc]));
 
     json_object_set_new(entity, "displayrect", JSON_Rect(pool->display_rect[loc]));
 
@@ -126,7 +126,7 @@ void JSON_ToEntity(EntityPool *pool, json_t *json) {
     json_t *velocity = json_object_get(json, "velocity");
 
     pool->component_flags[i] = json_integer_value(components);
-    if (!POOL_LacksComponentFlags(pool, COMPONENT_TEXTURE       , i)) { pool->tex_location[i] = json_integer_value(texture);     }
+    if (!POOL_LacksComponentFlags(pool, COMPONENT_TEXTURE       , i)) { pool->tex[i] = json_integer_value(texture);     }
 
     if (!POOL_LacksComponentFlags(pool, COMPONENT_DISPLAYRECT   , i)) { pool->display_rect[i] = JSON_ToRect(displayrect); }
 

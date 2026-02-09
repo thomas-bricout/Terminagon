@@ -48,7 +48,7 @@ typedef enum {
     TEX_MOBLIN_UP,
     TEX_MOBLIN_LEFT,
     TEX_MOBLIN_DOWN,
-} TextureLocation ;
+} TextureIndex ;
 
 typedef struct {
     TTF_Font *debug_font;
@@ -59,6 +59,6 @@ typedef struct {
 void ASSETS_Init(AssetManager *assetManager, SDL_Renderer *renderer);
 void ASSETS_Load(AssetManager *assetManager, SDL_Renderer *renderer);
 void ASSETS_Destroy(AssetManager *assetManager);
-void ASSETS_AccessTexture(SDL_Texture **texture, AssetManager *assetManager, TextureLocation textureLocation);
+void ASSETS_AccessTexture(SDL_Texture **texture, AssetManager *assetManager, TextureIndex textureLocation);
 
 #endif

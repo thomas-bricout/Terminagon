@@ -83,7 +83,7 @@ void ASSETS_Destroy(AssetManager *assetManager) {
     free_MAP_Textures(assetManager->map_assets);
 }
 
-void ASSETS_AccessTexture(SDL_Texture **texture, AssetManager *assetManager, TextureLocation textureLocation) {
-    assert(textureLocation < ASSET_ARRAY_LENGTH);
-    *texture = assetManager->asset_array[textureLocation];
+void ASSETS_AccessTexture(SDL_Texture **texture, AssetManager *assetManager, TextureIndex textureIndex) {
+    assert(textureIndex < ASSET_ARRAY_LENGTH);
+    *texture = assetManager->asset_array[textureIndex];
 }

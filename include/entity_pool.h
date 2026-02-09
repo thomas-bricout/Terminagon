@@ -51,7 +51,7 @@ struct EntityPool {
 
     // Each list contains a specific component for all entities in the game
     EntityID id[MAX_ENTITY_COUNT];
-    TextureLocation tex_location[MAX_ENTITY_COUNT];
+    TextureIndex tex[MAX_ENTITY_COUNT];
     
     SDL_Rect display_rect[MAX_ENTITY_COUNT]; // Where to display the entity relative to its position
     SDL_FRect collision_box[MAX_ENTITY_COUNT];
@@ -74,7 +74,7 @@ struct EntityPool {
 void POOL_Init(EntityPool *pool);
 void POOL_Load(EntityPool *pool, InState *inState);
 EntityID POOL_NewEntity(EntityPool *pool);
-EntityID POOL_NewEntityClassic(EntityPool *pool, TextureLocation tex_location, SDL_Rect display_rect, SDL_FPoint position);
+EntityID POOL_NewEntityClassic(EntityPool *pool, TextureIndex tex, SDL_Rect display_rect, SDL_FPoint position);
 void POOL_DestroyEntity(EntityPool *pool, EntityID id);
 void POOL_AddComponentFlags(EntityPool *pool, ComponentFlags component_flags, int location);
 bool POOL_LacksComponentFlags(EntityPool *pool, ComponentFlags component_flags, int location);

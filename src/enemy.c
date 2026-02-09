@@ -14,7 +14,7 @@ void ENEMY_System(EntityPool *pool, double current_time) {
         if (POOL_LacksComponentFlags(pool, COMPONENT_AI | COMPONENT_POSITION, index_enemy)) { continue; }
         SDL_FPoint *enemy_position = &pool->position[index_enemy];
         SDL_FPoint *enemy_velocity = &pool->velocity[index_enemy];
-        TextureLocation *tex = &pool->tex_location[index_enemy];
+        TextureIndex *tex = &pool->tex[index_enemy];
         EnemyComponent *enemy = &pool->enemy[index_enemy];
 
         int j_closest = ENEMY_LocateNearestTarget(pool, *enemy_position, index_enemy);
@@ -152,7 +152,7 @@ EntityID ENEMY_SpawnEnemyProjectile(EntityPool *pool, SDL_FPoint position, int d
             POOL_AddComponentFlags(pool, COMPONENT_DAMAGEBOX | COMPONENT_VELOCITY | COMPONENT_PROJECTILE, id.location);
             break;
         case MOBLIN:
-            TextureLocation tex = TEX_ARROW_RIGHT + direction;
+            TextureIndex tex = TEX_ARROW_RIGHT + direction;
             id = POOL_NewEntityClassic(pool, tex, (SDL_Rect) {-50, -50, 100, 100}, position);
 
             pool->damage_box[id.location] = (SDL_FRect) {-5., -5., 10., 10.};

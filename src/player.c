@@ -73,7 +73,7 @@ EntityID POOL_SpawnArrow(EntityPool *pool, SDL_FPoint position, double angle) {
     }
     position = FPOINT_Offset(position,vect);  //(SDL_FPoint) {cos(angle)*100,sin(angle)*100}
     int orientation = AngleToDirection(angle);
-    TextureLocation tex = TEX_ARROW_RIGHT + orientation;
+    TextureIndex tex = TEX_ARROW_RIGHT + orientation;
 
     EntityID id = POOL_NewEntityClassic(pool, tex, display_rect, position);
 
@@ -262,7 +262,7 @@ void PLAYER_System(Game *game, double current_time) {
 
 void PLAYER_Animate(EntityPool *pool, int playerIndex, double current_time) {
     int playerLocation = pool->player_id[playerIndex].location;
-    TextureLocation *tex = &pool->tex_location[playerLocation];
+    TextureIndex *tex = &pool->tex[playerLocation];
     PlayerComponent *pc = &pool->player_component[playerIndex];
     SDL_Rect *rect = &pool->display_rect[playerLocation];
     double delay = current_time - pc->actionTimeStamp;
