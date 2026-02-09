@@ -148,8 +148,10 @@ EntityID ENEMY_SpawnEnemyProjectile(EntityPool *pool, SDL_FPoint position, int d
             pool->damage_box[id.location] = (SDL_FRect) {-5., -5., 10., 10.};
             pool->collision_box[id.location] = (SDL_FRect) {-4., -4., 9., 9.};
             pool->velocity[id.location] = (SDL_FPoint) {vect.x / 100. * OCTOROK_PROJECTILE_SPEED, vect.y / 100. * OCTOROK_PROJECTILE_SPEED};
+            pool->hit_box[id.location] = (SDL_FRect) {-25., -25., 50., 50.};
+            pool->health_point[id.location] = 1;
     
-            POOL_AddComponentFlags(pool, COMPONENT_DAMAGEBOX | COMPONENT_VELOCITY | COMPONENT_PROJECTILE, id.location);
+            POOL_AddComponentFlags(pool, COMPONENT_DAMAGEBOX | COMPONENT_VELOCITY | COMPONENT_PROJECTILE | COMPONENT_HITBOX, id.location);
             break;
         case MOBLIN:
             TextureIndex tex = TEX_ARROW_RIGHT + direction;
@@ -158,8 +160,10 @@ EntityID ENEMY_SpawnEnemyProjectile(EntityPool *pool, SDL_FPoint position, int d
             pool->damage_box[id.location] = (SDL_FRect) {-5., -5., 10., 10.};
             pool->collision_box[id.location] = (SDL_FRect) {-4., -4., 9., 9.};
             pool->velocity[id.location] = (SDL_FPoint) {vect.x / 100. * MOBLIN_PROJECTILE_SPEED, vect.y / 100. * MOBLIN_PROJECTILE_SPEED};
+            pool->hit_box[id.location] = (SDL_FRect) {-50., -50., 100., 100.};
+            pool->health_point[id.location] = 1;
     
-            POOL_AddComponentFlags(pool, COMPONENT_DAMAGEBOX | COMPONENT_VELOCITY | COMPONENT_PROJECTILE, id.location);
+            POOL_AddComponentFlags(pool, COMPONENT_DAMAGEBOX | COMPONENT_VELOCITY | COMPONENT_PROJECTILE | COMPONENT_HITBOX, id.location);
             break;
     }
 
