@@ -143,7 +143,7 @@ EntityID ENEMY_SpawnEnemyProjectile(EntityPool *pool, SDL_FPoint position, int d
 
     switch (type) {
         case OCTOROK:
-            id = POOL_NewEntityClassic(pool, TEX_OCTOROK_UP, (SDL_Rect) {-5, -5, 10, 10}, position);
+            id = POOL_NewEntityClassic(pool, TEX_OCTOROK_PROJECTILE, (SDL_Rect) {-25, -25, 50, 50}, position);
 
             pool->damage_box[id.location] = (SDL_FRect) {-5., -5., 10., 10.};
             pool->collision_box[id.location] = (SDL_FRect) {-4., -4., 9., 9.};
@@ -152,7 +152,8 @@ EntityID ENEMY_SpawnEnemyProjectile(EntityPool *pool, SDL_FPoint position, int d
             POOL_AddComponentFlags(pool, COMPONENT_DAMAGEBOX | COMPONENT_VELOCITY | COMPONENT_PROJECTILE, id.location);
             break;
         case MOBLIN:
-            id = POOL_NewEntityClassic(pool, TEX_ARROW_UP, (SDL_Rect) {-5, -5, 10, 10}, position);
+            TextureLocation tex = TEX_ARROW_RIGHT + direction;
+            id = POOL_NewEntityClassic(pool, tex, (SDL_Rect) {-50, -50, 100, 100}, position);
 
             pool->damage_box[id.location] = (SDL_FRect) {-5., -5., 10., 10.};
             pool->collision_box[id.location] = (SDL_FRect) {-4., -4., 9., 9.};
