@@ -4,6 +4,7 @@
 #include "geometry.h"
 #include "physics.h"
 
+
 void PHYSICS_MoveAll(Tile map[HAUTEUR][LARGEUR], EntityPool *pool, double deltaTime) {
     for (int i = 0; i < pool->lastEntitylocation; i++) {
         // if (!pool->position_map[i] || !pool->velocity_map[i]) { continue; }
@@ -13,8 +14,13 @@ void PHYSICS_MoveAll(Tile map[HAUTEUR][LARGEUR], EntityPool *pool, double deltaT
             bool collided = false;
             int axis = 0;
 
+
+
             SDL_FPoint collider_pos = pool->position[i];
             SDL_FRect collider_box = FRECT_Offset(pool->collision_box[i], FPOINT_ApplyVelocity(collider_pos, pool->velocity[i], deltaTime));
+
+            SDL_FRect collider_box_actuel = FRECT_Offset(pool->collision_box[i], collider_pos);
+
             SDL_FPoint velocity_x = {pool->velocity[i].x,0.};
             SDL_FPoint velocity_y = {0.,pool->velocity[i].y};
             SDL_FRect collider_box_X = FRECT_Offset(pool->collision_box[i], FPOINT_ApplyVelocity(collider_pos, velocity_x, deltaTime));
@@ -51,6 +57,7 @@ void PHYSICS_MoveAll(Tile map[HAUTEUR][LARGEUR], EntityPool *pool, double deltaT
                         continue;
                     }
                 }
+                if(SDL_HasIntersectionF(&collider_box_actuel, &obstacle_box)) continue;
                 collided = true;
                 goto resultat;
             }
@@ -91,6 +98,9 @@ void PHYSICS_MoveAll(Tile map[HAUTEUR][LARGEUR], EntityPool *pool, double deltaT
                                 continue;
                             }
                         }
+
+
+                        if(SDL_HasIntersectionF(&collider_box_actuel, &obstacle_box)) continue;
                         
                         collided = true;
                         goto resultat;
@@ -212,7 +222,17 @@ void PHYSICS_UpdateHitPoints(EntityPool *pool, double current_time) {
                     POOL_DestroyEntityFromIndex(pool, i);
                     ENEMY_SpawnDeathAnim(pool, pool->position[i], current_time);
                 } else {
-                    POOL_RemoveComponentFlags(pool, COMPONENT_POSITION, i);
+                    //POOL_RemoveComponentFlags(pool, COMPONENT_POSITION, i);
+                    int j;
+                    if(pool->player_id[0].location!=i){
+                        j=pool->player_id[0].location;
+                    }else{
+                        j=pool->player_id[1].location;
+                    }
+                    
+                    pool->position[i] = pool->position[j];
+                    pool->velocity[i] = (SDL_FPoint) {0.,0.};
+                    pool->health_point[i] = 5;
                 }
             }
         }
