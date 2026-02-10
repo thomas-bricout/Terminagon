@@ -100,12 +100,9 @@ void PLAYER_System(Game *game, double current_time) {
         double elapsed_time = current_time - pc->actionTimeStamp;
     
         // Whether player is ready to start a new action
-        bool available = pc->action == 0 && elapsed_time >= RECOVERY_TIME;
+        bool available = (pc->action == ACTION_NONE || pc->action == ACTION_SHIELDING) && elapsed_time >= RECOVERY_TIME;
         if (available) { // Treat new actions
-            if (inState->W) {
-                pc->action = ACTION_SHIELDING;
-                pc->actionTimeStamp = current_time;
-            } else if (inState->C) {
+            if (inState->C) {
                 pc->action = ACTION_BOW_AIMING;
                 pc->actionTimeStamp = current_time;
             } else if (inState->V) {
@@ -114,8 +111,38 @@ void PLAYER_System(Game *game, double current_time) {
 
                 if (game->sound[0])
                     Mix_PlayChannel(-1, game->sound[0], 0);
+            }else if(inState->X) {
+                pc->action = ACTION_SPRINT;
+                pc->actionTimeStamp = current_time;
+            }
+        } 
 
-                // TODO: Placre la damage box devant le joueur
+        // Treat current action
+        switch(pc->action) {
+            case ACTION_SPRINT:
+                if (!inState->X) {
+                    pc->action = ACTION_NONE;
+                    pc->actionTimeStamp = current_time;
+                }
+                break;
+            case ACTION_DASHING:
+                if (elapsed_time >= DASHING_TIME) {
+                    pc->action = ACTION_NONE;
+                    pc->actionTimeStamp = current_time;
+                }
+                break;
+            case ACTION_BOW_AIMING:
+                if (!inState->C) {
+                    if (elapsed_time >= BOW_AIMING_TIME) {
+                        POOL_SpawnArrow(pool, *playerPosition, pc->angle);
+                    }
+                    pc->action = ACTION_NONE;
+                    pc->actionTimeStamp = current_time;
+                }
+                break;
+            case ACTION_SHIELDING:
+                break;
+            case ACTION_SWORD:
                 POOL_AddComponentFlags(pool, COMPONENT_DAMAGEBOX, playerLocation);
                 double angle = pc->angle * 180. / 3.1415;
                 if (angle <= 45 && angle >= -45) { // Right
@@ -127,50 +154,19 @@ void PLAYER_System(Game *game, double current_time) {
                 } else if (angle >= 45 && angle <= 135) { // Down
                     pool->damage_box[playerLocation] = (SDL_FRect) {-10, 60, 20, 90};
                 }
-            }else if(inState->X) {
-                pc->action = ACTION_SPRINT;
-                pc->actionTimeStamp = current_time;
-            }
-        } else {        // Treat current action
-            switch(pc->action) {
-                case ACTION_SPRINT:
-                    if (!inState->X) {
-                        pc->action = ACTION_NONE;
-                        pc->actionTimeStamp = current_time;
-                    }
-                    break;
-                case ACTION_DASHING:
-                    if (elapsed_time >= DASHING_TIME) {
-                        pc->action = ACTION_NONE;
-                        pc->actionTimeStamp = current_time;
-                    }
-                    break;
-                case ACTION_BOW_AIMING:
-                    if (!inState->C) {
-                        if (elapsed_time >= BOW_AIMING_TIME) {
-                            POOL_SpawnArrow(pool, *playerPosition, pc->angle);
-                        }
-                        pc->action = ACTION_NONE;
-                        pc->actionTimeStamp = current_time;
-                    }
-                    break;
-                case ACTION_SHIELDING:
-                    if (!inState->W) {
-                        pc->action = ACTION_NONE;
-                        pc->actionTimeStamp = current_time;
-                    }
-                    break;
-                case ACTION_SWORD:
-                    if (elapsed_time >= ATTACK_TIME) {
-                        pc->action = ACTION_NONE;
-                        pc->actionTimeStamp = current_time;
 
-                        POOL_RemoveComponentFlags(pool, COMPONENT_DAMAGEBOX, playerLocation);
-                    }
-                    break;
-                case ACTION_NONE:
-                    break;
-            }
+                if (elapsed_time >= ATTACK_TIME) {
+                    pc->action = ACTION_NONE;
+                    pc->actionTimeStamp = current_time;
+
+                    POOL_RemoveComponentFlags(pool, COMPONENT_DAMAGEBOX, playerLocation);
+                }
+                break;
+            case ACTION_NONE:
+                if (elapsed_time >= RECOVERY_TIME) {
+                    pc->action = ACTION_SHIELDING;
+                }
+                break;
         }
 
         // Set playerVelocity
@@ -211,6 +207,27 @@ void PLAYER_System(Game *game, double current_time) {
             *playerVelocity = FPOINT_VelocityFromAngle(pc->angle, player_speed);
         } else {
             *playerVelocity = (SDL_FPoint) {0., 0.};
+            // Adapt collision box to protect player from enemy attacks
+        }
+
+        if ( pc->action == ACTION_SHIELDING && !pc->walking ) {
+            int orientation = AngleToDirection(pc->angle);
+            switch ( orientation ) {
+                case 0: // Right
+                    pool->collision_box[playerLocation] = (SDL_FRect) {-50., -50., 150., 100.}; 
+                    break;
+                case 1: // Up
+                    pool->collision_box[playerLocation] = (SDL_FRect) {-50., -100., 100., 150.}; 
+                    break;
+                case 2: // Left
+                    pool->collision_box[playerLocation] = (SDL_FRect) {-100., -50., 150., 100.}; 
+                    break;
+                case 3: // Down
+                    pool->collision_box[playerLocation] = (SDL_FRect) {-50., -50., 100., 150.}; 
+                    break;
+            }
+        } else {
+            pool->collision_box[playerLocation] = (SDL_FRect) {-50., -50., 100., 100.}; 
         }
 
         // Animate the player
