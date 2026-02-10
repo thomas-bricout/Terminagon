@@ -148,8 +148,9 @@ void PLAYER_System(Game *game, double current_time) {
                     break;
                 case ACTION_BOW_AIMING:
                     if (!inState->C) {
-                        if (elapsed_time >= BOW_AIMING_TIME) {
+                        if (elapsed_time >= BOW_AIMING_TIME && pc->number_arrows > 0) {
                             POOL_SpawnArrow(pool, *playerPosition, pc->angle);
+                            pc->number_arrows--;
                         }
                         pc->action = ACTION_NONE;
                         pc->actionTimeStamp = current_time;
