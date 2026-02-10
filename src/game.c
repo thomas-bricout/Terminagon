@@ -110,6 +110,7 @@ void Game_ReadEvents(Game *game, double current_time) {
 
 // Gestion de la boucle principale, et de la limitation des fps
 void GAME_Run(Game *game) {
+    int ms_count_dead = 0;
     Uint64 perf_freq = SDL_GetPerformanceFrequency();
     Uint64 NOW = SDL_GetPerformanceCounter();
     Uint64 LAST = 0;
@@ -149,7 +150,17 @@ void GAME_Run(Game *game) {
             MoveCameraIJKL(game, deltaTime);
         
             ANIM_System(game->pool, current_time);
-        } 
+        }
+
+        if(!POOL_LacksComponentFlags(game->pool, COMPONENT_PLAYER_DEAD, game->pool->player_id[0].location) && !POOL_LacksComponentFlags(game->pool, COMPONENT_PLAYER_DEAD, game->pool->player_id[1].location)){
+            if(ms_count_dead>2000){
+                POOL_Init(game->pool);
+                POOL_Load(game->pool, game->inState);
+                ms_count_dead=0;
+            }else{
+                ms_count_dead+=deltaTime;
+            }
+        }
 
         // Création du rendu
         ANIM_Hurt(game->pool, current_time);
