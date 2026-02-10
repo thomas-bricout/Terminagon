@@ -14,6 +14,7 @@ typedef enum {
     ENEMY_SHOOTING,
     ENEMY_SPAWN,
     ENEMY_HIDDEN,
+    ENEMY_KNOCKEDBACK,
 } EnemyAction;
 
 typedef struct EnemyComponent EnemyComponent;

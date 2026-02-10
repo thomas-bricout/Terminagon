@@ -4,15 +4,20 @@
 const double OCTOROK_WALK_TIME = 500.;
 const double OCTOROK_SHOOTING_TIME = 1000.;
 const double OCTOROK_PROJECTILE_SPEED = 0.3;
+const double OCTOROK_KNOCKBACK_SPEED = 2.0;
 
 const double MOBLIN_WALK_TIME = 500.;
 const double MOBLIN_SHOOTING_TIME = 1000.;
 const double MOBLIN_PROJECTILE_SPEED = 0.3;
+const double MOBLIN_KNOCKBACK_SPEED = 1.2;
 
 const double LEEVER_SPEED = 3.;
 const double LEEVER_SPAWN_TIME = 1000.;
 const double LEEVER_ANIMATION_PERIOD = 200.;
 const float LEEVER_RANGE_SQUARED = 400. * 400.;
+const double LEEVER_KNOCKBACK_SPEED = 2.4;
+
+const double KNOCKBACK_TIME = 700;
 
 void ENEMY_System(EntityPool *pool, double current_time) {
     for (int index_enemy = 0; index_enemy < pool->lastEntitylocation; index_enemy++) {
@@ -60,6 +65,13 @@ void ENEMY_System(EntityPool *pool, double current_time) {
                             ENEMY_SpawnEnemyProjectile(pool, *enemy_position, direction, MOBLIN);
                         }
                         break;
+                    case ENEMY_KNOCKEDBACK:
+                        *enemy_velocity = FPOINT_Mul(FPOINT_Normalize(relative_position), -MOBLIN_KNOCKBACK_SPEED);
+                        if (current_time - enemy->timeStamp > KNOCKBACK_TIME) {
+                            enemy->timeStamp = current_time;
+                            enemy->action = ENEMY_STILL;
+                        }
+                        break;
                 }
                 break;
             case OCTOROK:
@@ -87,6 +99,13 @@ void ENEMY_System(EntityPool *pool, double current_time) {
                             enemy->timeStamp = current_time;
                             enemy->action = ENEMY_WALK;
                             ENEMY_SpawnEnemyProjectile(pool, *enemy_position, direction, OCTOROK);
+                        }
+                        break;
+                    case ENEMY_KNOCKEDBACK:
+                        *enemy_velocity = FPOINT_Mul(FPOINT_Normalize(relative_position), -OCTOROK_KNOCKBACK_SPEED);
+                        if (current_time - enemy->timeStamp > KNOCKBACK_TIME) {
+                            enemy->timeStamp = current_time;
+                            enemy->action = ENEMY_STILL;
                         }
                         break;
                 }
@@ -126,6 +145,14 @@ void ENEMY_System(EntityPool *pool, double current_time) {
                         break;
                     case ENEMY_SHOOTING:
                         enemy->action = ENEMY_STILL;
+                        break;
+                    case ENEMY_KNOCKEDBACK:
+                        *enemy_velocity = FPOINT_Mul(FPOINT_Normalize(relative_position), -LEEVER_KNOCKBACK_SPEED);
+                        if (current_time - enemy->timeStamp > KNOCKBACK_TIME) {
+                            enemy->timeStamp = current_time;
+                            enemy->action = ENEMY_STILL;
+                        }
+                        break;
                 }
             break;
         }

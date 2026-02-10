@@ -49,10 +49,13 @@ void EDITOR_EntityFromArchetype(Game *game, EntityArchetype archetype, SDL_FPoin
             break;
         case ARCHETYPE_OCTOROK:
             ENEMY_SpawnOctorok(pool, pos);
+            break;
         case ARCHETYPE_MOBLIN:
             ENEMY_SpawnMoblin(pool, pos);
+            break;
         case ARCHETYPE_LEEVER:
             ENEMY_SpawnLeever(pool, pos, current_time, 0);
+            break;
     }
 } 
 
