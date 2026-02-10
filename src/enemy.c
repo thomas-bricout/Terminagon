@@ -101,6 +101,7 @@ void ENEMY_System(EntityPool *pool, double current_time) {
                         } else {
                             *tex = TEX_LEEVER_SPAWN1;
                         }
+                        break;
                     case ENEMY_STILL:
                         *enemy_velocity = (SDL_FPoint) {0, 0};
                         enemy->action = ENEMY_WALK;
