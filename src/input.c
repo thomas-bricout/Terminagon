@@ -236,3 +236,24 @@ void PlayerAddSwordCollision(EntityPool *pool, EntityID id) {
     pool->damage_box[id.location] = (SDL_FRect) {100., 100., 100., 100.};
     POOL_AddComponentFlags(pool, COMPONENT_DAMAGEBOX, id.location);
 }
+
+bool IsInstateDefault(InState *inState) {
+    bool is_default = true;
+
+    if (inState->keyboard== true) is_default = false;
+
+    if (inState->UP      == true) is_default = false;
+    if (inState->DOWN    == true) is_default = false;
+    if (inState->LEFT    == true) is_default = false;
+    if (inState->RIGHT   == true) is_default = false;
+    if (inState->W       == true) is_default = false;
+    if (inState->X       == true) is_default = false;
+    if (inState->C       == true) is_default = false;
+
+    if (inState->ToggledF3 == true) is_default = false;
+    if (inState->ToggledF4 == true) is_default = false;
+    if (inState->ToggledGrid == true) is_default = false;
+    if (inState->paused == true) is_default = false;
+
+    return is_default;
+}

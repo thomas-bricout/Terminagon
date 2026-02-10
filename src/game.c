@@ -119,6 +119,7 @@ void GAME_Run(Game *game) {
     double elapsed = 0;
 
     bool paused = false;
+    bool message = true;
 
     while (!game->inState->QUIT) {
         // Calculating deltaTime, FPS and logging them
@@ -132,9 +133,11 @@ void GAME_Run(Game *game) {
         // Read game events
         Game_ReadEvents(game, current_time);
 
+        if (!IsInstateDefault(&game->inState[0]) || !IsInstateDefault(&game->inState[1])) message = false;
+
         paused = game->pool->player_component->inState->paused;
 
-        if (!paused) {
+        if (!paused && !message) {
             PLAYER_System(game, current_time);
             ENEMY_System(game->pool, current_time);
 
@@ -152,6 +155,7 @@ void GAME_Run(Game *game) {
         RENDER_RenderAll(game);
         draw_ui(game);
         if (paused) draw_pause(game);
+        if (message) draw_welcome(game);
         
         // Logging
         DEBUG_DisplayDebug(game, deltaTime, FPS, elapsed, current_time);

@@ -52,5 +52,6 @@ struct InState {
 void InState_Init(InState *inState);
 void InState_Update(InState *inState, SDL_Event event);
 void InState_Update_gamecontroller(InState *inState, SDL_Event event,SDL_GameController *controller);
+bool IsInstateDefault(InState *inState);
 
 #endif
