@@ -1,13 +1,14 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 
-#define ARCHETYPE_COUNT 4
+#define ARCHETYPE_COUNT 5
 typedef enum EntityArchetype EntityArchetype;
 enum EntityArchetype {
     ARCHETYPE_DEBUG,
     ARCHETYPE_PLAYER,
     ARCHETYPE_OCTOROK,
     ARCHETYPE_MOBLIN,
+    ARCHETYPE_LEEVER,
 };
 
 #include "game.h"
@@ -20,8 +21,8 @@ enum EntityArchetype {
 #define GRID_RECT (SDL_Rect) {-HALF_GRIDSIZE, -HALF_GRIDSIZE, GRID_SIZE, GRID_SIZE}
 #define GRID_FRECT (SDL_FRect) {-HALF_GRIDSIZE, -HALF_GRIDSIZE, GRID_SIZE, GRID_SIZE}
 
-void EDITOR_PlaceEntity(Game *game);
-void EDITOR_EntityFromArchetype(Game *game, EntityArchetype archetype, SDL_FPoint pos);
+void EDITOR_PlaceEntity(Game *game, double current_time);
+void EDITOR_EntityFromArchetype(Game *game, EntityArchetype archetype, SDL_FPoint pos, double current_time);
 
 void EDITOR_DisplayInfo(Game *game);
 void EDITOR_DrawGrid(Game *game);

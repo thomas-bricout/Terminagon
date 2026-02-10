@@ -47,7 +47,7 @@ void Game_Free(Game *game) {
     }
 }
 
-void Game_ReadEvents(Game *game) {
+void Game_ReadEvents(Game *game, double current_time) {
     SDL_Event event;
 
     InState *inState1 = game->inState;
@@ -71,7 +71,7 @@ void Game_ReadEvents(Game *game) {
                 inState1->mouse.y=window_h;
             }
             if (inState1->Tplace) {
-                EDITOR_PlaceEntity(game);
+                EDITOR_PlaceEntity(game, current_time);
             } else if (inState1->Tdestroy) {
                 EDITOR_DeleteUnderMouse(game);
             }
@@ -100,7 +100,7 @@ void Game_ReadEvents(Game *game) {
         }*/
         if (event.type == SDL_MOUSEBUTTONDOWN && inState1->ToggledF4 && inState1->keyboard) {
             if (event.button.button == SDL_BUTTON_LEFT) {
-                EDITOR_PlaceEntity(game);
+                EDITOR_PlaceEntity(game, current_time);
             } else if (event.button.button == SDL_BUTTON_RIGHT) {
                 EDITOR_DeleteUnderMouse(game);
             }
@@ -128,7 +128,7 @@ void GAME_Run(Game *game) {
         FPS = 1000 / deltaTime;
 
         // Read game events
-        Game_ReadEvents(game);
+        Game_ReadEvents(game, current_time);
         
         // Physiques et Mécaniques
         PLAYER_System(game, current_time);

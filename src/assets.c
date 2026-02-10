@@ -59,9 +59,18 @@ void ASSETS_Load(AssetManager *assetManager, SDL_Renderer *renderer) {
         "assets/MoblinRight.png",
         "assets/MoblinUp.png",
         "assets/MoblinLeft.png",
-        "assets/MoblinDown.png",
+        "assets/Moblisrc/assets.c",
+        "assets/LeeversSpawn1.png",
+        "assets/LeeversSpawn2.pngnDown.png",
+        "assets/LeeversRedSpawn.png",
+        "assets/LeeversRed1.png",
+        "assets/LeeversRed2.png",
+        "assets/LeeversBlueSpawn.png",
+        "assets/LeeversBlue1.png",
+        "assets/LeeversBlue2.png",
     };
-    int filenames_length = 41;
+
+    int filenames_length = 49;
 
     for (int i = 0; i < filenames_length; i++) {
         assetManager->asset_array[i] = IMG_LoadTexture(renderer, filenames[i]);

@@ -43,8 +43,9 @@ void POOL_Load(EntityPool *pool, InState *inState) {
     PLAYER_Spawn(pool, inState + 1, (SDL_FPoint) {100*120., 100*82.});
 
     // Adds a few enemies for trying them out
-    ENEMY_SpawnOctorok(pool, (SDL_FPoint) {100*117., 100*84.});
-    ENEMY_SpawnMoblin(pool, (SDL_FPoint) {100*118., 100*85.});
+    // ENEMY_SpawnOctorok(pool, (SDL_FPoint) {100*117., 100*84.});
+    // ENEMY_SpawnMoblin(pool, (SDL_FPoint) {100*118., 100*85.});
+    ENEMY_SpawnLeever(pool, (SDL_FPoint) {100*118., 100*85.}, 0., 0);
 }
 
 EntityID POOL_NewEntity(EntityPool *pool) {
