@@ -13,5 +13,6 @@ typedef struct {
 #include "entity_pool.h"
 
 void ANIM_System(EntityPool *pool, double current_time);
+void ANIM_Hurt(EntityPool *pool, double current_time);
 
 #endif

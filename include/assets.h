@@ -56,6 +56,7 @@ typedef enum {
     TEX_LEEVER_BLUESPAWN,
     TEX_LEEVER_BLUE1,
     TEX_LEEVER_BLUE2,
+    TEX_VOID,
 } TextureIndex ;
 
 typedef struct {

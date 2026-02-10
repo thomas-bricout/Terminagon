@@ -68,9 +68,10 @@ void ASSETS_Load(AssetManager *assetManager, SDL_Renderer *renderer) {
         "assets/LeeversBlueSpawn.png",
         "assets/LeeversBlue1.png",
         "assets/LeeversBlue2.png",
+        "assets/void.png",
     };
 
-    int filenames_length = 49;
+    int filenames_length = 50;
 
     for (int i = 0; i < filenames_length; i++) {
         assetManager->asset_array[i] = IMG_LoadTexture(renderer, filenames[i]);

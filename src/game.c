@@ -152,6 +152,7 @@ void GAME_Run(Game *game) {
         } 
 
         // Création du rendu
+        ANIM_Hurt(game->pool, current_time);
         RENDER_RenderAll(game);
         draw_ui(game);
         if (paused) draw_pause(game);
