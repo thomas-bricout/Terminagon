@@ -322,6 +322,8 @@ void PHYSICS_UpdateHitPoints(EntityPool *pool, double current_time) {
                     pool->velocity[i] = (SDL_FPoint) {0.,0.};
                     pool->health_point[i] = 5;
                 }
+            } else if ( !POOL_LacksComponentFlags(pool, COMPONENT_AI, i) ) {
+                pool->enemy[i].action = ENEMY_KNOCKEDBACK;
             }
         }
     }

@@ -4,10 +4,20 @@
 const double OCTOROK_WALK_TIME = 500.;
 const double OCTOROK_SHOOTING_TIME = 1000.;
 const double OCTOROK_PROJECTILE_SPEED = 0.3;
+const double OCTOROK_KNOCKBACK_SPEED = 2.0;
 
 const double MOBLIN_WALK_TIME = 500.;
 const double MOBLIN_SHOOTING_TIME = 1000.;
 const double MOBLIN_PROJECTILE_SPEED = 0.3;
+const double MOBLIN_KNOCKBACK_SPEED = 1.2;
+
+const double LEEVER_SPEED = 3.;
+const double LEEVER_SPAWN_TIME = 1000.;
+const double LEEVER_ANIMATION_PERIOD = 200.;
+const float LEEVER_RANGE_SQUARED = 400. * 400.;
+const double LEEVER_KNOCKBACK_SPEED = 2.4;
+
+const double KNOCKBACK_TIME = 700;
 
 void ENEMY_System(EntityPool *pool, double current_time) {
     for (int index_enemy = 0; index_enemy < pool->lastEntitylocation; index_enemy++) {
@@ -22,6 +32,7 @@ void ENEMY_System(EntityPool *pool, double current_time) {
         // Calculate and gather information about target
         SDL_FPoint target_position = pool->position[j_closest];
         SDL_FPoint relative_position = FPOINT_RelativePoint(target_position, *enemy_position);
+        float distance_squared = FPOINT_DistanceSquared(target_position, *enemy_position);
 
         // Calculate direction
         double angle = atan2((double) relative_position.y,(double) relative_position.x);
@@ -31,6 +42,9 @@ void ENEMY_System(EntityPool *pool, double current_time) {
             case MOBLIN:
                 *tex = TEX_MOBLIN_RIGHT + direction;
                 switch (pool->enemy[index_enemy].action) {
+                    case ENEMY_SPAWN:
+                        enemy->action = ENEMY_STILL;
+                        break;
                     case ENEMY_STILL:
                         *enemy_velocity = (SDL_FPoint) {0, 0};
                         enemy->action = ENEMY_WALK;
@@ -51,11 +65,21 @@ void ENEMY_System(EntityPool *pool, double current_time) {
                             ENEMY_SpawnEnemyProjectile(pool, *enemy_position, direction, MOBLIN);
                         }
                         break;
+                    case ENEMY_KNOCKEDBACK:
+                        *enemy_velocity = FPOINT_Mul(FPOINT_Normalize(relative_position), -MOBLIN_KNOCKBACK_SPEED);
+                        if (current_time - enemy->timeStamp > KNOCKBACK_TIME) {
+                            enemy->timeStamp = current_time;
+                            enemy->action = ENEMY_STILL;
+                        }
+                        break;
                 }
                 break;
             case OCTOROK:
                 *tex = TEX_OCTOROK_RIGHT + 2*direction;
                 switch (pool->enemy[index_enemy].action) {
+                    case ENEMY_SPAWN:
+                        enemy->action = ENEMY_STILL;
+                        break;
                     case ENEMY_STILL:
                         *enemy_velocity = (SDL_FPoint) {0, 0};
                         enemy->action = ENEMY_WALK;
@@ -77,10 +101,62 @@ void ENEMY_System(EntityPool *pool, double current_time) {
                             ENEMY_SpawnEnemyProjectile(pool, *enemy_position, direction, OCTOROK);
                         }
                         break;
-            }
+                    case ENEMY_KNOCKEDBACK:
+                        *enemy_velocity = FPOINT_Mul(FPOINT_Normalize(relative_position), -OCTOROK_KNOCKBACK_SPEED);
+                        if (current_time - enemy->timeStamp > KNOCKBACK_TIME) {
+                            enemy->timeStamp = current_time;
+                            enemy->action = ENEMY_STILL;
+                        }
+                        break;
+                }
+                break;
+            case LEEVER_RED:
+                *tex = TEX_LEEVER_RED1;
+                switch (pool->enemy[index_enemy].action) {
+                    case ENEMY_HIDDEN:
+                        *tex = TEX_LEEVER_SPAWN1;
+                        if (distance_squared <= LEEVER_RANGE_SQUARED) {
+                            enemy->timeStamp = current_time;
+                            enemy->action = ENEMY_SPAWN;
+                        }
+                        break;
+                    case ENEMY_SPAWN:
+                        if (current_time - enemy->timeStamp >= LEEVER_SPAWN_TIME) {
+                            enemy->timeStamp = current_time;
+                            enemy->action = ENEMY_STILL;
+                        } else if (current_time - enemy->timeStamp >= LEEVER_SPAWN_TIME * 2. / 3.) {
+                            *tex = TEX_LEEVER_REDSPAWN;
+                        } else if (current_time - enemy->timeStamp >= LEEVER_SPAWN_TIME * 1. / 3.) {
+                            *tex = TEX_LEEVER_SPAWN2;
+                        } else {
+                            *tex = TEX_LEEVER_SPAWN1;
+                        }
+                        break;
+                    case ENEMY_STILL:
+                        *enemy_velocity = (SDL_FPoint) {0, 0};
+                        enemy->action = ENEMY_WALK;
+                        enemy->timeStamp = current_time;
+                        break;
+                    case ENEMY_WALK:
+                        *enemy_velocity = FPOINT_Mul(FPOINT_Normalize(relative_position), .1);
+                        if (((int) (current_time / LEEVER_ANIMATION_PERIOD)) % 2) {
+                            *tex += 1;
+                        }
+                        break;
+                    case ENEMY_SHOOTING:
+                        enemy->action = ENEMY_STILL;
+                        break;
+                    case ENEMY_KNOCKEDBACK:
+                        *enemy_velocity = FPOINT_Mul(FPOINT_Normalize(relative_position), -LEEVER_KNOCKBACK_SPEED);
+                        if (current_time - enemy->timeStamp > KNOCKBACK_TIME) {
+                            enemy->timeStamp = current_time;
+                            enemy->action = ENEMY_STILL;
+                        }
+                        break;
+                }
             break;
         }
-    }
+    } // Fin boucle for
 }
 
 EntityID ENEMY_SpawnOctorok(EntityPool *pool, SDL_FPoint position) {
@@ -111,6 +187,23 @@ EntityID ENEMY_SpawnMoblin(EntityPool *pool, SDL_FPoint position) {
     pool->velocity[id.location] = (SDL_FPoint) {0., 0.};
 
     POOL_AddComponentFlags(pool, COMPONENT_AI | COMPONENT_COLLISIONBOX | COMPONENT_HITBOX | COMPONENT_VELOCITY | COMPONENT_VELOCITY_FLEXIBLE, id.location);
+
+    return id;
+}
+
+EntityID ENEMY_SpawnLeever(EntityPool *pool, SDL_FPoint position, double current_time, int color) {
+    EntityID id = POOL_NewEntityClassic(pool, TEX_LEEVER_SPAWN1, (SDL_Rect) {-40, -40, 80, 80}, position);
+
+    pool->enemy[id.location].timeStamp = current_time;
+    pool->enemy[id.location].action = ENEMY_HIDDEN;
+    pool->enemy[id.location].type = color ? LEEVER_BLUE : LEEVER_RED;
+    pool->collision_box[id.location] = (SDL_FRect) {-40., -40., 80., 80.};
+    pool->hit_box[id.location] = (SDL_FRect) {-40., -40., 80., 80.};
+    pool->damage_box[id.location] = (SDL_FRect) {-50., -50., 100., 100.};
+    pool->health_point[id.location] = 2;
+    pool->velocity[id.location] = (SDL_FPoint) {0., 0.};
+
+    POOL_AddComponentFlags(pool, COMPONENT_AI | COMPONENT_COLLISIONBOX | COMPONENT_HITBOX | COMPONENT_VELOCITY | COMPONENT_VELOCITY_FLEXIBLE | COMPONENT_DAMAGEBOX, id.location);
 
     return id;
 }

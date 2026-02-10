@@ -13,16 +13,16 @@ SDL_FPoint EDITOR_MouseToWorld(SDL_FPoint mouse, SDL_FPoint camera) {
     return res;
 }
 
-void EDITOR_PlaceEntity(Game *game) {
+void EDITOR_PlaceEntity(Game *game, double current_time) {
     SDL_FPoint mouse_position = EDITOR_MouseToWorld(game->inState->mouse, game->camera_pos);
     SDL_FPoint position = game->inState->ToggledGrid ? FPOINT_NearestSquare(mouse_position) : mouse_position;
 
     // TODO: get entity bundle from player selection
-    EDITOR_EntityFromArchetype(game, game->inState->selected_archetype, position);
+    EDITOR_EntityFromArchetype(game, game->inState->selected_archetype, position, current_time);
 }
 
 
-void EDITOR_EntityFromArchetype(Game *game, EntityArchetype archetype, SDL_FPoint pos) {
+void EDITOR_EntityFromArchetype(Game *game, EntityArchetype archetype, SDL_FPoint pos, double current_time) {
     EntityPool *pool = game->pool;
     EntityID id = POOL_NewEntity(game->pool);
     int i = id.location;
@@ -49,8 +49,13 @@ void EDITOR_EntityFromArchetype(Game *game, EntityArchetype archetype, SDL_FPoin
             break;
         case ARCHETYPE_OCTOROK:
             ENEMY_SpawnOctorok(pool, pos);
+            break;
         case ARCHETYPE_MOBLIN:
             ENEMY_SpawnMoblin(pool, pos);
+            break;
+        case ARCHETYPE_LEEVER:
+            ENEMY_SpawnLeever(pool, pos, current_time, 0);
+            break;
     }
 } 
 
@@ -118,7 +123,7 @@ void EDITOR_DisplayInfo(Game *game) {
 }
 
 char* EDITOR_ArchetypeToString(EntityArchetype archetype) {
-    char *strs[] = {"DEBUG", "PLAYER", "OCTOROK", "MOBLIN"};
+    char *strs[] = {"DEBUG", "PLAYER", "OCTOROK", "MOBLIN", "LEEVER"};
     return strs[archetype];
 }
 
