@@ -5,6 +5,37 @@
 #include "physics.h"
 
 
+void spawn_mobs(Tile map[HAUTEUR][LARGEUR], EntityPool *pool, double deltaTime){
+    static int spawn_timer = 0;
+    spawn_timer += deltaTime;
+    if (spawn_timer < 5000) return;
+    spawn_timer = 0;
+
+    int i = pool->player_id[0].location;
+    SDL_FPoint collider_pos = pool->position[i];
+    SDL_FRect collider_box = FRECT_Offset(pool->collision_box[i], collider_pos);
+
+    int i_map_centre = (int) (collider_box.y/TILE_SIZE)+1;
+    int i_map = (int) (collider_box.y/TILE_SIZE)-10;
+    int i_map_max = (int) ((collider_box.y+collider_box.h)/TILE_SIZE)+10;
+    if(i_map<0) i_map=0;
+    if(i_map_max>HAUTEUR) i_map_max=HAUTEUR;
+
+    int j_map_centre = (int) (collider_box.x/TILE_SIZE)+1;
+    int j_map_min = (int) (collider_box.x/TILE_SIZE)-10;
+    int j_map_max = (int) ((collider_box.x+collider_box.w)/TILE_SIZE)+10;
+    if(j_map_min<0) j_map_min=0;
+    if(j_map_max>LARGEUR) j_map_max=LARGEUR;
+
+    for(;i_map<i_map_max;i_map++){
+        for(int j_map=j_map_min;j_map<j_map_max;j_map++){
+            if(!map[i_map][j_map].blocking && !(i_map<(i_map_centre+2) && i_map>(i_map_centre-2) && j_map<(j_map_centre+2) && j_map>(j_map_centre-2)) && (rand()%100==0)){
+                ENEMY_SpawnOctorok(pool, (SDL_FPoint) {j_map*TILE_SIZE, i_map*TILE_SIZE});
+            }
+        }
+    }
+}
+
 void PHYSICS_MoveAll(Tile map[HAUTEUR][LARGEUR], EntityPool *pool, double deltaTime) {
     for (int i = 0; i < pool->lastEntitylocation; i++) {
         // if (!pool->position_map[i] || !pool->velocity_map[i]) { continue; }
@@ -133,6 +164,34 @@ resultat:
     }
 }
 
+
+
+void PHYSICS_item(EntityPool *pool) {
+    for (int i = 0; i < pool->lastEntitylocation; i++) {
+        if (POOL_LacksComponentFlags(pool, COMPONENT_PLAYER, i)) { continue; }
+        SDL_FPoint collider_pos = pool->position[i];
+        SDL_FRect collider_box = FRECT_Offset(pool->collision_box[i], collider_pos);
+        
+        printf("player %d\n", i);
+
+        for (int j = 0; j < pool->lastEntitylocation; j++) {
+            if (!POOL_LacksComponentFlags(pool, COMPONENT_COLLISIONBOX, j)) { continue; }
+
+            SDL_FPoint obstacle_pos = pool->position[j];
+            SDL_FRect obstacle_box = pool->collision_box[j];
+
+            // Shift collision boxes according to their entity position and velocity
+            obstacle_box = FRECT_Offset(obstacle_box, obstacle_pos);
+
+            // Continue there if there is no collision
+            if (!SDL_HasIntersectionF(&collider_box, &obstacle_box)) { continue; }
+
+            pool->health_point[i]+=2;
+            POOL_DestroyEntityFromIndex(pool, j);
+        }
+    }
+}
+
 void PHYSICS_DamageAll(Tile map[HAUTEUR][LARGEUR],EntityPool *pool, double deltaTime) {
     for (int i = 0; i < pool->lastEntitylocation; i++) {
         // if (!pool->position_map[i] || !pool->velocity_map[i]) { continue; }
@@ -220,7 +279,10 @@ void PHYSICS_UpdateHitPoints(EntityPool *pool, double current_time) {
             if (pool->health_point[i] <= 0) {
                 if (POOL_LacksComponentFlags(pool, COMPONENT_PLAYER, i)) {
                     POOL_DestroyEntityFromIndex(pool, i);
-                    ENEMY_SpawnDeathAnim(pool, pool->position[i], current_time);
+                    if(j==pool->player_id[0].location || j==pool->player_id[1].location){
+                        ENEMY_SpawnDeathAnim(pool, pool->position[i], current_time);
+                        Item_drop(pool, i);
+                    }
                 } else {
                     //POOL_RemoveComponentFlags(pool, COMPONENT_POSITION, i);
                     int j;

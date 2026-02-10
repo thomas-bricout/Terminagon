@@ -191,3 +191,11 @@ int ENEMY_LocateNearestTarget(EntityPool *pool, SDL_FPoint position, int index_e
 
     return target_closest;
 }
+
+void Item_drop(EntityPool *pool, int index_enemy){
+    if(rand()%100<50){
+        EntityID id = POOL_NewEntityClassic(pool, TEX_HEART_FULL, (SDL_Rect) {-25, -25, 50, 50}, pool->position[index_enemy]);
+        pool->collision_box[id.location] = (SDL_FRect) {-25., -25., 50., 50.};
+        POOL_AddComponentFlags(pool, COMPONENT_ITEM | COMPONENT_POSITION, id.location);
+    }
+}

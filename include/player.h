@@ -20,6 +20,7 @@ typedef struct {
     bool walking;
     PlayerAction action;
     double actionTimeStamp;
+    int number_arrows;
 } PlayerComponent;
 
 void PLAYER_System(Game *game, double current_time);

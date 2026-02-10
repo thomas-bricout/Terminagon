@@ -134,7 +134,9 @@ void GAME_Run(Game *game) {
         PLAYER_System(game, current_time);
         ENEMY_System(game->pool, current_time);
 
+        spawn_mobs(game->map,game->pool, deltaTime);
         PHYSICS_MoveAll(game->map,game->pool, deltaTime);
+        PHYSICS_item(game->pool);
         PHYSICS_UpdateHitPoints(game->pool, current_time);
         PHYSICS_DamageAll(game->map,game->pool, deltaTime);
         MoveCameraIJKL(game, deltaTime);

@@ -22,6 +22,7 @@ PlayerComponent PLAYER_NewComponent(InState *inState) {
     PlayerComponent p_c;
     p_c.action = ACTION_NONE;
     p_c.actionTimeStamp = 0.;
+    p_c.number_arrows = 5;
     p_c.angle = 0;
     p_c.walking = false;
     p_c.inState = inState;

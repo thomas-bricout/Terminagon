@@ -35,6 +35,8 @@ typedef enum ComponentFlags {
     COMPONENT_TARGET        = 0b0000010000000000,
     COMPONENT_ANIM          = 0b0000100000000000,
     COMPONENT_PLAYER        = 0b0001000000000000,
+    COMPONENT_PLAYER_DEAD   = 0b0010000000000000,
+    COMPONENT_ITEM          = 0b0100000000000000,
 } ComponentFlags;
 
 struct EntityPool {
@@ -69,7 +71,9 @@ struct EntityPool {
 
     AnimComponent anim[MAX_ENTITY_COUNT];
 
-    ComponentFlags component_flags[MAX_ENTITY_COUNT]; 
+    ComponentFlags component_flags[MAX_ENTITY_COUNT];
+
+    int short entity_type[MAX_ENTITY_COUNT];
 };
 
 void POOL_Init(EntityPool *pool);
