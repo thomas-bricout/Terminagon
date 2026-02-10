@@ -39,7 +39,7 @@ EntityID PLAYER_Spawn(EntityPool *pool, InState *inState, SDL_FPoint position) {
     pool->velocity[player_loc] = (SDL_FPoint) {0., 0.};
     pool->collision_box[player_loc] = (SDL_FRect) {-40., -40., 90., 90.};//{-50., -50., 100., 100.};
     pool->hit_box[player_loc] = (SDL_FRect) {-40., -40., 90., 90.};//{-50., -50., 100., 100.};
-    pool->health_point[player_loc] = 20;
+    pool->health_point[player_loc] = 5;
 
     POOL_AddComponentFlags(pool, COMPONENT_COLLISIONBOX | COMPONENT_HITBOX | COMPONENT_TARGET | COMPONENT_VELOCITY | COMPONENT_PLAYER, player_loc);
     
