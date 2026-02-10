@@ -89,7 +89,7 @@ EntityID POOL_SpawnArrow(EntityPool *pool, SDL_FPoint position, double angle) {
 void PLAYER_System(Game *game, double current_time) {
     EntityPool *pool = game->pool;
 
-    for (int i = 0; i < pool->player_amount; i++) {
+    for (int i = pool->player_amount-1; i >=0; i--) {
         if (POOL_LacksComponentFlags(pool, COMPONENT_POSITION, pool->player_id[i].location)) continue;
 
         int playerLocation = pool->player_id[i].location;
@@ -218,7 +218,7 @@ void PLAYER_System(Game *game, double current_time) {
         PLAYER_Animate(pool, i, current_time);
 
 
-        if(i==0){
+        if(POOL_LacksComponentFlags(pool, COMPONENT_PLAYER_DEAD, pool->player_id[i].location)){
             int window_h = SCREEN_H;
             int window_w = SCREEN_W;
             SDL_GetWindowSize(game->window, &window_w, &window_h);
@@ -227,7 +227,7 @@ void PLAYER_System(Game *game, double current_time) {
         }
     }
 
-    if(pool->player_amount==2){
+    if(pool->player_amount==2 && POOL_LacksComponentFlags(pool, COMPONENT_PLAYER_DEAD, pool->player_id[0].location) && POOL_LacksComponentFlags(pool, COMPONENT_PLAYER_DEAD, pool->player_id[1].location)){
         int player1Location = pool->player_id[0].location;
         SDL_FPoint *player1Position = &pool->position[player1Location];
         int player2Location = pool->player_id[1].location;

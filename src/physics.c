@@ -30,7 +30,14 @@ void spawn_mobs(Tile map[HAUTEUR][LARGEUR], EntityPool *pool, double deltaTime){
     for(;i_map<i_map_max;i_map++){
         for(int j_map=j_map_min;j_map<j_map_max;j_map++){
             if(!map[i_map][j_map].blocking && !(i_map<(i_map_centre+2) && i_map>(i_map_centre-2) && j_map<(j_map_centre+2) && j_map>(j_map_centre-2)) && (rand()%100==0)){
-                ENEMY_SpawnOctorok(pool, (SDL_FPoint) {j_map*TILE_SIZE, i_map*TILE_SIZE});
+                int r = rand()%10;
+                if(r<5){
+                    ENEMY_SpawnOctorok(pool, (SDL_FPoint) {j_map*TILE_SIZE, i_map*TILE_SIZE});
+                }else if(r<8){
+                    ENEMY_SpawnMoblin(pool, (SDL_FPoint) {j_map*TILE_SIZE, i_map*TILE_SIZE});
+                }else if(r<10){
+                    ENEMY_SpawnLeever(pool, (SDL_FPoint) {j_map*TILE_SIZE, i_map*TILE_SIZE}, 0, rand()%4);
+                }
             }
         }
     }
@@ -195,18 +202,20 @@ void PHYSICS_item(EntityPool *pool) {
                 pool->player_component[i_p].number_arrows+=1;
                 break;
             case 2:
+                int j;
                 if(i_p==1){
-                    if(POOL_LacksComponentFlags(pool, COMPONENT_PLAYER_DEAD, pool->player_id[0].location)){
-                        pool->health_point[i]+=4;
-                    }else{
-                        POOL_RemoveComponentFlags(pool, COMPONENT_PLAYER_DEAD, pool->player_id[0].location);
-                    }
+                    j=pool->player_id[0].location;
                 }else{
-                    if(POOL_LacksComponentFlags(pool, COMPONENT_PLAYER_DEAD, pool->player_id[1].location)){
-                        pool->health_point[i]+=4;
-                    }else{
-                        POOL_RemoveComponentFlags(pool, COMPONENT_PLAYER_DEAD, pool->player_id[1].location);
-                    }
+                    j=pool->player_id[1].location;
+                }
+                if(POOL_LacksComponentFlags(pool, COMPONENT_PLAYER_DEAD, j)){
+                    pool->health_point[i]+=4;
+                }else{
+                    POOL_RemoveComponentFlags(pool, COMPONENT_PLAYER_DEAD, j);
+                    POOL_AddComponentFlags(pool, COMPONENT_POSITION, j);
+                    pool->position[j] = pool->position[i];
+                    pool->velocity[j] = (SDL_FPoint) {0.,0.};
+                    pool->health_point[j] = 5;
                 }
                 break;
             
@@ -310,17 +319,8 @@ void PHYSICS_UpdateHitPoints(EntityPool *pool, double current_time) {
                         Item_drop(pool, i);
                     }
                 } else {
-                    //POOL_RemoveComponentFlags(pool, COMPONENT_POSITION, i);
-                    int j;
-                    if(pool->player_id[0].location!=i){
-                        j=pool->player_id[0].location;
-                    }else{
-                        j=pool->player_id[1].location;
-                    }
-                    
-                    pool->position[i] = pool->position[j];
-                    pool->velocity[i] = (SDL_FPoint) {0.,0.};
-                    pool->health_point[i] = 5;
+                    POOL_RemoveComponentFlags(pool, COMPONENT_POSITION, i);
+                    POOL_AddComponentFlags(pool, COMPONENT_PLAYER_DEAD, i);
                 }
             } else if ( !POOL_LacksComponentFlags(pool, COMPONENT_AI, i) ) {
                 pool->enemy[i].action = ENEMY_KNOCKEDBACK;

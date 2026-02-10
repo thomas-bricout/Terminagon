@@ -292,16 +292,19 @@ void Item_drop(EntityPool *pool, int index_enemy){
     }else if(r<55){
         //resurection
         EntityID id = POOL_NewEntityClassic(pool, TEX_DEATH_ANIM4, (SDL_Rect) {-25, -25, 50, 50}, pool->position[index_enemy]);
+        pool->item_type[id.location] = 2;
         pool->collision_box[id.location] = (SDL_FRect) {-25., -25., 50., 50.};
         POOL_AddComponentFlags(pool, COMPONENT_ITEM | COMPONENT_POSITION, id.location);
     }else if(r<80){
         //heart
         EntityID id = POOL_NewEntityClassic(pool, TEX_HEART_FULL, (SDL_Rect) {-25, -25, 50, 50}, pool->position[index_enemy]);
+        pool->item_type[id.location] = 0;
         pool->collision_box[id.location] = (SDL_FRect) {-25., -25., 50., 50.};
         POOL_AddComponentFlags(pool, COMPONENT_ITEM | COMPONENT_POSITION, id.location);
     }else if(r<100){
         //arrow
         EntityID id = POOL_NewEntityClassic(pool, TEX_ARROW_UP, (SDL_Rect) {-25, -25, 50, 50}, pool->position[index_enemy]);
+        pool->item_type[id.location] = 1;
         pool->collision_box[id.location] = (SDL_FRect) {-25., -25., 50., 50.};
         POOL_AddComponentFlags(pool, COMPONENT_ITEM | COMPONENT_POSITION, id.location);
     }
