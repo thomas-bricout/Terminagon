@@ -167,15 +167,15 @@ resultat:
 
 
 void PHYSICS_item(EntityPool *pool) {
-    for (int i = 0; i < pool->lastEntitylocation; i++) {
+    for (int i_p = 0; i_p < pool->player_amount; i_p++) {
+        int i = pool->player_id[i_p].location;
+
         if (POOL_LacksComponentFlags(pool, COMPONENT_PLAYER, i)) { continue; }
         SDL_FPoint collider_pos = pool->position[i];
         SDL_FRect collider_box = FRECT_Offset(pool->collision_box[i], collider_pos);
-        
-        printf("player %d\n", i);
 
         for (int j = 0; j < pool->lastEntitylocation; j++) {
-            if (!POOL_LacksComponentFlags(pool, COMPONENT_COLLISIONBOX, j)) { continue; }
+            if (!POOL_LacksComponentFlags(pool, COMPONENT_COLLISIONBOX, j) || POOL_LacksComponentFlags(pool, COMPONENT_ITEM, j)) { continue; }
 
             SDL_FPoint obstacle_pos = pool->position[j];
             SDL_FRect obstacle_box = pool->collision_box[j];
@@ -186,7 +186,33 @@ void PHYSICS_item(EntityPool *pool) {
             // Continue there if there is no collision
             if (!SDL_HasIntersectionF(&collider_box, &obstacle_box)) { continue; }
 
-            pool->health_point[i]+=2;
+            switch (pool->item_type[j])
+            {
+            case 0:
+                pool->health_point[i]+=2;
+                break;
+            case 1:
+                pool->player_component[i_p].number_arrows+=1;
+                break;
+            case 2:
+                if(i_p==1){
+                    if(POOL_LacksComponentFlags(pool, COMPONENT_PLAYER_DEAD, pool->player_id[0].location)){
+                        pool->health_point[i]+=4;
+                    }else{
+                        POOL_RemoveComponentFlags(pool, COMPONENT_PLAYER_DEAD, pool->player_id[0].location);
+                    }
+                }else{
+                    if(POOL_LacksComponentFlags(pool, COMPONENT_PLAYER_DEAD, pool->player_id[1].location)){
+                        pool->health_point[i]+=4;
+                    }else{
+                        POOL_RemoveComponentFlags(pool, COMPONENT_PLAYER_DEAD, pool->player_id[1].location);
+                    }
+                }
+                break;
+            
+            default:
+                break;
+            }
             POOL_DestroyEntityFromIndex(pool, j);
         }
     }

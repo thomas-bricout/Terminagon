@@ -193,9 +193,24 @@ int ENEMY_LocateNearestTarget(EntityPool *pool, SDL_FPoint position, int index_e
 }
 
 void Item_drop(EntityPool *pool, int index_enemy){
-    if(rand()%100<50){
+    int r = rand()%100;
+    if(r<50){
+
+    }else if(r<55){
+        //resurection
+        EntityID id = POOL_NewEntityClassic(pool, TEX_DEATH_ANIM4, (SDL_Rect) {-25, -25, 50, 50}, pool->position[index_enemy]);
+        pool->collision_box[id.location] = (SDL_FRect) {-25., -25., 50., 50.};
+        POOL_AddComponentFlags(pool, COMPONENT_ITEM | COMPONENT_POSITION, id.location);
+    }else if(r<80){
+        //heart
         EntityID id = POOL_NewEntityClassic(pool, TEX_HEART_FULL, (SDL_Rect) {-25, -25, 50, 50}, pool->position[index_enemy]);
         pool->collision_box[id.location] = (SDL_FRect) {-25., -25., 50., 50.};
         POOL_AddComponentFlags(pool, COMPONENT_ITEM | COMPONENT_POSITION, id.location);
+    }else if(r<100){
+        //arrow
+        EntityID id = POOL_NewEntityClassic(pool, TEX_ARROW_UP, (SDL_Rect) {-25, -25, 50, 50}, pool->position[index_enemy]);
+        pool->collision_box[id.location] = (SDL_FRect) {-25., -25., 50., 50.};
+        POOL_AddComponentFlags(pool, COMPONENT_ITEM | COMPONENT_POSITION, id.location);
     }
+
 }

@@ -73,7 +73,7 @@ struct EntityPool {
 
     ComponentFlags component_flags[MAX_ENTITY_COUNT];
 
-    int short entity_type[MAX_ENTITY_COUNT];
+    int short item_type[MAX_ENTITY_COUNT];
 };
 
 void POOL_Init(EntityPool *pool);
