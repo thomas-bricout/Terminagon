@@ -164,7 +164,7 @@ EntityID ENEMY_SpawnLeever(EntityPool *pool, SDL_FPoint position, double current
     pool->health_point[id.location] = 2;
     pool->velocity[id.location] = (SDL_FPoint) {0., 0.};
 
-    POOL_AddComponentFlags(pool, COMPONENT_AI | COMPONENT_COLLISIONBOX | COMPONENT_HITBOX | COMPONENT_VELOCITY | COMPONENT_VELOCITY_FLEXIBLE, id.location);
+    POOL_AddComponentFlags(pool, COMPONENT_AI | COMPONENT_COLLISIONBOX | COMPONENT_HITBOX | COMPONENT_VELOCITY | COMPONENT_VELOCITY_FLEXIBLE | COMPONENT_DAMAGEBOX, id.location);
 
     return id;
 }
