@@ -10,6 +10,7 @@ void spawn_mobs(Tile map[HAUTEUR][LARGEUR], EntityPool *pool, double deltaTime){
     spawn_timer += deltaTime;
     if (spawn_timer < 5000) return;
     spawn_timer = 0;
+    if (pool->currentCount>300) return;
 
     int i = pool->player_id[0].location;
     SDL_FPoint collider_pos = pool->position[i];
@@ -197,6 +198,9 @@ void PHYSICS_item(EntityPool *pool) {
             {
             case 0:
                 pool->health_point[i]+=2;
+                if(pool->health_point[i]>20){
+                    pool->health_point[i]=20;
+                }
                 break;
             case 1:
                 pool->player_component[i_p].number_arrows+=1;
@@ -210,6 +214,9 @@ void PHYSICS_item(EntityPool *pool) {
                 }
                 if(POOL_LacksComponentFlags(pool, COMPONENT_PLAYER_DEAD, j)){
                     pool->health_point[i]+=4;
+                    if(pool->health_point[i]>20){
+                        pool->health_point[i]=20;
+                    }
                 }else{
                     POOL_RemoveComponentFlags(pool, COMPONENT_PLAYER_DEAD, j);
                     POOL_AddComponentFlags(pool, COMPONENT_POSITION, j);
