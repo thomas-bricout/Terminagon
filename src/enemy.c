@@ -14,7 +14,7 @@ const double MOBLIN_KNOCKBACK_SPEED = 1.2;
 const double LEEVER_SPEED = 3.;
 const double LEEVER_SPAWN_TIME = 1000.;
 const double LEEVER_ANIMATION_PERIOD = 200.;
-const float LEEVER_RANGE_SQUARED = 400. * 400.;
+const float LEEVER_RANGE_SQUARED = 600. * 600.;
 const double LEEVER_KNOCKBACK_SPEED = 2.4;
 
 const double KNOCKBACK_TIME = 700;

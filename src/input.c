@@ -18,6 +18,7 @@ void InState_Init(InState *inState) {
     inState->ToggledF3 = false;
     inState->ToggledF4 = false;
     inState->ToggledGrid = false;
+    inState->paused = false;
 
     inState->selected_archetype = ARCHETYPE_DEBUG;
 
@@ -97,6 +98,9 @@ void InState_Update(InState *inState, SDL_Event event) {
                     break;
                 case SDL_SCANCODE_G:
                     inState->ToggledGrid = !inState->ToggledGrid;
+                    break;
+                case SDL_SCANCODE_ESCAPE:
+                    inState->paused = !inState->paused;
                     break;
                 default:
                     break;

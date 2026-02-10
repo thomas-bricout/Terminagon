@@ -31,6 +31,7 @@ struct InState {
     bool ToggledF3;
     bool ToggledF4;
     bool ToggledGrid;
+    bool paused;
 
     bool ToggledF3_prec;
     bool ToggledF4_prec;

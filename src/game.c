@@ -118,6 +118,8 @@ void GAME_Run(Game *game) {
     double FPS = 0;
     double elapsed = 0;
 
+    bool paused = false;
+
     while (!game->inState->QUIT) {
         // Calculating deltaTime, FPS and logging them
         LAST = NOW;
@@ -129,22 +131,27 @@ void GAME_Run(Game *game) {
 
         // Read game events
         Game_ReadEvents(game, current_time);
-        
-        // Physiques et Mécaniques
-        PLAYER_System(game, current_time);
-        ENEMY_System(game->pool, current_time);
 
-        spawn_mobs(game->map,game->pool, deltaTime);
-        PHYSICS_MoveAll(game->map,game->pool, deltaTime);
-        PHYSICS_item(game->pool);
-        PHYSICS_UpdateHitPoints(game->pool, current_time);
-        PHYSICS_DamageAll(game->map,game->pool, deltaTime);
-        MoveCameraIJKL(game, deltaTime);
+        paused = game->pool->player_component->inState->paused;
+
+        if (!paused) {
+            PLAYER_System(game, current_time);
+            ENEMY_System(game->pool, current_time);
+
+            spawn_mobs(game->map,game->pool, deltaTime);
+            PHYSICS_MoveAll(game->map,game->pool, deltaTime);
+            PHYSICS_item(game->pool);
+            PHYSICS_UpdateHitPoints(game->pool, current_time);
+            PHYSICS_DamageAll(game->map,game->pool, deltaTime);
+            MoveCameraIJKL(game, deltaTime);
+        
+            ANIM_System(game->pool, current_time);
+        } 
 
         // Création du rendu
-        ANIM_System(game->pool, current_time);
         RENDER_RenderAll(game);
         draw_ui(game);
+        if (paused) draw_pause(game);
         
         // Logging
         DEBUG_DisplayDebug(game, deltaTime, FPS, elapsed, current_time);

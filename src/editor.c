@@ -114,10 +114,7 @@ void EDITOR_DisplayInfo(Game *game) {
     SDL_FreeSurface(messageSurface);
     SDL_DestroyTexture(messageTexture);
 
-
-
     //mouse
-
     SDL_FRect rect = {game->inState->mouse.x-5, game->inState->mouse.y-5,10, 10};
     SDL_RenderFillRectF(game->renderer, &rect);
 }
