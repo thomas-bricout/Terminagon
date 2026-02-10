@@ -11,7 +11,8 @@ const double MOBLIN_PROJECTILE_SPEED = 0.3;
 
 const double LEEVER_SPEED = 3.;
 const double LEEVER_SPAWN_TIME = 1000.;
-const double LEEVER_ANIMATION_PERIOD = 400.;
+const double LEEVER_ANIMATION_PERIOD = 200.;
+const float LEEVER_RANGE_SQUARED = 400. * 400.;
 
 void ENEMY_System(EntityPool *pool, double current_time) {
     for (int index_enemy = 0; index_enemy < pool->lastEntitylocation; index_enemy++) {
@@ -26,6 +27,7 @@ void ENEMY_System(EntityPool *pool, double current_time) {
         // Calculate and gather information about target
         SDL_FPoint target_position = pool->position[j_closest];
         SDL_FPoint relative_position = FPOINT_RelativePoint(target_position, *enemy_position);
+        float distance_squared = FPOINT_DistanceSquared(target_position, *enemy_position);
 
         // Calculate direction
         double angle = atan2((double) relative_position.y,(double) relative_position.x);
@@ -37,6 +39,7 @@ void ENEMY_System(EntityPool *pool, double current_time) {
                 switch (pool->enemy[index_enemy].action) {
                     case ENEMY_SPAWN:
                         enemy->action = ENEMY_STILL;
+                        break;
                     case ENEMY_STILL:
                         *enemy_velocity = (SDL_FPoint) {0, 0};
                         enemy->action = ENEMY_WALK;
@@ -64,6 +67,7 @@ void ENEMY_System(EntityPool *pool, double current_time) {
                 switch (pool->enemy[index_enemy].action) {
                     case ENEMY_SPAWN:
                         enemy->action = ENEMY_STILL;
+                        break;
                     case ENEMY_STILL:
                         *enemy_velocity = (SDL_FPoint) {0, 0};
                         enemy->action = ENEMY_WALK;
@@ -90,6 +94,13 @@ void ENEMY_System(EntityPool *pool, double current_time) {
             case LEEVER_RED:
                 *tex = TEX_LEEVER_RED1;
                 switch (pool->enemy[index_enemy].action) {
+                    case ENEMY_HIDDEN:
+                        *tex = TEX_LEEVER_SPAWN1;
+                        if (distance_squared <= LEEVER_RANGE_SQUARED) {
+                            enemy->timeStamp = current_time;
+                            enemy->action = ENEMY_SPAWN;
+                        }
+                        break;
                     case ENEMY_SPAWN:
                         if (current_time - enemy->timeStamp >= LEEVER_SPAWN_TIME) {
                             enemy->timeStamp = current_time;
@@ -109,7 +120,7 @@ void ENEMY_System(EntityPool *pool, double current_time) {
                         break;
                     case ENEMY_WALK:
                         *enemy_velocity = FPOINT_Mul(FPOINT_Normalize(relative_position), .1);
-                        if ((int) (current_time - enemy->timeStamp / LEEVER_ANIMATION_PERIOD) % 2) {
+                        if (((int) (current_time / LEEVER_ANIMATION_PERIOD)) % 2) {
                             *tex += 1;
                         }
                         break;
@@ -157,7 +168,7 @@ EntityID ENEMY_SpawnLeever(EntityPool *pool, SDL_FPoint position, double current
     EntityID id = POOL_NewEntityClassic(pool, TEX_LEEVER_SPAWN1, (SDL_Rect) {-40, -40, 80, 80}, position);
 
     pool->enemy[id.location].timeStamp = current_time;
-    pool->enemy[id.location].action = ENEMY_SPAWN;
+    pool->enemy[id.location].action = ENEMY_HIDDEN;
     pool->enemy[id.location].type = color ? LEEVER_BLUE : LEEVER_RED;
     pool->collision_box[id.location] = (SDL_FRect) {-40., -40., 80., 80.};
     pool->hit_box[id.location] = (SDL_FRect) {-40., -40., 80., 80.};

@@ -59,7 +59,7 @@ void ASSETS_Load(AssetManager *assetManager, SDL_Renderer *renderer) {
         "assets/MoblinRight.png",
         "assets/MoblinUp.png",
         "assets/MoblinLeft.png",
-        "assets/Moblisrc/assets.c",
+        "assets/MoblinDown.png",
         "assets/LeeversSpawn1.png",
         "assets/LeeversSpawn2.png",
         "assets/LeeversRedSpawn.png",
