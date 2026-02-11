@@ -1,6 +1,17 @@
 # Terminagon
 ## Gameplay et idées
 
+## Contrôles
+### Clavier
+- Appuyer sur `insert` ou `Fn + fin` pour lancer le mode clavier.
+- Flêches directionels pour se déplacer.
+- V - Attaquer
+- C - Manier l'arc
+- X - Sprinter
+
+### Manette
+- Joystick droit ou flêches directionels pour se déplacer.
+
 ## Compilation
 - Compiler et lancer le jeu avec la touche F5 ( dans l'éditeur ).
 - Ne pas utiliser le bouton Lancer et Débugguer en haut à droite.
