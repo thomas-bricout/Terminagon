@@ -1,6 +1,8 @@
 # Terminagon
 ## Gameplay et idées
 
+Pour l’instant, les ennemies apparaissent aléatoirement. Ils s’agit juste de vous amusez avec un amis à se faire submerger.
+
 ## Contrôles
 ### Clavier
 - Appuyer sur `insert` ou `Fn + fin` pour lancer le mode clavier.
